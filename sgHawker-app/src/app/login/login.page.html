@@ -1,0 +1,128 @@
+<ion-content fullscreen="true" scrollY="true">
+  <ion-card-header *ngIf="isCustomer === true" class="topBarRed">
+    <ion-row class="ion-align-items-end ion-justify-content-center">
+      <img src="../../assets/sgHawkerAppIcon.svg" class="img-logo" />
+    </ion-row>
+  </ion-card-header>
+  <ion-card-header *ngIf="isCustomer === false" class="topBarYellow">
+    <ion-row class="ion-align-items-end ion-justify-content-center">
+      <img src="../../assets/sgHawkerAppIcon.svg" class="img-logo" />
+    </ion-row>
+  </ion-card-header>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="1" sizeMd></ion-col>
+      <ion-col size="10" sizeMd>
+        <ion-toolbar>
+          <ion-segment value="customer">
+            <ion-segment-button value="customer" (click)="tabs(true)">
+              Customer
+            </ion-segment-button>
+            <ion-segment-button value="hawker" (click)="tabs(false)">
+              Hawker
+            </ion-segment-button>
+          </ion-segment>
+        </ion-toolbar>
+        <form [formGroup]="loginForm" (ngSubmit)="login()">
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                <ion-item>
+                  <ion-label position="floating">Email</ion-label>
+                  <ion-input
+                    type="text"
+                    formControlName="email"
+                    (ngModelChange)="checkFormValid()"
+                  ></ion-input>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <!-- Error Message - Email -->
+              <span
+                *ngIf="formSubmitted && errorControl.email.errors?.required"
+                style="color: #ee4444; padding-left: 1rem"
+                >Email is required.</span
+              >
+              <span *ngIf="errorControl.email.errors?.pattern"
+                >Please input an appropriate email.</span
+              >
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                <ion-item>
+                  <ion-label position="floating">Password</ion-label>
+                  <ion-input
+                    type="password"
+                    formControlName="password"
+                    (ngModelChange)="checkFormValid()"
+                  ></ion-input>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+            <!-- Error Message - Password -->
+            <ion-row>
+              <span
+                *ngIf="formSubmitted && errorControl.password.errors?.required"
+                >Password is required.</span
+              >
+              <span
+                *ngIf="formSubmitted && loginForm.get('password').hasError('minlength')"
+                >Password needs to be more than 8 chars.</span
+              >
+            </ion-row>
+          </ion-grid>
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                <ion-button color="danger" expand="block" type="submit">
+                  Login
+                </ion-button>
+              </ion-col>
+              <ion-col>
+                <ion-button color="primary" expand="block" type="reset">
+                  Reset
+                </ion-button>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+          <ion-grid style="padding: 0.6rem">
+            <ion-button
+              *ngIf="isCustomer === true"
+              color="warning"
+              expand="block"
+              (click)="clickCustomerRegister()"
+            >
+              Register as customer
+            </ion-button>
+            <ion-button
+              *ngIf="isCustomer === false"
+              color="warning"
+              expand="block"
+              (click)="clickHawkerRegister()"
+            >
+              Register as hawker
+            </ion-button>
+          </ion-grid>
+          <ion-grid *ngIf="isCustomer === true">
+            <ion-row  style="margin: 1rem 0 1rem 0;">
+              <ion-col class="ion-text-center">
+                <div class="segregation">OR
+                </div>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col class="ion-text-center">
+                <ion-button color="tertiary" expand="block" (click) ="clickGuestOrder()">
+                  <ion-icon slot="start" name="bag-handle"></ion-icon>
+                  Order as guest
+                </ion-button>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </form>
+      </ion-col>
+      <ion-col size="1" sizeMd></ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

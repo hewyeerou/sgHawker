@@ -1,0 +1,109 @@
+<ion-header >
+  <ion-toolbar class="customer-header-background-color">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/account" style="color: white">
+      </ion-back-button>
+    </ion-buttons>
+    <ion-title style="color: white;" class="ion-text-center"> QR Code Scanner </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid style="height: 100%">
+    <ion-row style="height: 100%" class="ion-align-items-center">
+      <ion-col>
+        <ion-row>
+          <ion-col>
+            <video #video [hidden]="!scanActive" width="100%"></video>
+            <canvas #canvas hidden></canvas>
+          </ion-col>
+        </ion-row>
+        <ion-row
+          class="ion-justify-content-center"
+          (click)="navigateToPage(currentItemDisplay.navigationUrl)"
+        >
+          <ion-col *ngIf="scanResult && !errorPresent" class="ion-text-center">
+            <ion-item lines="none" class="card">
+              <ion-thumbnail slot="start" style="border-radius: 10px">
+                <img
+                  src="{{currentItemDisplay.imgSrc}}"
+                  onerror="this.src='/assets/sgHawkerAppIcon.svg';"
+                />
+              </ion-thumbnail>
+              <ion-label style="width: 100%">
+                <h3>{{currentItemDisplay.mainTitle}}</h3>
+                <p
+                  style="font-style: italic"
+                  *ngIf="currentItemDisplay.secondaryTitle"
+                >
+                  {{currentItemDisplay.secondaryTitle}}
+                </p>
+                <p style="float: right; color: steelblue">Go →</p>
+              </ion-label>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+        <ion-grid *ngIf="!scanActive && !scanResult">
+          <ion-row class="ion-justify-content-center">
+            <ion-col size="10" class="ion-text-center">
+              <img src="../../assets/QR_code_illustration.svg" />
+            </ion-col>
+          </ion-row>
+          <ion-row class="ion-justify-content-center">
+            <ion-col
+              size="10"
+              class="ion-text-center"
+              style="font-weight: bold"
+            >
+              Quick access to hawker's menus
+            </ion-col>
+          </ion-row>
+          <ion-row class="ion-justify-content-center">
+            <ion-col size="10" class="ion-text-justify">
+              Scan QR code of Hawkers stores or Hawker Centers to access to each
+              of their menus!
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+        <ion-row class="ion-justify-content-center">
+          <ion-col size="10" class="ion-text-center">
+            <ion-button
+              mode="ios"
+              expand="block"
+              color="primary"
+              (click)="startScan()"
+              *ngIf="!scanActive && !scanResult"
+            >
+              <ion-icon name="scan" slot="start"></ion-icon>
+              Start Scanning QR
+            </ion-button>
+            <ion-button
+              mode="ios"
+              expand="block"
+              color="danger"
+              (click)="stopScan()"
+              *ngIf="scanActive"
+            >
+              <ion-icon name="stop-circle" slot="start"></ion-icon>
+              Stop Scanning
+            </ion-button>
+          </ion-col>
+        </ion-row>
+        <ion-row class="ion-justify-content-center">
+          <ion-col size="10" class="ion-text-center">
+            <ion-button
+              mode="ios"
+              expand="block"
+              color="warning"
+              (click)="reset()"
+              *ngIf="scanResult"
+            >
+              <ion-icon name="refresh" slot="start"></ion-icon>
+              Reset
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

@@ -1,0 +1,39 @@
+<ion-header>
+  <ion-toolbar class="hawker-header-background-color">
+    <ion-buttons slot="primary">
+      <ion-button (click)="closeModal()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-row class="ion-align-items-center ion-justify-content-end">
+      <ion-title> Withdraw Balance </ion-title>
+    </ion-row>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div>
+    <ion-item>
+      <ion-label>Select Bank Account: </ion-label>
+      <ion-select class="select" placeholder="Select One" [(ngModel)]="selectedBankAccountId">
+        <ion-select-option *ngFor="let ba of currentOutlet.hawkerAccount.bankAccounts" value="{{ba._id}}">
+          {{ba.nameOfBank}}, *{{ba.accountNumber.substr(ba.accountNumber.length-4)}}
+          <ion-label *ngIf="ba.isDefault" >[Default]</ion-label>
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label>
+        Withdrawal Amount:
+        <br/>
+        <span style="font-size:14px;color:gray">
+          100% of your balance is deducted
+        </span>
+      </ion-label>
+      <ion-text>${{currentWallet.balance | number : '1.2-2'}}</ion-text>
+    </ion-item>
+  </div>
+  <div style="margin-top:20px">
+    <ion-button color="primary" expand="full" (click)="confirm()">Confirm</ion-button>
+  </div>
+</ion-content>

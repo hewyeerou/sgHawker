@@ -1,0 +1,24 @@
+<ion-header>
+  <ion-toolbar class="customer-header-background-color">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/customer/profile" style="color:white;"></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      <ion-row class="ion-align-items-end ion-justify-content-center">
+        <img src="../../assets/Logo - White.svg" width="40%" height="30%" />
+      </ion-row>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+ 
+<ion-content fullscreen>
+  <ion-grid>
+    <ion-row *ngIf="allReports?.length > 0">
+      <app-report-card (removeReportEvent)="updateReportList($event)" style="width: 100%;" *ngFor="let report of allReports" [report]="report" [user]="user">
+      </app-report-card>
+    </ion-row>
+    <ion-row *ngIf="!allReports || allReports.length === 0" class="ion-justify-content-center" style="font-style: italic;">
+      <ion-label>You have not made any reports.</ion-label>
+    </ion-row>
+  </ion-grid>
+</ion-content>

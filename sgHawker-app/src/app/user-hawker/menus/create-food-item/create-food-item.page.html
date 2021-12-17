@@ -1,0 +1,130 @@
+<ion-header>
+  <ion-toolbar class="hawker-header-background-color">
+    <ion-back-button slot="start"></ion-back-button>
+    <ion-title>Create Food Item</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <br />
+  <ion-grid class="grid">
+    <ion-row>
+      <ion-col>
+        <ion-thumbnail style="--size: 160px; display: block; margin: 0 auto;">
+          <img [src]="fileURL">
+        </ion-thumbnail>
+        <input class="ion-hide" name="file" #file type="file" (change)="onFileChange($event)" accept="image/*" />
+        <ion-button (click)="file.click()" class="imgButton" color="light">
+          <ion-icon slot="icon-only" name="camera-outline" color="medium">
+          </ion-icon>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-padding">
+      <ion-col size="12" size-md>
+        <ion-row>
+          <ion-col>
+            <h5>Information</h5>
+            <hr />
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="12" size-md>
+            <ion-item>
+              <ion-label>Food Item Name: </ion-label>
+              <ion-input class="input" placeholder="Enter food item name here..." type="text" [(ngModel)]="foodItem.itemName"></ion-input>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="12" size-md>
+            <ion-item>
+              <ion-label>Item Price: </ion-label>
+              <ion-input class="input" placeholder="Enter food item price here..." type="number" [(ngModel)]="foodItem.itemPrice"></ion-input>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-item>
+              <ion-label>Description: </ion-label>
+              <ion-textarea class="input" placeholder="Enter more description here..." [(ngModel)]="foodItem.itemDescription">
+              </ion-textarea>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+        <!-- <ion-row>
+          <ion-col>
+            <ion-item>
+              <ion-label>Outlet: </ion-label>
+              <ion-select [(ngModel)]="outlet" multiple="true" (ionChange) = "onClickOutlet(outlet)">
+                <ion-select-option *ngFor="let outlet of outlets" [value]="outlet">{{outlet.outletName}}</ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
+        </ion-row> -->
+        <ion-row>
+          <ion-col size="5">
+            <ion-item lines="none">
+              <ion-label>Category: </ion-label>
+            </ion-item>
+          </ion-col>
+          <ion-col class="ion-align-self-center">
+            <item-category [itemCategories]="categories" [(selectedItem)]="selectedCategory"
+              [editCallback]="updateCategoryNameCallback"></item-category>
+          </ion-col>
+        </ion-row>
+      </ion-col>
+      <ion-col size="1">
+        <div class="verticalLine"></div>
+      </ion-col>
+      <ion-col size="12" size-md>
+        <ion-row>
+          <ion-col>
+            <h5>Customization</h5>
+            <hr />
+          </ion-col>
+          <ion-col size="1" class="ion-align-self-center">
+            <ion-button (click)="customization()" style="margin-top: -10px;" fill="clear" class="ion-float-right">
+              <ion-icon name="add-circle-outline"></ion-icon>
+            </ion-button>
+          </ion-col>
+        </ion-row>
+        <div *ngIf="customizationArr.length === 0" style="align-content: center; text-align: center;">
+          <ion-label>No customization added.</ion-label>
+        </div>
+        <div class="groupList" *ngIf="customizationArr.length > 0">
+          <ion-list style="max-height: 250px;"lines="none" *ngFor="let c of customizationArr; let j = index;"
+            class="grid-card">
+            <ion-item-sliding>
+              <ion-item>
+                <ion-label style="font-size: 15px;">{{j + 1}}. {{c.customizationName}}
+                  <ion-label *ngIf="c.mandatory" style="font-size: 12px; padding-left: 12px; color: green;">MANDATORY
+                    <ion-icon name="checkmark-circle-outline"></ion-icon>
+                  </ion-label>
+                  <ion-label *ngIf="!c.mandatory" style="font-size: 12px; padding-left: 12px; color:red;">NOT MANDATORY
+                    <ion-icon name="close-circle-outline"></ion-icon>
+                  </ion-label>
+                </ion-label>
+                <ion-button (click)="viewCustomization(j)" shape="round" fill="outline">Edit</ion-button>
+              </ion-item>
+              <ion-item-options side="end">
+                <ion-item-option (click)="removeOption(j)">REMOVE</ion-item-option>
+              </ion-item-options>
+            </ion-item-sliding>
+          </ion-list>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col class="ion-text-center">
+        <ion-button (click)="createFoodItem()" style="--border-width:50px!important; width: 40%; --background: #f2b354" fill="solid">Submit
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>

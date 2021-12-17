@@ -1,0 +1,49 @@
+<ion-header>
+  <ion-toolbar class="{{userType === 'HAWKER' ? 'hawker-header-background-color' : 'customer-header-background-color'}}">
+    <ion-title style="color: white;">Information</ion-title>
+    <ion-buttons slot="primary">
+      <ion-button (click) = "modalDismiss()"style="font-size: 20px;" fill="clear" >
+        <ion-icon  style="color: white; " name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid style="width: 90%;">
+    <ion-row>
+      <ion-col class="ion-text-center">
+        <br />
+        <img src="./assets/leaderboard-info-img.png" style="width: 200px;" />
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="ion-text-center">
+        <h5 style="text-decoration: underline; font-weight: bold; ">Leaderboard by Number of Sales</h5>
+        <p>This leaderboard provides user with ranking of the top selling hawker/ hawker centre/ food item available
+          in the application determined by the number of sales. Ratings shown are calculated as
+        </p>
+        <p style="font-weight: bold; font-style:italic; color: #EE4444">(Number of Sales By Hawker / Highest Number of Sales) x 5</p>
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-text-center" *ngIf="userType === 'CUSTOMER'">
+      <ion-col class="ion-text-center">
+        <h5 style="text-decoration: underline; font-weight: bold;">Leaderboard by Most Favourites</h5>
+        <p>This leaderboard provides user with ranking of the top favourited hawker/ hawker centre available
+          in the application determined by the number of favourites each hawker/ hawker centre have.
+        </p>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <!-- <div style=" position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+    <img src="./assets/leaderboard-info-img.png" style="width: 220px;" />
+  </div>
+  <ion-grid>
+    <ion-row>
+      <ion-col >
+        <h3>Leaderboard by Number of Sales</h3>
+      </ion-col>
+    </ion-row>
+  </ion-grid> -->
+
+</ion-content>

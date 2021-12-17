@@ -1,0 +1,93 @@
+<ion-header>
+  <ion-toolbar class="hawker-header-background-color">
+    <ion-buttons slot="start">
+      <ion-button (click) = "dismissModal()"style="font-size: 15px;" fill="clear">
+        <ion-icon name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Edit Customization</ion-title>
+    <ion-button (click) = "edit()" slot="end" style="font-size: 15px;" fill="clear">
+      SAVE
+    </ion-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row class="ion-padding">
+      <ion-col>
+        <ion-item>
+          <ion-label>Name: </ion-label>
+          <ion-input class="ion-text-right" type="text" [(ngModel)]="customization.customizationName"></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-padding">
+      <ion-col>
+        <ion-item>
+          <ion-label>Mandatory: </ion-label>
+          <ion-toggle [(ngModel)]="customization.mandatory"></ion-toggle>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row style="background-color: #f9f9f9;" >
+      <ion-col>
+        <h5>Options</h5>
+      </ion-col>
+      <ion-col size="2">
+        <ion-button (click) = "addOptions()" fill="clear" style="height: 90%; width:100%">
+          ADD
+        </ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngFor="let options of customization.customizationOptions; let i = index">
+      <ion-list style="width: 100%;">
+          <ion-grid style="width: 100%; ">
+            <ion-row>
+              <ion-col>
+                <ion-item>
+                  <ion-label>
+                    <h4 style="font-weight:bold;"> Option {{i + 1}}</h4>
+                    <h5 class="ion-padding-top">Name :</h5>
+                    <ion-input class="ion-text-right" type="text" [(ngModel)]="options.optionName"></ion-input>
+                  </ion-label>
+              </ion-item>
+              </ion-col>
+              <ion-col style="margin-top: 17.5px;">
+                <ion-item>
+                  <ion-label>
+                    <h4></h4>
+                    <h5 class="ion-padding-top">Price :</h5>
+                    <ion-input class="ion-text-right" type="number" [(ngModel)]="options.optionCharge"></ion-input>
+                  </ion-label>
+                </ion-item>
+              </ion-col>
+              <ion-col class="ion-align-self-center" style="margin-top: 17px;" size="2">
+                <ion-button (click) = "removeOption(i)" fill="clear" class="ion-float-right">
+                  <ion-icon name="remove-circle-outline"></ion-icon>
+                </ion-button>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+      </ion-list>
+    </ion-row>
+  </ion-grid>
+
+ <!-- <<ion-grid class="ion-padding" *ngFor="let options of customization.customizationOptions; let i = index">
+    <ion-row style="margin: auto; justify-content: center;">
+      <ion-col>
+        <ion-item>
+          <ion-label>Option {{i + 1}} : </ion-label>
+          <ion-input class="ion-text-right" type="text" [(ngModel)]="options.optionName"></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-item>
+        <ion-label>Price:</ion-label>
+        <ion-input class="ion-text-right" type="text" [(ngModel)]="options.optionCharge"></ion-input>
+      </ion-item>
+    </ion-row>
+  </ion-grid> -->
+
+</ion-content>

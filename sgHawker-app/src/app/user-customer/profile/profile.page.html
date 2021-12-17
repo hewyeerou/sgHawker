@@ -1,0 +1,101 @@
+<ion-header>
+  <ion-toolbar class="customer-header-background-color">
+    <ion-title>
+      <ion-row class="ion-align-items-end ion-justify-content-center">
+        <img src="../../assets/Logo - White.svg" width="40%" height="30%" />
+      </ion-row>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content scrollY="true">
+  <ion-grid>
+    <ion-row style="padding: 2rem">
+      <ion-col>
+        <div style="display: flex; justify-content: center;">
+          <ion-avatar>
+            <ion-img *ngIf="user.profileImgSrc!==''" src="{{baseUrl}}/{{user.profileImgSrc}}"></ion-img>
+            <ion-img *ngIf="user.profileImgSrc===''" src="/assets/Profile Picture.svg" aria-label="Image Placeholder">
+            </ion-img>
+          </ion-avatar>
+        </div>
+      </ion-col>
+      <ion-col>
+        <ion-row style="font-size: large; font-weight: bold">
+          {{user.name}} 
+        </ion-row>
+        <ion-row *ngIf="user.phone?.length > 0 ">
+          +65 {{user.phone}}
+        </ion-row>
+        <ion-row *ngIf="user.phone === 'undefined' " style="font-style: italic">
+          No phone number recorded.
+        </ion-row>
+        <ion-row>
+          <ion-button color="danger" expand="block" (click)="logout()">
+            <ion-icon slot="start" name="log-out"></ion-icon>
+            Log out
+          </ion-button>
+        </ion-row>
+      </ion-col>
+    </ion-row>
+    <ion-list-header lines="full">
+      <ion-label style="font-weight: bold">Account</ion-label>
+    </ion-list-header>
+    <ion-list>
+      <ion-item [routerLink]="['/customer/profile/account-details']" detail="false">
+        <ion-label>
+          <ion-icon slot="start" name="person" style="padding: 0 1rem 0 1rem"></ion-icon>
+          Account Details
+          <div style="display: inline; float: right">
+            <ion-icon name="chevron-forward"></ion-icon>
+          </div>
+        </ion-label>
+      </ion-item>
+      <ion-item [routerLink]="['/customer/profile/digital-wallet']" detail="false">
+        <ion-label>
+          <ion-icon slot="start" name="card" style="padding: 0 1rem 0 1rem"></ion-icon>
+          My Digital Wallet
+          <div style="display: inline; float: right">
+            <ion-icon name="chevron-forward"></ion-icon>
+          </div>
+        </ion-label>
+      </ion-item>
+      <ion-item [routerLink]="['/customer/profile/user-address']" detail="false">
+        <ion-label>
+          <ion-icon slot="start" name="navigate" style="padding: 0 1rem 0 1rem"></ion-icon>
+          Addresses
+          <div style="display: inline; float: right">
+            <ion-icon name="chevron-forward"></ion-icon>
+          </div>
+        </ion-label>
+      </ion-item>
+      <ion-list-header lines="full">
+        <ion-label style="font-weight: bold">General</ion-label>
+      </ion-list-header>
+      <ion-item (click)="openReportModal()">
+        <ion-label>
+          <ion-icon slot="start" name="alert-circle" style="padding: 0 1rem 0 1rem"></ion-icon>Report error
+          <div style="display: inline; float: right">
+            <ion-icon name="chevron-forward"></ion-icon>
+          </div>
+        </ion-label>
+      </ion-item>
+      <ion-item [routerLink]="['/customer/profile/view-reports']" detail="false">
+        <ion-label>
+          <ion-icon slot="start" name="document-text" style="padding: 0 1rem 0 1rem"></ion-icon>View submitted reports
+          <div style="display: inline; float: right">
+            <ion-icon name="chevron-forward"></ion-icon>
+          </div>
+        </ion-label>
+      </ion-item>
+      <ion-item (click)="openFeedbackModal()">
+        <ion-label>
+          <ion-icon slot="start" name="bulb" style="padding: 0 1rem 0 1rem"></ion-icon>Feedback
+          <div style="display: inline; float: right">
+            <ion-icon name="chevron-forward"></ion-icon>
+          </div>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  </ion-grid>
+</ion-content>

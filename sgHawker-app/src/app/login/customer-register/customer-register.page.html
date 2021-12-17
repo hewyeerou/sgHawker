@@ -1,0 +1,166 @@
+<ion-header>
+  <ion-toolbar color="white">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/account" color="primary"></ion-back-button>
+    </ion-buttons>
+    <!-- <ion-title>
+      <ion-grid>
+        <ion-row class="ion-align-items-center ion-justify-content-center">
+          <img
+            src="../../../assets/Logo - White.svg"
+            width="50%"
+            height="50%"
+          />
+        </ion-row>
+      </ion-grid>
+    </ion-title> -->
+  </ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen="true" scrollY="true">
+  <ion-grid>
+    <ion-card>
+      <ion-card-header class="signUpHeader">
+        <ion-grid>
+          <ion-row class="ion-align-items-center ion-justify-content-center">
+            <img
+              src="../../../assets/sgHawkerAppIcon.svg"
+              width="70%"
+              height="70%"
+            />
+          </ion-row>
+          <br />
+          <br />
+          <ion-row class="ion-align-items-center ion-justify-content-center">
+            <ion-card-title>
+              <ion-text class="signUpHeaderTitle"> Customer Details </ion-text>
+            </ion-card-title>
+          </ion-row>
+        </ion-grid>
+      </ion-card-header>
+      <ion-card-content style="padding: 5px">
+        <!--Register Form-->
+        <form [formGroup]="userForm" (ngSubmit)="createCustomer()">
+          <ion-grid style="width:80%">
+            <ion-row>
+              <ion-col>
+                <ion-item>
+                  <ion-label position="floating">Name:</ion-label>
+                  <ion-input
+                    type="text"
+                    formControlName="name"
+                    (ngModelChange)="checkFormValid()"
+                  ></ion-input>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <!-- Error Message -->
+              <span *ngIf="formSubmitted && errorControl.name.errors?.required"
+                >Name is required.</span
+              >
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                <ion-item>
+                  <ion-label position="floating">Email:</ion-label>
+                  <ion-input
+                    type="text"
+                    formControlName="email"
+                    (ngModelChange)="checkFormValid()"
+                  ></ion-input>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <!-- Error Message -->
+              <span *ngIf="formSubmitted && errorControl.email.errors?.required"
+                >Email is required.</span
+              >
+              <span *ngIf="errorControl.email.errors?.pattern"
+                >Please input an appropriate email.</span
+              >
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                <ion-item>
+                  <ion-label position="floating">Password:</ion-label>
+                  <ion-input
+                    type="password"
+                    formControlName="password"
+                    (ngModelChange)="checkFormValid()"
+                  ></ion-input>
+                </ion-item>
+              </ion-col>
+              <ion-col>
+                <ion-item>
+                  <ion-label position="floating">Confirm Password:</ion-label>
+                  <ion-input
+                    type="password"
+                    formControlName="cfmPassword"
+                    (ngModelChange)="checkFormValid()"
+                  ></ion-input>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                <!-- Error Message -->
+                <span
+                  *ngIf="formSubmitted && errorControl.password.errors?.required"
+                  >Password is required.</span
+                >
+                <span
+                  *ngIf="formSubmitted && userForm.get('password').hasError('minlength')"
+                  >Password needs to be more than 8 chars.</span
+                >
+              </ion-col>
+              <ion-col>
+                <!-- Error Message -->
+                <span
+                  *ngIf="formSubmitted && errorControl.cfmPassword.errors?.required"
+                  >Confirm Password is required.</span
+                >
+                <span
+                  *ngIf="cfmPasswordOnChange()"
+                  (ionChange)="cfmPasswordOnChange()"
+                  style="white-space: nowrap"
+                  >Passwords are not the same!</span
+                >
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                <ion-item>
+                  <ion-label position="floating">Phone:</ion-label>
+                  <ion-input
+                    type="text"
+                    formControlName="phone"
+                    (ngModelChange)="checkFormValid()"
+                  ></ion-input>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <!-- Error Message -->
+              <span *ngIf="formSubmitted && errorControl.phone.errors?.required"
+                >Phone Number is required.</span
+              >
+              <span *ngIf="formSubmitted && errorControl.phone.errors?.pattern"
+                >Please insert a correct number.</span
+              >
+            </ion-row>
+            <ion-row class="ion-align-items-center ion-justify-content-center">
+              <ion-button
+                (click)="createCustomer()"
+                [class.button-disabled]="!formValid"
+                >Create Account
+                <ion-spinner name="crescent" *ngIf="loading"></ion-spinner>
+              </ion-button>
+            </ion-row>
+          </ion-grid>
+        </form>
+      </ion-card-content>
+    </ion-card>
+  </ion-grid>
+</ion-content>

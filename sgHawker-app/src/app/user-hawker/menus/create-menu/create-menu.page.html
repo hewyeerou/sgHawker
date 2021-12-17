@@ -1,0 +1,162 @@
+<ion-header>
+  <ion-toolbar class="hawker-header-background-color">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/hawker/menus"></ion-back-button>
+    </ion-buttons>
+    <ion-title *ngIf="operation === 'createMenu'">Create Menu</ion-title>
+    <ion-title *ngIf="operation === 'editMenu'">Edit Menu Details</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <form [formGroup]="createMenuForm" (ngSubmit)="createMenu()">
+      <ion-grid>
+        <!-- Include for future enhancement -->
+        <!-- <ion-row>
+          <ion-col>
+            <ion-item>
+              <ion-label>Outlet: </ion-label>
+              <ion-select formControlName="outlet" cancelText="Cancel" okText="OK" (ngModelChange)="checkFormValid()"
+                placeholder="Please select an outlet" (ionChange)="retrieveFoodItems()">
+                <ion-select-option *ngFor="let o of outlets" [value]="o">
+                  {{o.outletName}}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
+        </ion-row> -->
+        <!-- Error Message -->
+        <!-- <ion-row>
+          <span *ngIf="formSubmitted && errorControl.outlet.errors?.required">
+            Outlet is required.
+          </span>
+        </ion-row> -->
+        <ion-row>
+          <ion-col>
+            <ion-item>
+              <ion-label>Menu Name: </ion-label>
+              <ion-input type="text" formControlName="menuName" (ngModelChange)="checkFormValid()"
+                placeholder="Please enter menu name"></ion-input>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+        <!-- Error Message -->
+        <ion-row>
+          <span *ngIf="formSubmitted && errorControl.menuName.errors?.required">Menu Name is required.</span>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-item>
+              <ion-label>Active: </ion-label>
+              <ion-toggle formControlName="activeMenu" (ngModelChange)="checkFormValid()"></ion-toggle>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-item lines="none">
+              <ion-label>Food Items: </ion-label>
+              <!-- Display only when no menu categories is selected -->
+              <ion-button (click)="selectFoodItems()" class="hawker-header-background-color">
+                <ion-icon slot="start" name="add-outline"></ion-icon>
+                Add Food Item
+              </ion-button>
+            </ion-item>
+
+            <ion-item lines="none" *ngIf="createMenuForm.controls.foodItems.value.length !== 0">
+              <span slot="end" class="mc-items-number">
+                {{createMenuForm.controls.foodItems.value.length}} Items selected
+              </span>
+            </ion-item>
+            <ion-item-divider></ion-item-divider>
+          </ion-col>
+        </ion-row>
+        <!-- Error Message -->
+        <ion-row>
+          <span *ngIf="formSubmitted && errorControl.foodItems.errors?.required">Food Items are required.</span>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-item lines="none">
+              <ion-label>Menu Categories:</ion-label>
+              <ion-button (click)="addMenuCategory()" class="hawker-header-background-color">
+                <ion-icon slot="start" name="add-outline"></ion-icon>
+                New Menu Category
+              </ion-button>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+        <ion-card formGroupName="recommendedMenuCategory"
+          (click)="presentMenuCategoryModal(createMenuForm.controls.recommendedMenuCategory, true, true, null)">
+          <ion-item lines="none">
+            <ion-badge class="mc-name-badge">
+              {{createMenuForm.controls.recommendedMenuCategory.controls.categoryName.value}} [default]
+            </ion-badge>
+            <span slot="end" class="mc-items-number">
+              {{createMenuForm.controls.recommendedMenuCategory.controls.foodItems.value.length}}
+              Items
+            </span>
+            <ion-icon slot="end" name="pencil"></ion-icon>
+          </ion-item>
+        </ion-card>
+        <ion-card formArrayName="menuCategories" *ngFor="let category of menuCategories.controls; let i = index;"
+          (click)="presentMenuCategoryModal(category, false, true, i)">
+          <div [formGroupName]="i">
+            <ion-item lines="none">
+              <ion-badge class="mc-name-badge">
+                {{category.controls.categoryName.value}}
+              </ion-badge>
+              <span slot="end" class="mc-items-number">
+                {{category.controls.foodItems.value.length}} Items
+              </span>
+              <ion-icon slot="end" name="pencil"></ion-icon>
+            </ion-item>
+          </div>
+        </ion-card>
+        <ion-item-divider></ion-item-divider>
+        <ion-row>
+          <ion-col>
+            <ion-item lines="none">
+              <ion-label>Food Bundle: </ion-label>
+              <ion-button (click)="addFoodBundle()" class="hawker-header-background-color">
+                <ion-icon slot="start" name="add"></ion-icon>
+                New Food Bundle
+              </ion-button>
+            </ion-item>
+
+            <ion-card *ngFor="let f of foodBundles" (click)="updateFoodBundle(f)">
+              <ion-item lines="none">
+                <ion-badge class="mc-name-badge">{{f.bundleName}}</ion-badge>
+                <span slot="end">
+                  <b>{{f.foodItems.length}} {{f.foodItems.length === 1 ? 'item' : 'items'}}</b>
+                </span>
+                <ion-icon slot="end" name="pencil"></ion-icon>
+              </ion-item>
+            </ion-card>
+            <ion-item-divider></ion-item-divider>
+          </ion-col>
+        </ion-row>
+        <br />
+        <br />
+        <ion-row>
+          <ion-col style="display:flex;justify-content: center;">
+            <ion-button type="submit" [class.button-disabled]="!formValid"
+              *ngIf="operation === 'createMenu'">
+              <ion-icon slot="start" name="checkmark"></ion-icon>
+              Submit
+            </ion-button>
+            <ion-button type="submit" *ngIf="operation === 'editMenu'">
+              <ion-icon slot="start" name="checkmark"></ion-icon>
+              Submit
+            </ion-button>
+            <ion-button color="warning" [routerLink]="['/hawker/menus']">
+              <ion-icon slot="start" name="close"></ion-icon>
+              Cancel
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </form>
+  </ion-card>
+</ion-content>

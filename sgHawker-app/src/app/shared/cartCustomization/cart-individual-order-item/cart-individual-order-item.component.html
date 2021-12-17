@@ -1,0 +1,28 @@
+<ion-item-sliding>
+  <ion-item (click)="showFoodItemModal(foodItem)">
+    <ion-grid>
+      <ion-row class="ion-justify-content-between">
+        <ion-text>
+          <h4><b>{{ foodItem.itemQuantity }}x {{ foodItem.foodItem.itemName }}</b></h4>
+        </ion-text>
+        <ion-text>
+          <h4>${{ foodItem.itemSubtotal | number: '1.2-2' }}</h4>
+        </ion-text>
+      </ion-row>
+      <div *ngIf="foodItem.selectedCustomizations.length > 0">
+        <ion-text>
+          <div *ngFor="let customization of foodItem.selectedCustomizations">
+            <h6 class="customization">&nbsp;&nbsp;&nbsp;&nbsp;{{customization.customizationName}} -
+              {{customization.selectedOption?.optionName}}</h6>
+          </div>
+        </ion-text>
+      </div>
+    </ion-grid>
+  </ion-item>
+
+  <ion-item-options side="end">
+    <ion-item-option color="danger" expandable (click)="removeIndividualFoodItem(foodItem)">
+      Remove
+    </ion-item-option>
+  </ion-item-options>
+</ion-item-sliding>

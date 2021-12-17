@@ -1,0 +1,114 @@
+ion-slides {
+    height:50%;
+}
+
+ion-slide {
+    transition: 0.1s ease-in;
+    width: 250px !important;
+    margin-left:-50px
+}
+
+.group-order-status {
+    position: absolute;
+    right:10px;
+    font-size: 12px
+}
+
+.order-card {
+    height:230px;
+    width:300px ;
+    z-index: 1;
+}
+
+.order-card-fade {
+    height:230px;
+    width:300px;
+    z-index: 1;
+    opacity: 0.4;
+}
+
+ion-badge {
+    font-size:12px
+}
+
+ion-card-title, ion-card-subtitle {
+    font-size: 12px;
+    text-align: start
+}
+
+ion-card {
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    -ms-overflow-style: none;  // IE 10+
+    scrollbar-width: none;  // Firefox
+    scroll-behavior: smooth;
+
+    &::-webkit-scrollbar {
+      display: none; // Safari and Chrome
+    }
+}
+
+.text {
+    font-size: 12px;
+    text-align: start;
+}
+
+.text-cust {
+    font-size: 12px;
+}
+
+.group-order-item-status{
+    font-size:10px;
+}
+
+.queue-pref-badge {
+    margin-top: 100px;
+    padding: 10px;
+    font-size: 15px;
+    position: fixed;
+    left: 100px;
+    z-index: 99;
+}
+
+@media only screen and (min-height: 1000px) {
+    ion-slide {
+        transition: 0.1s ease-in;
+        width: 300px !important;
+    }
+    .order-card {
+        height:300px;
+        width:300px;
+        position: absolute;
+        z-index: 1
+    }
+
+    .order-card-fade {
+        height:300px;
+        width:300px;
+        z-index: 1;
+        opacity: 0.5;
+    }
+
+    ion-card-title, ion-card-subtitle{
+        font-size: 20px;
+        text-align: start
+    }
+    .text {
+        font-size: 20px;
+        text-align: start
+    }
+    .text-cust {
+        font-size: 20px;
+    }
+    .group-order-item-status{
+        font-size:18px
+    }
+    .group-order-status {
+        position: absolute;
+        right:10px;
+        font-size: 18px
+    }
+    ion-badge {
+        font-size:15px
+    }
+  }

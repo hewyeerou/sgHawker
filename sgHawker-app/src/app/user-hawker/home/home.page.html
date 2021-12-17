@@ -1,0 +1,53 @@
+<ion-header>
+  <ion-toolbar class="hawker-header-background-color">
+    <ion-row class="ion-align-items-end ion-justify-content-center">
+      <img src="../../assets/Logo - White.svg" width="25%" height="25%" />
+    </ion-row>
+    <ion-buttons slot="end">
+      <ion-button class="add-menu-category-button" (click)="showPopOver($event)">
+        <ion-icon name="ellipsis-horizontal-outline" style="color: white;"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content scroll-y="false">
+  <!-- queue not yet started -->
+  <ion-grid *ngIf="!queueService.queueIsActive" style="height: 100%; display: flex; justify-content: center">
+    <ion-row style="align-items: center">
+      <ion-col></ion-col>
+      <ion-col style="text-align: center">
+        <ion-button (click)="startQueue()">Start Order Queue</ion-button>
+      </ion-col>
+      <ion-col></ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <!-- queue start -->
+  <ion-grid *ngIf="queueService.queueIsActive" style="height: 100%">
+    <ion-row style="height: 80%; align-items: center;">
+      <ion-col style="height: 100%; justify-content: center">
+
+        <ion-row class="ion-justify-content-end">
+          <ion-button (click)="presentTakeOrderModal()" color="warning">
+            <ion-icon slot="start" name="cart"></ion-icon>
+            Take Order
+          </ion-button>
+
+          <ion-button (click)="presentCashOrderModal()" color="warning">
+            <ion-icon slot="start" name="wallet"></ion-icon>
+            Unpaid Cash Orders
+          </ion-button>
+        </ion-row>
+
+        <!-- EMPTY DIV TO CENTRALISE QUEUE COMPONENT WHEN THERES ONLY 1 QUEUE -->
+        <div *ngIf="orderQueueArr.length === 1" style="height:25%"></div>
+
+        <order-queue-card *ngFor="let q of orderQueueArr" [queue]="q" [queueSetting]="queueService.queueSetting">
+        </order-queue-card>
+        
+      </ion-col>
+    </ion-row>
+
+  </ion-grid>
+</ion-content>

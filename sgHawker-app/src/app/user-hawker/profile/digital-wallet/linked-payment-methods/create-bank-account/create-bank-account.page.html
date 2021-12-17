@@ -1,0 +1,94 @@
+<ion-header>
+  <ion-toolbar class="hawker-header-background-color">
+    <ion-row class="ion-align-items-end ion-justify-content-center">
+      <img src="../../assets/Logo - White.svg" width="25%" height="25%" />
+    </ion-row>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/hawker/profile/digital-wallet/linked-payment-methods" style="color:white;"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+ 
+<ion-content overflow-scroll="true">
+  <ion-row>
+    <!-- <ion-button size="large" type="button" [routerLink]="['/hawker/profile/digital-wallet/linked-payment-methods']" fill="clear"
+      >
+      <ion-icon size="large" style="color: #ee4444" slot="icon-only" name="arrow-back-outline"></ion-icon>
+    </ion-button> -->
+    <ion-label style="font-weight: bold; font-size: large; margin-left: 5%; margin-top: 6%;"> Add New Bank Account
+    </ion-label>
+  </ion-row>
+
+  <form [formGroup]="bankAccountForm" (ngSubmit)="updateDetails()">
+    <ion-grid style="padding: 1rem">
+  
+      <ion-row>
+        <ion-col size="12">
+          <ion-item>
+            <ion-label position="stacked" style="width: 100%">Full Name in your Bank Account</ion-label>
+            <ion-input formControlName="fullName" type="text" (ngModelChange)="checkFormValid()"></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <span *ngIf="formSubmitted && errorControl.fullName.errors?.required" style="color: #ee4444; padding-left: 1rem">
+            Name Required.</span>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="12">
+          <ion-item>
+            <ion-label position="stacked" style="width: 100%">Account Number</ion-label>
+            <ion-input formControlName="accountNumber" type="text" (ngModelChange)="checkFormValid()"></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <span *ngIf="formSubmitted && errorControl.accountNumber.errors?.required" style="color: #ee4444; padding-left: 1rem">
+            Account Number Required.</span>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="12">
+          <ion-item>
+            <ion-label position="stacked" style="width: 100%">Bank Name</ion-label>
+            <ion-input formControlName="nameOfBank" type="text" (ngModelChange)="checkFormValid()"></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <span *ngIf="formSubmitted && errorControl.nameOfBank.errors?.required" style="color: #ee4444; padding-left: 1rem">
+            Name of Bank Required.</span>
+        </ion-col>
+      </ion-row>
+      
+      <ion-row>
+        <ion-col size="9">
+          <ion-text style="font-weight: normal;">
+          Set as Default 
+          </ion-text>
+        </ion-col>
+        <ion-col >
+          <ion-toggle style="margin-left: 30%;" (ionChange)="changeDefault($event)"></ion-toggle>
+        </ion-col>
+      </ion-row>
+      <div style="display: flex; justify-content: center;">
+        <ion-row> 
+          <ion-col>
+            <ion-button
+                (click)="updateDetails()"
+                [class.button-disabled]="!formValid"
+                >Add New Bank Account
+                <ion-spinner name="crescent" *ngIf="loading"></ion-spinner>
+              </ion-button>
+          </ion-col>
+        </ion-row>
+      </div>
+    </ion-grid>
+  </form>
+
+</ion-content>

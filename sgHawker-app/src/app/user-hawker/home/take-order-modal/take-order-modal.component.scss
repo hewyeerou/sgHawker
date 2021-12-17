@@ -1,0 +1,27 @@
+.content {
+  height: 100%;
+  width: 100%;
+}
+
+.menuContent {
+  position: fixed;
+  top: 200px;
+  width: 45%;
+  // bottom: 79px;
+  bottom: 10px;
+  overflow: scroll;
+}
+
+.cartContent {
+  position: fixed;
+  top: 132px;
+  width: 45%; 
+  bottom: 143px;
+  overflow: scroll;
+}
+
+.checkOut {
+  position: fixed;
+  bottom: 10px;
+  width: 48%;
+}

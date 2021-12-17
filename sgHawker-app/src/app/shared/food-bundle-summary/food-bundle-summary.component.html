@@ -1,0 +1,26 @@
+<ion-item>
+  <div style="display: flex; flex-direction: column">
+    <ion-row class="ion-align-items-center" style="padding-top: 1%">
+      <ion-label>
+        {{ foodBundle.bundleName }}
+      </ion-label>
+      &nbsp;&nbsp;
+      <ion-badge *ngIf="foodBundle.isPromotion && available" color="warning">
+        PROMOTION
+      </ion-badge>
+      <ion-badge *ngIf="!available" color="light"> NOT AVAILABLE </ion-badge>
+    </ion-row>
+    <ion-label class="ion-text-wrap" style="font-size: small; color: gray">
+      {{ foodBundle.foodItems.length }} items
+    </ion-label>
+    <ion-label class="ion-text-wrap" style="font-size: small; color: gray">
+      {{ foodBundle.foodItems[0].itemName }} & more
+    </ion-label>
+    <ion-note color="dark" style="font-weight: bold">
+      ${{ foodBundle.bundlePrice }}
+    </ion-note>
+  </div>
+  <ion-thumbnail slot="end">
+    <img src="../../../assets/sgHawkerAppIcon.svg" />
+  </ion-thumbnail>
+</ion-item>

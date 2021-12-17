@@ -1,0 +1,105 @@
+<ion-header>
+  <ion-toolbar [ngClass]="{'customer-header-background-color': currentUser !== undefined, 'hawker-header-background-color': !currentUser}">
+    <ion-buttons slot="primary">
+      <ion-button (click)="dismissModal()">
+        <ion-icon slot="icon-only" ios="close" md="close" style="color:white;"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>
+      <ion-row class="ion-align-items-end ion-justify-content-center">
+        <img src="../../assets/Logo - White.svg" width="40%" height="30%" />
+      </ion-row>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen>
+  <div class="fill">
+    <img src="https://picsum.photos/200/300" />
+  </div>
+  <ion-grid style="margin-top: -10%;">
+    <ion-row>
+      <ion-col>
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>
+              <ion-row class="ion-justify-content-between ion-align-items-center">
+                <ion-text color="dark" style="font-weight: bold;font-size: medium;">
+                  {{orderItem.foodItem.itemName}}
+                </ion-text>
+                <ion-badge color="primary">
+                  {{orderItem.foodItem.itemCategory}}
+                </ion-badge>
+              </ion-row>
+            </ion-card-title>
+            <ion-card-subtitle>
+              {{orderItem.foodItem.itemDescription}}
+            </ion-card-subtitle>
+            <ion-card-subtitle *ngIf="!partOfFoodBundle" style="font-weight: bold;">
+              ${{orderItem.foodItem.itemPrice}}
+            </ion-card-subtitle>
+            <div *ngIf="!partOfFoodBundle">
+              <br />
+              <ion-row class="ion-align-items-center">
+                <ion-button class="button-has-icon-only button-clear button-small" (click)="decreaseItemQuantity()">
+                  <ion-icon name="remove">
+                  </ion-icon>
+                </ion-button>
+                &nbsp;
+                {{this.orderItem.itemQuantity}}
+                &nbsp;
+                <ion-button class="button-has-icon-only button-clear button-small" (click)="increaseItemQuantity()">
+                  <ion-icon name="add">
+                  </ion-icon>
+                </ion-button>
+              </ion-row>
+            </div>
+          </ion-card-header>
+          <ion-card-content *ngIf="orderItem.foodItem.itemCustomizations.length > 0">
+            <br />
+            <ion-list>
+              <ion-radio-group *ngFor="let customization of orderItem.foodItem.itemCustomizations; let id = index"
+                (ionChange)="selectCustomizationHandler($event, customization.customizationName)"
+                value="{{getSelection(customization.customizationName)}}" allow-empty-selection>
+                <ion-list-header>
+                  <ion-label>
+                    <ion-text style="font-weight: bold; font-size: medium;">{{ customization.customizationName}}
+                    </ion-text>
+                    <ion-text *ngIf="customization.mandatory">*</ion-text>
+                  </ion-label>
+                </ion-list-header>
+                <ion-item *ngFor="let option of customization.customizationOptions">
+                  <ion-label>{{option.optionName}} - ${{option.optionCharge}}</ion-label>
+                  <ion-radio slot="end" [value]="option.optionName"></ion-radio>
+                </ion-item>
+              </ion-radio-group>
+            </ion-list>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
+<ion-footer *ngIf="!partOfFoodBundle">
+  <ion-toolbar transparent>
+    <ion-button disabled="{{!outletIsActive}}" expand="block" color="success" (click)="addOrderItemToBasket()">
+      <ion-icon slot="start" name="cart">
+      </ion-icon>
+      <ion-text *ngIf="!editingFoodItem">Add to basket</ion-text>
+      <ion-text *ngIf="editingFoodItem">Edit basket</ion-text>&nbsp;-&nbsp;&nbsp;<ion-text style="font-weight: bold;">
+        ${{orderItem.itemSubtotal}}</ion-text>
+    </ion-button>
+  </ion-toolbar>
+</ion-footer>
+<ion-footer *ngIf="partOfFoodBundle">
+  <ion-toolbar transparent>
+    <ion-button expand="block" color="success" (click)="addOrderItemToBasket()">
+      <ion-icon slot="start" name="cart">
+      </ion-icon>
+      Confirm &nbsp;&nbsp;<ion-text style="font-weight: bold;">+
+        <!-- <ion-text *ngIf="!partOfFoodBundle">{{orderItem.itemSubtotal - foodItem.itemPrice}}</ion-text> -->
+        <ion-text>{{orderItem.itemSubtotal * bundleQuantity}}</ion-text>
+      </ion-text>
+    </ion-button>
+  </ion-toolbar>
+</ion-footer>

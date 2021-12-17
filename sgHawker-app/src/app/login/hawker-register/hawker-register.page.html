@@ -1,0 +1,224 @@
+<ion-header class="ion-no-border" style="background-color: #ee4444">
+  <!-- <ion-button size="default" type="button" (click)="goBack()" fill="clear" style="width: 100px; height: 60px; margin-left: -5px;">
+    <ion-icon style="color:white;" slot="icon-only" name="arrow-back-outline"></ion-icon>
+  </ion-button> -->
+  <ion-toolbar color="#ee4444">
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content style="--background: #ee4444">
+  <br />
+  <!--Register Form-->
+  <form [formGroup]="registerForm" (ngSubmit)="register()">
+    <ion-grid style="width: 100%; margin-top: -5%; background-color: #ee4444">
+      <ion-row>
+        <ion-col class="ion-padding-vertical" size="12" size-md>
+          <ion-row> </ion-row>
+          <ion-row> </ion-row>
+          <ion-row class="ion-justify-content-center">
+            <img
+              style="width: 260; height: 260"
+              src="../../../assets/sgHawkerAppIcon.svg"
+            />
+          </ion-row>
+          <ion-row> </ion-row>
+        </ion-col>
+        <ion-col>
+          <ion-grid>
+            <ion-row>
+              <ion-col class="ion-text-center" style="color: white">
+                <h1>Register</h1>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                <ion-item>
+                  <ion-label position="floating">Name of Hawker:</ion-label>
+                  <ion-input
+                    class="input"
+                    type="text"
+                    formControlName="name"
+                    (ngModelChange)="checkFormValid()"
+                  ></ion-input>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <!-- Error Message -->
+              <span *ngIf="formSubmitted && errorControl.name.errors?.required"
+                >Name is required.</span
+              >
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                <ion-item>
+                  <ion-label position="floating">Email:</ion-label>
+                  <ion-input
+                    class="input"
+                    type="text"
+                    formControlName="email"
+                    (ngModelChange)="checkFormValid()"
+                  ></ion-input>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <!-- Error Message -->
+              <span *ngIf="formSubmitted && errorControl.email.errors?.required"
+                >Email is required.</span
+              >
+              <span *ngIf="errorControl.email.errors?.pattern"
+                >Please input an appropriate email.</span
+              >
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                <ion-item>
+                  <ion-label position="floating">Password:</ion-label>
+                  <ion-input
+                    class="input"
+                    type="password"
+                    formControlName="password"
+                    (ngModelChange)="checkFormValid()"
+                  ></ion-input>
+                </ion-item>
+              </ion-col>
+              <ion-col>
+                <ion-item>
+                  <ion-label position="floating">Confirm Password:</ion-label>
+                  <ion-input
+                    class="input"
+                    type="password"
+                    formControlName="cfmPassword"
+                    (ngModelChange)="checkFormValid()"
+                  ></ion-input>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                <!-- Error Message -->
+                <span
+                  *ngIf="formSubmitted && errorControl.password.errors?.required"
+                  >Password is required.</span
+                >
+                <span
+                  *ngIf="formSubmitted && registerForm.get('password').hasError('minlength')"
+                  >Password needs to be more than 8 chars.</span
+                >
+              </ion-col>
+              <ion-col>
+                <!-- Error Message -->
+                <span
+                  *ngIf="formSubmitted && errorControl.cfmPassword.errors?.required"
+                  >Confirm Password is required.</span
+                >
+                <span
+                  *ngIf="cfmPasswordOnChange()"
+                  (ionChange)="cfmPasswordOnChange($event)"
+                  >Confirm Password not the same as Password.</span
+                >
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                <ion-item>
+                  <ion-label position="floating">Phone:</ion-label>
+                  <ion-input
+                    class="input"
+                    type="text"
+                    formControlName="phone"
+                    (ngModelChange)="checkFormValid()"
+                  ></ion-input>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                <!-- Error Message -->
+                <span
+                  *ngIf="formSubmitted && errorControl.phone.errors?.required"
+                  >Phone Number is required.</span
+                >
+                <span *ngIf="errorControl.phone.errors?.pattern"
+                  >Please insert a correct number.</span
+                >
+              </ion-col>
+            </ion-row>
+            <!-- File Upload -->
+            <ion-row>
+              <ion-col
+                size="8"
+                style="margin-top: 8px; color: white; font-weight: bold"
+                class="ion-text-left"
+              >
+                <ion-label
+                  >Upload Hawker Stall License(s) / Food Stall License(s)
+                </ion-label>
+              </ion-col>
+              <ion-col size="2" class="ion-float-right">
+                <ion-row class="ion-align-items-center ion-justify-content-center">
+                  <input
+                    class="ion-hide"
+                    name="file"
+                    #file
+                    type="file"
+                    multiple="multiple"
+                    (change)="onFileChange($event)"
+                    accept="image/*,.doc, .docx,.txt,.pdf"
+                  />
+                  <ion-button
+                    size="small"
+                    (click)="file.click()"
+                  >
+                    Upload File
+                  </ion-button>
+                </ion-row>
+              </ion-col>
+            </ion-row>
+            <ion-row *ngIf="existFiles" style="padding-top: 20px">
+              <ion-grid class="grid">
+                <ion-row
+                  class="ion-padding"
+                  style="
+                    color: white;
+                    font-size: 15px;
+                    background-color: #cf6363;
+                  "
+                  >Uploaded files</ion-row
+                >
+                <ion-list *ngFor="let item of files; let i = index">
+                  <ion-item-sliding>
+                    <ion-item>
+                      <ion-label>{{i + 1}}. {{item.name}}</ion-label>
+                    </ion-item>
+                    <ion-item-options side="end">
+                      <ion-item-option (click)="removeFile(i)">
+                        <ion-icon
+                          slot="icon-only"
+                          name="trash-outline"
+                        ></ion-icon>
+                        DELETE
+                      </ion-item-option>
+                    </ion-item-options>
+                  </ion-item-sliding>
+                </ion-list>
+              </ion-grid>
+            </ion-row>
+            <br />
+            <br />
+            <ion-row class="ion-align-items-center ion-justify-content-center">
+              <ion-button [class.button-disabled]="!formValid" type="submit"
+                >Create Account
+                <ion-spinner name="crescent" *ngIf="loading"></ion-spinner>
+              </ion-button>
+            </ion-row>
+          </ion-grid>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
+</ion-content>

@@ -1,0 +1,72 @@
+<ion-header>
+  <ion-toolbar class="hawker-header-background-color">
+    <ion-title>Add Customisation</ion-title>
+    <ion-buttons slot="primary">
+      <ion-button (click) = "dismissModal()"style="font-size: 20px;" fill="clear" color="primary">
+        <ion-icon name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label>Customization Name:</ion-label>
+          <ion-input style="text-align: end;" placeholder="Enter customization name here..." type="text" [(ngModel)]="tempName"></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label>Mandatory</ion-label>
+          <ion-select interface="popover" [(ngModel)]="tempMandatory" (ionChange) = "checkMandatory()">
+            <ion-select-option value="yes">Yes</ion-select-option>
+            <ion-select-option value="no">No</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-card>
+      <ion-card-header >
+        <ion-label style="font-size: 17px;">Options</ion-label>
+        <ion-button (click) = "addOptions()" style="margin-top: -10px;"fill="clear" class="ion-float-right">
+          <ion-icon name="add-circle-outline"></ion-icon>
+        </ion-button>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-grid class="grid-card">
+          <ion-row *ngFor="let op of options; let i = index;" style="width: 100%;">
+            <ion-col size="5">
+              <ion-item>
+                <ion-label>{{i + 1}}. Name: </ion-label>
+                <ion-input type="text" placeholder="Enter name..." [(ngModel)]="op.optionName"></ion-input>
+              </ion-item>
+            </ion-col>
+            <ion-col size="5">
+              <ion-item>
+                <ion-label>Price: </ion-label>
+                <ion-input type="number" placeholder="Enter price..." [(ngModel)]="op.optionCharge"></ion-input>
+              </ion-item>
+            </ion-col>
+            <ion-col size="2" >
+              <ion-button (click) = "removeOption(i)" fill="clear" class="ion-float-right">
+                <ion-icon name="remove-circle-outline"></ion-icon>
+              </ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </ion-card>
+
+  </ion-grid>
+  <ion-grid>
+    <ion-row class="ion-padding-top ion-align-items-center ion-justify-content-center">
+      <ion-button (click) = "submit()" fill="solid" style="width: 50%; --background: #f2b354">Add</ion-button>
+  </ion-row>
+  </ion-grid>
+
+</ion-content>

@@ -1,0 +1,67 @@
+<ion-card (deleteReportEvent)="removeReportFromList($event)">
+  <ion-item-sliding>
+    <ion-item (click)="viewReportDetails()" lines="none" style="display: flex; flex-direction: column">
+      <ion-col>
+        <ion-row>
+          <ion-item lines="none">
+          <ion-label>Report #{{ report?._id.substring(report._id.length - 5) }}</ion-label>
+        </ion-item>
+        </ion-row>
+        <ion-row>
+          <ion-list lines="none">
+            <div style="display: flex; flex-direction: column">
+              <ion-item>
+                <ion-label>
+                  <span class="header">Category: </span>
+                  <span>{{ report.complaintCategory.replaceAll('_', ' ') }}</span>
+                </ion-label>
+              </ion-item>
+
+              <ion-item>
+                <ion-label>
+                  <span class="header">Report Date: </span>
+                  <span>{{ report.reportDate | date: 'dd/MM/yy hh:MM a' }}</span>
+                </ion-label>
+              </ion-item>
+
+              <ion-item>
+                <ion-label>
+                  <span class="header">Status: </span>
+                  <span [ngSwitch]="report.reportStatus">
+                    <ion-badge color="warning" *ngSwitchCase="'IN_PROGRESS'">
+                      {{report.reportStatus.toString().replace('_', " ")}}
+                    </ion-badge>
+                    <ion-badge color="success" *ngSwitchCase="'RESOLVED'">
+                      {{report.reportStatus.toString().replace('_', " ")}}
+                    </ion-badge>
+                    <ion-badge color="success" *ngSwitchCase="'REFUNDED'">
+                      {{report.reportStatus.toString().replace('_', " ")}}
+                    </ion-badge>
+                    <ion-badge color="success" *ngSwitchCase="'EMAIL'">
+                      {{report.reportStatus.toString().replace('_', " ")}}
+                    </ion-badge>
+                    <ion-badge color="primary" *ngSwitchDefault>{{report.reportStatus.toString().replace('_', "
+                      ")}}</ion-badge>
+                  </span>
+                </ion-label>
+              </ion-item>
+
+              <ion-item>
+                <ion-label *ngIf="report.reportReplyDate">
+                  <span class="header">Reply date: </span>
+                  <span>{{ report.reportReplyDate | date: 'dd/MM/yy hh:MM a' }}</span>
+                </ion-label>
+              </ion-item>
+            </div>
+          </ion-list>
+        </ion-row>
+      </ion-col>
+    </ion-item>
+
+    <ion-item-options side="end">
+      <ion-item-option *ngIf="report.reportStatus === 'NEW'" color="danger" expandable (click)="deleteReport()">
+        Delete
+      </ion-item-option>
+    </ion-item-options>
+  </ion-item-sliding>
+</ion-card>

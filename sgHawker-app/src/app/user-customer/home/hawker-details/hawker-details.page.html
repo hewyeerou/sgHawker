@@ -1,0 +1,197 @@
+<ion-header>
+  <ion-toolbar class="customer-header-background-color">
+    <ion-buttons slot="start">
+      <ion-back-button
+        defaultHref="/customer/home"
+        style="color: white"
+        *ngIf="!sessionService.getIsGuest()"
+      ></ion-back-button>
+      <ion-button
+        [routerLink]="['/guest-qr-code']"
+        *ngIf="sessionService.getIsGuest()"
+      >
+        <ion-icon style="color: white" name="qr-code-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="primary">
+      <ion-button>
+        <ion-icon
+          slot="icon-only"
+          ios="ellipsis-horizontal"
+          md="ellipsis-vertical"
+          style="color: white"
+        ></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>
+      <ion-row class="ion-align-items-end ion-justify-content-center">
+        <img src="../../assets/Logo - White.svg" width="40%" height="30%" />
+      </ion-row>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen>
+  <div class="fill">
+    <img src="../../../../assets/Logo - Black.svg" />
+  </div>
+  <ion-grid style="margin-top: -10%">
+    <ion-row>
+      <ion-col>
+        <ion-card *ngIf="outlet">
+          <ion-card-header>
+            <ion-card-title>
+              <ion-row
+                class="ion-justify-content-between ion-align-items-center"
+              >
+                <ion-text
+                  color="dark"
+                  style="font-weight: bold; font-size: medium"
+                >
+                  {{outlet.outletName}}
+                </ion-text>
+                <ion-badge color="success" *ngIf="isActive()"> OPEN </ion-badge>
+                <ion-badge color="dark" *ngIf="!isActive()"> CLOSED </ion-badge>
+              </ion-row>
+            </ion-card-title>
+            <ion-card-subtitle> {{outlet.outletAddress}} </ion-card-subtitle>
+            <br />
+            <ion-row class="ion-align-items-center">
+              <ion-button
+                fill="clear"
+                style="padding: 0; margin: 0"
+                size="small"
+              >
+                <ion-icon
+                  name="star"
+                  slot="start"
+                  style="color: coral; font-size: small"
+                >
+                </ion-icon>
+                <ion-text
+                  color="dark"
+                  style="font-weight: bold; font-size: small"
+                  class="ion-text-lg-lowercase"
+                >
+                  cashback available&nbsp;
+                </ion-text>
+                <ion-text style="color: gray"
+                  >|&nbsp;<span style="border-bottom: 1px solid gray"
+                    >See details</span
+                  >
+                </ion-text>
+              </ion-button>
+            </ion-row>
+          </ion-card-header>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-align-items-center">
+      <ion-col size="10">
+        <ion-searchbar
+          (ionChange)="filterFoodByName()"
+          [(ngModel)]="searchString"
+          placeholder="Search for food..."
+        >
+        </ion-searchbar>
+      </ion-col>
+      <ion-col size="1">
+        <ion-button
+          class="button-has-icon-only"
+          fill="clear"
+          (click)="categorySelect.open()"
+        >
+          <ion-icon name="filter"> </ion-icon>
+        </ion-button>
+        <ion-select
+          [(ngModel)]="selectedCategories"
+          #categorySelect
+          class="ion-hide"
+          (ionChange)="filterCategories();"
+          multiple="true"
+        >
+          <ion-select-option
+            *ngFor="let category of allCategories"
+            [value]="category"
+            >{{category}}
+          </ion-select-option>
+        </ion-select>
+      </ion-col>
+    </ion-row>
+
+    <ion-row *ngIf="recommendedFoodItems?.length > 0">
+      <ion-col>
+        <ion-card class="borderless-ion-card">
+          <ion-card-header>
+            <ion-card-title> Recommended </ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-slides
+              [options]="{ slidesPerView: 'auto', zoom: false, grabCursor: true }"
+            >
+              <recommended-food-item
+                *ngFor="let foodItem of recommendedFoodItems"
+                [foodItem]="foodItem"
+                (click)="showFoodItemModal(foodItem)"
+              >
+              </recommended-food-item>
+            </ion-slides>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-list>
+          <ion-item-group *ngIf="foodBundles?.length > 0">
+            <ion-item-divider>
+              <ion-label>Food bundles</ion-label>
+            </ion-item-divider>
+            <app-food-bundle-summary
+              *ngFor="let foodBundle of foodBundles"
+              [foodBundle]="foodBundle"
+              (click)="showFoodBundleModal(foodBundle)"
+            >
+            </app-food-bundle-summary>
+          </ion-item-group>
+        </ion-list>
+        <ion-list *ngFor="let category of menuCategories">
+          <ion-item-group>
+            <ion-item-divider>
+              <ion-label>{{category.categoryName}}</ion-label>
+            </ion-item-divider>
+            <app-food-item-summary
+              *ngFor="let foodItem of category.foodItems"
+              [foodItem]="foodItem"
+              (click)="showFoodItemModal(foodItem)"
+            >
+            </app-food-item-summary>
+          </ion-item-group>
+        </ion-list>
+        <ion-list *ngFor="let category of foodItemCategories">
+          <ion-item-group>
+            <ion-item-divider>
+              <ion-label>{{category.categoryName}}</ion-label>
+            </ion-item-divider>
+            <app-food-item-summary
+              *ngFor="let foodItem of category.foodItems"
+              [foodItem]="foodItem"
+              (click)="showFoodItemModal(foodItem)"
+            >
+            </app-food-item-summary>
+          </ion-item-group>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
+<ion-footer *ngIf="foodBasketService.getTotalItems() > 0">
+  <ion-button expand="block" color="success" (click)="navigateToCart()">
+    <ion-icon slot="start" name="cart"> </ion-icon>
+    Basket ({{foodBasketService.getTotalItems()}} items) &nbsp;&nbsp; -
+    &nbsp;&nbsp;
+    <ion-text style="font-weight: bold">
+      {{foodBasketService.getTotalPrice() | currency: "USD" }}
+    </ion-text>
+  </ion-button>
+</ion-footer>

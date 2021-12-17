@@ -1,0 +1,149 @@
+<ion-header>
+  <ion-toolbar class="hawker-header-background-color">
+    <ion-row class="ion-align-items-end ion-justify-content-center">
+      <img src="../../assets/Logo - White.svg" width="25%" height="25%" />
+    </ion-row>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/hawker/profile/digital-wallet/linked-payment-methods" style="color:white;"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+ 
+<ion-content overflow-scroll="true">
+  <ion-row>
+    <!-- <ion-button size="large" type="button" [routerLink]="['/hawker/profile/digital-wallet/linked-payment-methods']" fill="clear"
+      >
+      <ion-icon size="large" style="color: #ee4444" slot="icon-only" name="arrow-back-outline"></ion-icon>
+    </ion-button> -->
+    <ion-label style="font-weight: bold; font-size: large; margin-left: 33%; margin-top: 6%;"> Add New Card
+    </ion-label>
+  </ion-row>
+
+  <form [formGroup]="cardForm" (ngSubmit)="updateDetails()">
+    <ion-grid style="padding: 1rem">
+  
+      <ion-row>
+        <ion-col size="12">
+          <ion-item>
+            <ion-label position="stacked" style="width: 100%">Name on Card</ion-label>
+            <ion-input formControlName="cardName" type="text" (ngModelChange)="checkFormValid()"></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <span *ngIf="formSubmitted && errorControl.cardName.errors?.required" style="color: #ee4444; padding-left: 1rem">
+            Name of Card Required.</span>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="12">
+          <ion-item>
+            <ion-label position="stacked" style="width: 100%">Card Number</ion-label>
+            <ion-input formControlName="cardNumber" type="text" (ngModelChange)="checkFormValid()"></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <span *ngIf="formSubmitted && errorControl.cardNumber.errors?.required" style="color: #ee4444; padding-left: 1rem">
+            Card Number Required.</span>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="12">
+          <ion-item>
+            <ion-label position="stacked" style="width: 100%">Card Type</ion-label>
+            <ion-input formControlName="cardType" type="text" (ngModelChange)="checkFormValid()"></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <span *ngIf="formSubmitted && errorControl.cardType.errors?.required" style="color: #ee4444; padding-left: 1rem">
+            Card Type Required.</span>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="12">
+          <ion-item>
+            <ion-label position="stacked" style="width: 100%">Expiry Date</ion-label>
+            <ion-datetime displayFormat="MM/YY" min="2021" max="2099" placeholder="Select Date" formControlName="expiryDate" type="text" (ngModelChange)="checkFormValid()"></ion-datetime>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <span *ngIf="formSubmitted && errorControl.expiryDate.errors?.required" style="color: #ee4444; padding-left: 1rem">
+            Expiry Date Required.</span>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="12">
+          <ion-item>
+            <ion-label position="stacked" style="width: 100%">CVV</ion-label>
+            <ion-input formControlName="cvv" type="text" (ngModelChange)="checkFormValid()"></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <span *ngIf="formSubmitted && errorControl.cvv.errors?.required" style="color: #ee4444; padding-left: 1rem">
+            CVV Required.</span>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="12">
+          <ion-item>
+            <ion-label position="stacked" style="width: 100%">Billing Address Details</ion-label>
+            <ion-input formControlName="billingAddressDetails" type="text" (ngModelChange)="checkFormValid()"></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <span *ngIf="formSubmitted && errorControl.billingAddressDetails.errors?.required" style="color: #ee4444; padding-left: 1rem">
+            Billing Address required.</span>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="12">
+          <ion-item>
+            <ion-label position="stacked">Postal Code</ion-label>
+            <ion-input formControlName="billingPostalCode" type="text" (ngModelChange)="checkFormValid()"></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="12">
+          <span *ngIf="formSubmitted && errorControl.billingPostalCode.errors?.required" style="color: #ee4444; padding-left: 1rem">
+            Postal Code should have 6 digits.</span>
+        </ion-col>
+      </ion-row>
+      <!-- <ion-row>
+        <ion-col size="9">
+          <ion-text style="font-weight: normal;">
+          Set as Default Card
+          </ion-text>
+        </ion-col>
+        <ion-col >
+          <ion-toggle style="margin-left: 30%;" (ionChange)="changeDefault($event)"></ion-toggle>
+        </ion-col>
+      </ion-row> -->
+      <div style="display: flex; justify-content: center;">
+        <ion-row>
+          <ion-col>
+            <ion-button
+                (click)="updateDetails()"
+                [class.button-disabled]="!formValid"
+                >Add New Card
+                <ion-spinner name="crescent" *ngIf="loading"></ion-spinner>
+              </ion-button>
+          </ion-col>
+        </ion-row>
+      </div>
+    </ion-grid>
+  </form>
+
+</ion-content>

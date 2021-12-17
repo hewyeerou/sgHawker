@@ -1,0 +1,33 @@
+<ion-header>
+  <ion-toolbar class="customer-header-background-color">
+    <ion-buttons slot="primary">
+      <ion-button *ngIf="user" [routerLink]="['activity-history']">
+        <ion-icon slot="icon-only" name="document" style="color:white;"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-row class="ion-align-items-center ion-justify-content-end">
+      <ion-title style="color: white;">
+        My Activity
+      </ion-title>
+    </ion-row>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen>
+  <ion-toolbar>
+    <ion-segment [(ngModel)]="segmentModel">
+      <ion-segment-button value="ongoingOrders" class="segment-active-inactive">
+        Orders
+      </ion-segment-button>
+      <ion-segment-button value="ongoingDeliveries" class="segment-active-inactive"> Deliveries </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+  <ion-grid>
+    <div *ngIf="segmentModel === 'ongoingOrders'">
+      <ion-row *ngFor="let order of ongoingOrders">
+        <app-order-summary [order]="order" (click)="showOrderDetails(order)" style="width: 100%;">
+        </app-order-summary>
+      </ion-row>
+    </div>
+  </ion-grid>
+</ion-content>

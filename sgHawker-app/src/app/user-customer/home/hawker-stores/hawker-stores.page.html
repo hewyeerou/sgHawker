@@ -1,0 +1,196 @@
+<ion-header>
+  <ion-toolbar class="customer-header-background-color">
+    <ion-buttons slot="start">
+      <ion-back-button
+        defaultHref="/customer/home"
+        style="color: white"
+        *ngIf="!sessionService.getIsGuest()"
+      ></ion-back-button>
+      <ion-button [routerLink]="['/guest-qr-code']" *ngIf="sessionService.getIsGuest()">
+        <ion-icon style="color: white;" name="qr-code-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="primary">
+      <ion-button *ngIf="user">
+        <ion-icon
+          slot="icon-only"
+          ios="ellipsis-horizontal"
+          md="ellipsis-vertical"
+          style="color: white"
+        ></ion-icon>
+      </ion-button>
+    </ion-buttons> 
+    <ion-title>
+      <ion-row class="ion-align-items-end ion-justify-content-center">
+        <img src="../../assets/Logo - White.svg" width="40%" height="30%" />
+      </ion-row>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-card class="borderless-ion-card">
+          <img src="../../../assets/Logo - Black.svg" width="100%" />
+          <ion-card-title> {{hawkerCenter.hawkerCenterName}} </ion-card-title>
+          <ion-card-subtitle>
+            <ion-icon name="location" style="color: coral"></ion-icon>
+            {{hawkerCenter.hawkerCentreAddress}}
+          </ion-card-subtitle>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-align-items-center">
+      <ion-col size="9">
+        <ion-searchbar
+          (ionChange)="searchData($event)"
+          placeholder="Search stalls..."
+        >
+        </ion-searchbar>
+      </ion-col>
+      <ion-col size="1">
+        <ion-button
+          class="button-has-icon-only"
+          fill="clear"
+          (click)="categorySelect.open()"
+        >
+          <ion-icon name="funnel-outline"> </ion-icon>
+        </ion-button>
+        <ion-select
+          [(ngModel)]="selectedCategories"
+          #categorySelect
+          class="ion-hide"
+          (ionChange)="filterCategories();"
+          multiple="true"
+        >
+          <ion-select-option
+            *ngFor="let category of allFoodCategories"
+            [value]="category"
+            >{{category}}
+          </ion-select-option>
+        </ion-select>
+      </ion-col>
+      <ion-col size="1">
+        <ion-button
+          class="button-has-icon-only"
+          fill="clear"
+          (click)="sortCategorySelect.open()"
+        >
+          <ion-icon name="filter"> </ion-icon>
+        </ion-button>
+        <ion-select
+          [(ngModel)]="selectedCategory"
+          #sortCategorySelect
+          class="ion-hide"
+          (ionChange)="filterByCategory();"
+        >
+          <ion-select-option
+            *ngFor="let item of allSortCategories"
+            [value]="item"
+            >{{item}}
+          </ion-select-option>
+        </ion-select>
+      </ion-col>
+    </ion-row>
+
+    <div *ngIf="allPromotionalFoodBundles.length > 0">
+      <ion-row>
+        <ion-col>
+          <ion-card class="borderless-ion-card">
+            <ion-card-title> Promotions </ion-card-title>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-slides
+            [options]="{ slidesPerView: 'auto', zoom: false, grabCursor: true }"
+          >
+            <app-promotional-bundle-summary
+              *ngFor="let foodBundle of allPromotionalFoodBundles"
+              [promotionFoodBundle]="foodBundle"
+            >
+            </app-promotional-bundle-summary>
+          </ion-slides>
+        </ion-col>
+      </ion-row>
+      <ion-row class="ion-justify-content-end ion-align-items-center">
+          <ion-text style="color: gray; margin-right: 8%;" (click)="showAllPromotionalBundles()"> See all </ion-text>
+      </ion-row>
+    </div>
+
+    <ion-row>
+      <ion-col>
+        <ion-card class="borderless-ion-card">
+          <ion-card-title> Stores </ion-card-title>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-card
+          *ngFor="let hawkerStore of allHawkerStores"
+          
+        >
+          <ion-row class="ion-align-items-center">
+            <ion-col>
+              <ion-row
+                class="ion-justify-content-between ion-align-items-center"
+              >
+                <ion-card-title
+                  style="
+                    font-family: bold;
+                    color: var(--font-color);
+                    align-items: center;
+                  " (click)="navigateHawkerStore(hawkerStore)"
+                >
+                  {{hawkerStore.outletName}}
+                  <ion-badge color="success" *ngIf="isActive(hawkerStore)">
+                    OPEN
+                  </ion-badge>
+                  <ion-badge color="medium" *ngIf="!isActive(hawkerStore)">
+                    CLOSED
+                  </ion-badge>
+                </ion-card-title>
+                <ion-icon *ngIf="user" name="heart" [color]="isFavourited(hawkerStore._id) ? 'danger': 'dark'" style="font-size: medium" (click) = "addFavouriteHawkerStore(hawkerStore._id)"> </ion-icon>
+              </ion-row>
+              <br />
+              <ion-row class="ion-align-items-center">
+                <ion-icon name="location" style="color: coral"></ion-icon>
+                {{hawkerStore.outletAddress}}
+              </ion-row>
+              <br />
+              <ion-row class="ion-align-items-center">
+                <ion-badge
+                  color="warning"
+                  *ngFor="let type of hawkerStore.cuisineType"
+                  style="font-size: x-small; margin: 3px"
+                >
+                  {{type}}
+                </ion-badge>
+              </ion-row>
+            </ion-col>
+          </ion-row>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  
+    <ion-fab
+      *ngIf="foodBasketService.getTotalItems() > 0"
+      horizontal="end"
+      vertical="bottom"
+      slot="fixed"
+      (click)="navigateToCart()"
+    >
+      <ion-badge color="dark" class="notificationBadge"
+        >{{foodBasketService.getTotalItems()}}</ion-badge
+      >
+      <ion-fab-button class="cartButton">
+        <ion-icon name="cart"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+  
+</ion-content>

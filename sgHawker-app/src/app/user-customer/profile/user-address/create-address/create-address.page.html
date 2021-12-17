@@ -1,0 +1,90 @@
+<ion-header>
+  <ion-toolbar class="customer-header-background-color">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/customer/user-address" style="color:white;"></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      <ion-row class="ion-align-items-end ion-justify-content-center">
+        <img src="../../assets/Logo - White.svg" width="40%" height="30%" />
+      </ion-row>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content>
+  <ion-row>
+    <ion-button size="large" type="button" [routerLink]="['/customer/profile/user-address']" fill="clear"
+      >
+      <ion-icon size="large" style="color: #ee4444" slot="icon-only" name="arrow-back-outline"></ion-icon>
+    </ion-button>
+    <ion-label style="font-weight: bold; font-size: large; margin-left: 9%; margin-top: 6%;"> Add New Address
+    </ion-label>
+  </ion-row>
+
+  <form [formGroup]="addressForm" (ngSubmit)="updateDetails()">
+    <ion-grid style="padding: 1rem">
+  
+      <ion-row>
+        <ion-col size="12">
+          <ion-item>
+            <ion-label position="stacked" style="width: 100%">Address Details</ion-label>
+            <ion-input formControlName="addressDetails" type="text" (ngModelChange)="checkFormValid()"></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <!-- Error Message - Name -->
+          <span *ngIf="formSubmitted && errorControl.addressDetails.errors?.required" style="color: #ee4444; padding-left: 1rem">
+            Details of Address required.</span>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="12">
+          <ion-item>
+            <ion-label position="stacked">Postal Code</ion-label>
+            <ion-input formControlName="postalCode" type="text" (ngModelChange)="checkFormValid()"></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+
+        </ion-col>
+        <ion-col size="12">
+          <!-- Error Message - Phone -->
+          <span *ngIf="formSubmitted && errorControl.postalCode.errors?.required" style="color: #ee4444; padding-left: 1rem">
+            Postal Code should have 6 digits.</span>
+          
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="9">
+          <ion-text style="font-weight: normal;">
+          Set as Default Address
+          </ion-text>
+        </ion-col>
+        <ion-col >
+          <ion-toggle style="margin-left: 30%;" (ionChange)="changeDefault($event)"></ion-toggle>
+        </ion-col>
+      </ion-row>
+    
+      <br />
+      <br />
+      <div style="display: flex; justify-content: center;">
+        <ion-row>
+          <ion-col>
+            <ion-button
+                (click)="updateDetails()"
+                [class.button-disabled]="!formValid"
+                >Add New Address
+                <ion-spinner name="crescent" *ngIf="loading"></ion-spinner>
+              </ion-button>
+          </ion-col>
+        </ion-row>
+      </div>
+    </ion-grid>
+  </form>
+
+</ion-content>

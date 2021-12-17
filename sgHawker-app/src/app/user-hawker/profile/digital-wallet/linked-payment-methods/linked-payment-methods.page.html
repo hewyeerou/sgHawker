@@ -1,0 +1,123 @@
+<ion-header>
+  <ion-toolbar class="hawker-header-background-color">
+    <ion-row class="ion-align-items-end ion-justify-content-center">
+      <img src="../../assets/Logo - White.svg" width="25%" height="25%" />
+    </ion-row>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/hawker/profile/digital-wallet" style="color:white;"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+ 
+<ion-content>
+  <ion-row>
+  <ion-label style="font-weight: bold; font-size: large; margin-top: 6%">
+    Linked Payment Methods
+  </ion-label>
+</ion-row>
+<br>
+
+  <ion-row style="border: 0.1px solid; border-left: none; border-right: none;"> 
+    <ion-col>
+      <ion-text style="font-weight: normal">
+        <ion-icon style="padding-right: 8px;" name="card-outline"></ion-icon>
+        <b>My Cards</b>
+      </ion-text>
+    </ion-col> 
+  </ion-row>
+  <ion-row>
+    <ion-col>
+      <ion-list *ngFor="let card of myCards" style="column-span: all;" (click)="directToSpecificCard(card._id)">
+  
+          <ion-item class="ion-align-items-start" size="10" lines="full" style="border-color: black;">
+            <ion-col>
+              &nbsp;
+              <ion-row >
+                <ion-col style="flex: 0 0 4px; padding: 0; margin-right: 10px;">
+                <span style="font-size: large;"><b>{{card.cardType}}</b></span>
+              </ion-col>
+              <ion-col style="flex: 0 0 4px; padding: 0; margin-right: 10px;"*ngIf="card.isDefault">
+                <ion-text>
+                  <span style="color: #5e44ee;">[Default]</span>
+                </ion-text>
+              </ion-col> 
+              <ion-col style="flex: 0 0 4px; padding: 0; margin-left:auto; font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;" >
+                <ion-text>
+                  <span>*{{card.truncatedCardNumber.substr(card.truncatedCardNumber.length-4)}}</span>
+                </ion-text>
+              </ion-col>
+              </ion-row>
+            </ion-col>
+          </ion-item>
+        
+      </ion-list>
+    </ion-col>
+   </ion-row> 
+  <br>
+
+   <ion-row style="border: 0.1px solid #ee4444; border-left: none; border-right: none;">
+     
+      <ion-col>
+        <ion-text style="font-weight: normal; margin-left: 10%">
+          <b>Add A New Card</b>
+        </ion-text>
+      </ion-col>
+      <ion-col >
+        <ion-icon style="margin-left: 80% " name = "add-outline" (click) = "addNewCard()" ></ion-icon>
+      </ion-col>
+      
+   </ion-row>
+
+   <br>
+    <ion-row style="border: 0.1px solid; border-left: none; border-right: none;"> 
+    <ion-col>
+      <ion-text style="font-weight: normal">
+        <ion-icon style="padding-right: 8px;" name="cash-outline"></ion-icon>
+        <b>My Bank Accounts</b>
+      </ion-text>
+    </ion-col>
+  </ion-row>
+
+  <ion-row>
+    <ion-col>
+      <ion-list *ngFor="let bankAccount of myBankAccounts" style="column-span: all;" (click)="directToSpecificBankAccount(bankAccount._id)">
+  
+          <ion-item class="ion-align-items-start" size="10" lines="full" style="border-color: black;">
+            <ion-col>
+              &nbsp;
+              <ion-row >
+                <ion-col style="flex: 0 0 4px; padding: 0; margin-right: 10px;">
+                <span style="font-size: large;"><b>{{bankAccount.nameOfBank}}</b></span>
+              </ion-col>
+              <ion-col style="flex: 0 0 4px; padding: 0; margin-right: 10px;"*ngIf="bankAccount.isDefault">
+                <ion-text>
+                  <span style="color: #5e44ee;">[Default]</span>
+                </ion-text>
+              </ion-col>
+              <ion-col style="flex: 0 0 4px; padding: 0; margin-left:auto; font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;" >
+                <ion-text>
+                  <span>*{{bankAccount.accountNumber.substr(bankAccount.accountNumber.length-4)}}</span>
+                </ion-text>
+              </ion-col>
+              </ion-row>
+            </ion-col>
+          </ion-item>
+        
+      </ion-list>
+    </ion-col>
+   </ion-row> 
+
+   <ion-row style="border: 0.1px solid #ee4444; border-left: none; border-right: none;">
+     
+    <ion-col>
+      <ion-text style="font-weight: normal; margin-left: 10%">
+        <b>Add Bank Account</b>
+      </ion-text>
+    </ion-col>
+    <ion-col >
+      <ion-icon style="margin-left: 80% " name = "add-outline" (click) = "addNewBankAccount()" ></ion-icon>
+    </ion-col>
+    
+ </ion-row>
+
+</ion-content>

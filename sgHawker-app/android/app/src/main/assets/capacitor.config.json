@@ -1,0 +1,6 @@
+{
+	"appId": "com.sgHawker.app",
+	"appName": "sgHawker",
+	"webDir": "www",
+	"bundledWebRuntime": false
+}

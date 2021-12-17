@@ -1,0 +1,14 @@
+.cartButton {
+    --background: coral;
+    --background-activated: coral;
+    // --ion-color-base: coral!important;
+}
+
+.notificationBadge {
+    // background-color: red;
+    position: absolute;
+    top: -3px;
+    right: -3px;
+    border-radius: 100%;
+    z-index: 1;
+}

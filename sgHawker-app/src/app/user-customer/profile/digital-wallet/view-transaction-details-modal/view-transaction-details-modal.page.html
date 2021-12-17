@@ -1,0 +1,97 @@
+<ion-header>
+  <ion-toolbar class="customer-header-background-color">
+    <ion-title style="color:white;">View Transaction Details</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismissModal()" style="font-size: 20px;" fill="clear">
+        <ion-icon name="close-outline" style="color:white;"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid style="width: 100%;">
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label>Transaction Date</ion-label>
+          <ion-input value="{{transaction.transactionDate | date: 'MMM d, y'}}" [readonly]="true"></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label>Transaction Time</ion-label>
+          <ion-input value="{{transaction.transactionDate | date: 'h:mm aaa'}}" [readonly]="true"></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item>
+          <ion-label *ngIf="transaction.transactionType === 'TOP_UP' || transaction.transactionType === 'REFUND'">Transaction Type</ion-label>
+          <ion-label *ngIf="transaction.transactionType === 'ORDER'">Order Number</ion-label>
+          <ion-input value="Top Up" *ngIf="transaction.transactionType === 'TOP_UP'" [readonly]="true"></ion-input>
+          <ion-input value="Order #{{transaction.order._id.substr(transaction.order._id.length-5) | uppercase}}" *ngIf="transaction.transactionType === 'ORDER'" [readonly]="true"></ion-input>
+          <ion-input value="Refund" *ngIf="transaction.transactionType === 'REFUND'" [readonly]="true"></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="transaction.transactionType === 'TOP_UP'">
+      <ion-col>
+        <ion-item>
+          <ion-label>Amount</ion-label>
+          <ion-input value="{{ transaction.topUpAmount | currency: 'USD' }}"
+            [readonly]="true"></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="transaction.transactionType === 'TOP_UP'" >
+      <ion-col>
+        <ion-item>
+          <ion-label>Credit Card</ion-label>
+          <ion-input
+            value="* {{ transaction.creditCardInvolved.truncatedCardNumber.substr(transaction.creditCardInvolved.truncatedCardNumber.length-4) }}"
+            *ngIf="transaction.transactionType === 'TOP_UP'" [readonly]="true"></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="transaction.transactionType === 'ORDER'">
+      <ion-col>
+        <ion-item>
+          <ion-label>Amount Paid</ion-label>
+          <ion-input value="{{ transaction.paidNonCashbackAmount | currency: 'USD' }}"
+            [readonly]="true"></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="transaction.transactionType === 'ORDER'">
+      <ion-col>
+        <ion-item>
+          <ion-label>Cashback Amount Used</ion-label>
+          <ion-input value="{{ transaction.paidCashbackAmount | currency: 'USD' }}"
+            [readonly]="true"></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="transaction.transactionType === 'ORDER'">
+      <ion-col>
+        <ion-item>
+          <ion-label>Credited Cashback Amount</ion-label>
+          <ion-input value="{{ transaction.receivedCashbackAmount | currency: 'USD' }}"
+            [readonly]="true"></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="transaction.transactionType === 'REFUND'">
+      <ion-col>
+        <ion-item>
+          <ion-label>Refund Amount</ion-label>
+          <ion-input value="{{ transaction.refundedAmount | currency: 'USD' }}"
+            [readonly]="true"></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

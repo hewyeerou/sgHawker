@@ -1,0 +1,49 @@
+.profile {
+  width: 160px;
+  height: 160px;
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+  margin: 0 auto;
+
+  img {
+    display: block;
+    border-radius: 100%;
+    width: 160px;
+    height: 160px;
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    margin: 0 auto;
+    border: 5px solid black;
+    background-color: #fff;
+  }
+}
+
+ion-avatar {
+  position: relative;
+  min-width: 100px;
+  min-height: 100px;
+  &::after {
+    content: "";
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    box-shadow: 4px 4px 12px 0px #5a5a5a;
+    top: 0;
+    left: 0;
+  }
+}
+
+.img-placeholder {
+  width: 70%;
+  height: 70%;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.manage-outlet-btn {
+  --background: var(--hawker-primary-color);
+}

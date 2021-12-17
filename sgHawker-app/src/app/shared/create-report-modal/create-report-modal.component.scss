@@ -1,0 +1,26 @@
+ion-button {
+  --color: black;
+}
+
+.submitButton {
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.header {
+  font-weight: bold;
+}
+
+.content {
+  position: fixed;
+  top: 64px;
+  bottom: 44px;
+  overflow-y: scroll;
+}

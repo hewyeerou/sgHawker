@@ -1,0 +1,71 @@
+<ion-header>
+  <ion-toolbar class="customer-header-background-color">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/customer/profile" style="color:white;"></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      <ion-row class="ion-align-items-end ion-justify-content-center">
+        <img src="../../assets/Logo - White.svg" width="40%" height="30%" />
+      </ion-row>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+ 
+<ion-content>
+  <ion-row>
+  <!-- <ion-button size="large" type="button" [routerLink]="['/customer/profile']" fill="clear"
+    >
+    <ion-icon size="large" style="color: #ee4444" slot="icon-only" name="arrow-back-outline"></ion-icon>
+  </ion-button> -->
+  <ion-label style="font-weight: bold; font-size: large; margin-left: 5%; margin-top: 6%;color: #ee4444">
+    My Addresses
+  </ion-label>
+</ion-row>
+  <ion-row>
+    
+    <ion-col>
+    
+      <ion-list *ngFor="let address of myAddresses" style="column-span: all;" (click)="directToSpecificAddress(address._id)">
+  
+          <ion-item class="ion-align-items-center" size="10" lines="full" style="border-color: black;">
+            <ion-col>
+              &nbsp;
+              <ion-row>
+                <span style="font-size: large;"><b>{{address.addressDetails}}</b></span>
+              </ion-row>
+              &nbsp;
+              <ion-row>
+                <ion-col>
+              <ion-text>
+                <span>SG {{address.postalCode}}</span>
+              </ion-text>
+            </ion-col>
+            <ion-col *ngIf="address.isDefault" style="margin-left: 40%;">
+              <ion-text>
+                <span style="color: #ee4444;">[Default]</span>
+              </ion-text>
+            </ion-col>
+            </ion-row>
+            
+            </ion-col>
+          </ion-item>
+        
+      </ion-list>
+    </ion-col>
+   </ion-row> 
+  <br>
+
+   <ion-row style="border: 0.1px solid #ee4444; border-left: none; border-right: none;">
+     
+      <ion-col>
+        <ion-text style="font-weight: normal; margin-left: 10%; color:#ee4444">
+          Add A New Address
+        </ion-text>
+      </ion-col>
+      <ion-col >
+        <ion-icon style="margin-left: 80%;color:#ee4444" name = "add-outline" (click) = "addNewAddress()" ></ion-icon>
+      </ion-col>
+      
+   </ion-row>
+
+</ion-content>

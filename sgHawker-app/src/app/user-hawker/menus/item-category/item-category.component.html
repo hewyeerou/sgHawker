@@ -1,0 +1,10 @@
+<ng-select [items]="itemCategories" [(ngModel)]="selectedItem" [addTag]="showAddTag ? addTagFn: false">
+  <ng-template ng-option-tmp let-item="item" let-search="searchTerm">
+    <div (click)="clickSelectItem(item)" style="display: flex; justify-content: space-between; align-items: center">
+        <span [ngOptionHighlight]="search" style="margin: 5px 0">{{item}}</span>
+        <ion-button *ngIf="editCallback && itemCategories.includes(item)" size="small" shape="round" fill="outline" color="primary" (click)="editCallback(item)">
+          <ion-icon name="pencil"></ion-icon>
+        </ion-button>
+    </div>
+  </ng-template>
+</ng-select>

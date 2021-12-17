@@ -1,0 +1,28 @@
+<ion-card (click)="redirectToOutlet()" style="width: 170px;">
+  <div style="display: flex; flex-direction: column">
+    <img
+      src="../../../assets/sgHawkerAppIcon.svg"
+      style="height: 150px; width: 150px"
+    />
+    <ion-badge style="margin-top: -10%" color="primary">
+      {{ promotionFoodBundle.outletName }}
+    </ion-badge>
+  </div>
+
+  <ion-item>
+    <div style="display: flex; flex-direction: column">
+      <ion-label>
+        {{ promotionFoodBundle.bundleName }}
+      </ion-label>
+      <ion-label
+        class="ion-text-wrap"
+        style="font-size: small; color: gray; text-overflow: ellipsis"
+      >
+        {{ promotionFoodBundle.foodItems[0].itemName }}...
+      </ion-label>
+      <ion-note color="dark" style="font-weight: bold">
+        ${{ promotionFoodBundle.bundlePrice }}
+      </ion-note>
+    </div>
+  </ion-item>
+</ion-card>

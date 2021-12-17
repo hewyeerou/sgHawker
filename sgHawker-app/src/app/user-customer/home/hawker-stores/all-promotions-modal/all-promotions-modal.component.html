@@ -1,0 +1,44 @@
+<ion-header>
+  <ion-toolbar class="customer-header-background-color">
+    <ion-buttons slot="primary">
+      <ion-button (click)="dismissModal()">
+        <ion-icon
+          slot="icon-only"
+          ios="close"
+          md="close"
+          style="color: white"
+        ></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>
+      <ion-row class="ion-align-items-end ion-justify-content-center">
+        <img src="../../assets/Logo - White.svg" width="40%" height="30%" />
+      </ion-row>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-card class="borderless-ion-card">
+          <ion-card-title> Promotional Bundles </ion-card-title>
+        </ion-card>
+        <ion-list>
+          <ion-item-group *ngFor="let entry of outletMap | keyvalue">
+            <ion-item-divider>
+              <ion-label style="color: black; font-weight: bold;">{{ entry.key }}</ion-label>
+            </ion-item-divider>
+            <app-food-bundle-summary
+              *ngFor="let foodBundle of entry.value"
+              [foodBundle]="foodBundle"
+              (click)="navigateHawkerStore(foodBundle._id)"
+            >
+            </app-food-bundle-summary>
+          </ion-item-group>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

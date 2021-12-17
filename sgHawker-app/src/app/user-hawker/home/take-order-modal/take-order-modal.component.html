@@ -1,0 +1,158 @@
+<ion-header>
+  <ion-toolbar class="hawker-header-background-color">
+    <ion-buttons slot="primary">
+      <ion-button
+        (click)="dismissModal()"
+        style="font-size: 20px"
+        fill="clear"
+        color="primary"
+      >
+        <ion-icon name="close" slot="icon-only" style="color: white;"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Create Order</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content scrollY="false">
+  <ion-grid fixed class="content">
+    <ion-row class="ion-justify-content-center content">
+      <ion-col class="content">
+        <ion-row class="content">
+          <ion-col size="6" class="content">
+            <ion-row class="ion-padding-start">
+              <ion-text>
+                <h2>Menu</h2>
+              </ion-text>
+            </ion-row>
+
+            <ion-row>
+              <!-- Searching -->
+              <ion-col size="10">
+                <ion-searchbar (ionChange)="filterFoodByName()" [(ngModel)]="searchString"
+                  placeholder="Search for food...">
+                </ion-searchbar>
+              </ion-col>
+
+              <!-- Sorting -->
+              <ion-col size="1" class="ion-align-self-center">
+                <ion-button (click)="categorySelect.open()" fill="clear">
+                  <ion-icon slot="icon-only" name="filter-outline" style="color: black;"></ion-icon>
+                </ion-button>
+                <ion-item class="ion-hide">
+                  <ion-label [innerHTML]="title"></ion-label>
+                  <ion-select [(ngModel)]="selectedCategories" #categorySelect class="ion-hide"
+                    (ionChange)="filterCategories();" multiple="true">
+                    <ion-select-option *ngFor="let category of allCategories" [value]="category">{{category}}
+                    </ion-select-option>
+                  </ion-select>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+
+            <ion-card class="menuContent borderless-ion-card">
+              <ion-row *ngIf="recommendedFoodItems?.length > 0">
+                <ion-col>
+                  <ion-card class="borderless-ion-card">
+                    <ion-card-header>
+                      <ion-card-title> Recommended </ion-card-title>
+                    </ion-card-header>
+                    <ion-card-content>
+                      <ion-slides [options]="{ slidesPerView: 'auto', zoom: false, grabCursor: true }">
+                        <recommended-food-item *ngFor="let foodItem of recommendedFoodItems" [foodItem]="foodItem"
+                          (click)="showFoodItemModal(foodItem)">
+                        </recommended-food-item>
+                      </ion-slides>
+                    </ion-card-content>
+                  </ion-card>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col>
+                  <ion-list>
+                    <ion-item-group *ngIf="foodBundles?.length > 0">
+                      <ion-item-divider>
+                        <ion-label>Food bundles</ion-label>
+                      </ion-item-divider>
+                      <app-food-bundle-summary *ngFor="let foodBundle of foodBundles" [foodBundle]="foodBundle"
+                        (click)="showFoodBundleModal(foodBundle)">
+                      </app-food-bundle-summary>
+                    </ion-item-group>
+                  </ion-list>
+                  <ion-list *ngFor="let category of menuCategories">
+                    <ion-item-group>
+                      <ion-item-divider>
+                        <ion-label>{{category.categoryName}}</ion-label>
+                      </ion-item-divider>
+                      <app-food-item-summary *ngFor="let foodItem of category.foodItems" [foodItem]="foodItem"
+                        (click)="showFoodItemModal(foodItem)">
+                      </app-food-item-summary>
+                    </ion-item-group>
+                  </ion-list>
+                  <ion-list *ngFor="let category of foodItemCategories">
+                    <ion-item-group>
+                      <ion-item-divider>
+                        <ion-label>{{category.categoryName}}</ion-label>
+                      </ion-item-divider>
+                      <app-food-item-summary *ngFor="let foodItem of category.foodItems" [foodItem]="foodItem"
+                        (click)="showFoodItemModal(foodItem)">
+                      </app-food-item-summary>
+                    </ion-item-group>
+                  </ion-list>
+                </ion-col>
+              </ion-row>
+            </ion-card>
+          </ion-col>
+
+          <ion-col size="6" class="content" style="overflow-y: scroll;">
+            <ion-row class="ion-padding-start ion-justify-content-between ion-align-items-center">
+              <ion-text>
+                <h2>Cart</h2>
+              </ion-text>
+              <ion-button *ngIf="order?.individualOrderItems.length + order?.foodBundleOrderItems.length > 0"
+                (click)="clearCart()" color="danger">
+                <ion-icon slot="start" name="cart"></ion-icon>
+                Clear Cart
+              </ion-button>
+            </ion-row>
+
+            <ion-card class="cartContent borderless-ion-card">
+              <ion-card *ngFor="let foodItem of order?.individualOrderItems; let id = index">
+                <app-cart-individual-order-item [foodItem]="foodItem" [id]="id">
+                </app-cart-individual-order-item>
+              </ion-card>
+
+              <ion-card *ngFor="let bundleItem of order?.foodBundleOrderItems; let id = index">
+                <app-cart-bundle-order-item [bundleItem]="bundleItem" [id]="id">
+                </app-cart-bundle-order-item>
+              </ion-card>
+            </ion-card>
+
+            <div *ngIf="order?.individualOrderItems.length + order?.foodBundleOrderItems.length > 0" class="checkOut">
+              <ion-row class="ion-justify-content-between ion-padding-horizontal">
+                <ion-text>
+                  <h4>Price</h4>
+                </ion-text>
+                <ion-text>
+                  <h4>${{ order?.totalPrice | number: '1.2-2'}}</h4>
+                </ion-text>
+              </ion-row>
+              <ion-row>
+                <ion-item style="width: 98%;">
+                  <ion-label>Dining Options</ion-label>
+                  <ion-select interface="popover" placeholder="Select One" [(ngModel)]="diningOptions">
+                    <ion-select-option value="DINE_IN">Dine In</ion-select-option>
+                    <ion-select-option value="TAKE_AWAY">Takeaway</ion-select-option>
+                  </ion-select>
+                </ion-item>
+              </ion-row>
+              <ion-button horizontal="end" vertical="bottom" expand="block" color="success" (click)="placeOrder()" style="width: 98%;">
+                Place Order
+              </ion-button>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

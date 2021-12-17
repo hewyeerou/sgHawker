@@ -1,0 +1,64 @@
+<ion-header>
+  <ion-toolbar class="hawker-header-background-color">
+    <ion-buttons slot="start" class="hawker-toolbar-button">
+      <ion-back-button defaultHref="/hawker/profile/hawkertier"></ion-back-button>
+    </ion-buttons>
+    <ion-title class="hawker-toolbar-title">Choose Plan</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div style="display:flex;justify-content: center;align-items:center;height:100%">
+    <ion-grid *ngIf="subscriptionFees">
+      <ion-row class="plan-group" (click)="switch(1)">
+        <div style="display:flex;justify-content: start;" *ngIf="hawker.accountTier === 'FREE'">
+          <ion-icon name="checkmark-circle-sharp" class="plan-checked-icon"></ion-icon>
+        </div>
+        <ion-col size="3" class="{{hawker.accountTier === 'FREE' ? 'col-left-selected' : 'col-left'}}" style="background-color: var(--ion-color-medium);color:white">
+          <ion-label>FREE</ion-label>
+        </ion-col>
+        <ion-col size="5" class="{{hawker.accountTier === 'FREE' ? 'col-mid-selected' : 'col-mid'}}">
+          <ion-text>All features supported. Login to one device only</ion-text>
+        </ion-col>
+        <ion-col size="2" class="{{hawker.accountTier === 'FREE' ? 'col-right-selected' : 'col-right'}}">
+          <ion-text>Free</ion-text>
+        </ion-col>
+      </ion-row>
+      <ion-row class="plan-group" (click)="switch(2)">
+        <div style="display:flex;justify-content: start;" *ngIf="hawker.accountTier === 'PREMIUM'">
+          <ion-icon name="checkmark-circle-sharp" class="plan-checked-icon"></ion-icon>
+        </div>
+        <ion-col size="3" class="{{hawker.accountTier === 'PREMIUM' ? 'col-left-selected' : 'col-left'}}" style="background-color: var(--ion-color-primary);color:white">
+          <ion-label>PREMIUM</ion-label>
+        </ion-col>
+        <ion-col size="5" class="{{hawker.accountTier === 'PREMIUM' ? 'col-mid-selected' : 'col-mid'}}">
+          <ion-text>Login on multiple devices</ion-text>
+        </ion-col>
+        <ion-col size="2" class="{{hawker.accountTier === 'PREMIUM' ? 'col-right-selected' : 'col-right'}}">
+          <ion-text>S${{subscriptionFees.premium}}/month</ion-text>
+        </ion-col>
+      </ion-row>
+      <ion-row class="plan-group" (click)="switch(3)">
+        <div style="display:flex;justify-content: start;" *ngIf="hawker.accountTier === 'DELUXE'">
+          <ion-icon name="checkmark-circle-sharp" class="plan-checked-icon"></ion-icon>
+        </div>
+        <ion-col size="3" class="{{hawker.accountTier === 'DELUXE' ? 'col-left-selected' : 'col-left'}}" style="background-color: var(--ion-color-tertiary);color:white">
+          <ion-label>DELUXE</ion-label>
+        </ion-col>
+        <ion-col size="5" class="{{hawker.accountTier === 'DELUXE' ? 'col-mid-selected' : 'col-mid'}}">
+          <ion-text>Merchandised outlet support</ion-text>
+        </ion-col>
+        <ion-col size="2" class="{{hawker.accountTier === 'DELUXE' ? 'col-right-selected' : 'col-right'}}">
+          <ion-text>S${{subscriptionFees.deluxe}}/month</ion-text>
+        </ion-col>
+      </ion-row>
+      <ion-row style="display:flex;justify-content: center;">
+        <ion-button style="text-align: center;" 
+        disabled="{{originalHawker.accountTier === hawker.accountTier}}"
+        (click)="confirm()">
+          Change Plan
+        </ion-button>
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>

@@ -1,0 +1,63 @@
+<ion-header>
+  <ion-toolbar class="hawker-header-background-color">
+    <ion-buttons slot="primary">
+      <ion-button (click)="closeModal()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-row class="ion-align-items-center ion-justify-content-end">
+      <ion-title> Cashback </ion-title>
+    </ion-row>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form>
+    <ion-item>
+      <ion-label>Enable Cashback</ion-label>
+      <ion-toggle name="cashbackActive" [(ngModel)]="updatedOutlet.cashbackIsActive"></ion-toggle>
+    </ion-item>
+    <ion-item style="display:flex">
+      <ion-label style="flex:2">Cashback Rate ({{updatedOutlet.cashbackRate}}%)</ion-label>
+      <ion-range min="0" max="100" pin="true" name="cashbackRate" 
+      [(ngModel)]="updatedOutlet.cashbackRate" 
+      (ionChange)="updateSimulation()" 
+      disabled="{{!updatedOutlet.cashbackIsActive}}">
+      <ion-label slot="start">0</ion-label>
+      <ion-label slot="end">100</ion-label>
+    </ion-range>
+    </ion-item>
+    <ion-item *ngIf="updatedOutlet.cashbackIsActive" style="display:flex;justify-content: center;opacity:0.7;padding:0px 50px 0px 50px">
+      <ion-label>Simulation:</ion-label>
+      <ion-list style="flex:3;align-self: center;">
+        <ion-item>
+          Order #123
+        </ion-item>
+        <ion-item>
+          <ion-list>
+            <ion-item lines="none">
+              Chicken Rice x1 $3.50
+            </ion-item>
+            <ion-item lines="none">
+              Wanton Mee x1 $3.00
+            </ion-item>
+          </ion-list>
+        </ion-item>
+        
+        <ion-item>
+          <ion-label>Total Order Price:</ion-label>
+          <ion-text>$6.50</ion-text>
+        </ion-item>
+        <ion-item>
+          <ion-label>Cashback:</ion-label>
+          <ion-text color="danger">(${{simulatedCashback | number : '1.2-2'}})</ion-text>
+        </ion-item>
+        <ion-item style="font-weight: bold;" lines="none">
+          <ion-label>Total Earnings For Order:</ion-label>
+          <ion-text>${{simulatedEarnings | number : '1.2-2'}}</ion-text>
+        </ion-item>
+      </ion-list>
+    </ion-item>
+    <ion-button expand="full" (click)="updateCashback()">Update Cashback</ion-button>
+  </form>
+</ion-content>

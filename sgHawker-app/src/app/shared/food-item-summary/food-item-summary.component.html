@@ -1,0 +1,33 @@
+<ion-item>
+  <div style="display: flex; flex-direction: column">
+    <div style="display: flex">
+      <ion-label>
+        {{ foodItem.itemName }} </ion-label
+      >&nbsp;&nbsp;
+      <ion-badge *ngIf="foodItem.itemAvailability === false" color="light">
+        NOT AVAILABLE
+      </ion-badge>
+    </div>
+    <ion-label class="ion-text-wrap" style="font-size: small; color: gray">
+      {{ foodItem.itemDescription }}
+    </ion-label>
+    <ion-note color="dark" style="font-weight: bold">
+      ${{ foodItem.itemPrice }}
+    </ion-note>
+  </div>
+  <ion-thumbnail slot="end">
+    <ion-img
+      *ngIf="
+        foodItem.itemImageSrc !== undefined && foodItem.itemImageSrc.length > 0
+      "
+      [src]="imgSrc(foodItem.itemImageSrc)"
+    ></ion-img>
+    <img
+      src="../../../assets/sgHawkerAppIcon.svg"
+      *ngIf="
+        foodItem.itemImageSrc === undefined ||
+        foodItem.itemImageSrc.length === 0
+      "
+    />
+  </ion-thumbnail>
+</ion-item>

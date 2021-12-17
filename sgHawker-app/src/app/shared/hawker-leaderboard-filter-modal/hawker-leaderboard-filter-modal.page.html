@@ -1,0 +1,118 @@
+<ion-header>
+  <ion-toolbar
+    class="{{userType === 'HAWKER' ? 'hawker-header-background-color' : 'customer-header-background-color'}}"
+  >
+    <ion-buttons slot="primary">
+      <ion-button (click)="closeModal()">
+        <ion-icon slot="icon-only" name="close" style="color: white"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-row class="ion-align-items-center ion-justify-content-end">
+      <ion-title style="color: white"> Leaderboard Filter </ion-title>
+    </ion-row>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list style="margin-bottom: 3rem">
+    <ion-radio-group [(ngModel)]="selectedCurrentView">
+      <ion-list-header>
+        <ion-label>View Selection</ion-label>
+      </ion-list-header>
+
+      <ion-item *ngFor="let view of viewSelections">
+        <ion-label>{{view.label}}</ion-label>
+        <ion-radio slot="start" value="{{view.value}}"></ion-radio>
+      </ion-item>
+    </ion-radio-group>
+
+    <ion-radio-group
+      [(ngModel)]="selectedValueType"
+      *ngIf="userType !== 'HAWKER' && selectedCurrentView !== leaderBoardViewTypes.FOOD_ITEMS"
+    >
+      <ion-list-header>
+        <ion-label>Leaderboard Type</ion-label>
+      </ion-list-header>
+
+      <ion-item *ngFor="let valueType of valueTypeSelections">
+        <ion-label>{{valueType.label}}</ion-label>
+        <ion-radio slot="start" value="{{valueType.value}}"></ion-radio>
+      </ion-item>
+    </ion-radio-group>
+
+    <ion-list-header
+    *ngIf="!(selectedCurrentView === 'HAWKER_CENTERS' && selectedValueType === 'FAVOURITES') && !(selectedCurrentView === 'HAWKERS' && selectedValueType === 'FAVOURITES')"
+    >
+      <ion-label>Filter Selection</ion-label>
+    </ion-list-header>
+    <ion-item lines="inset"
+      *ngIf="!(selectedCurrentView === 'HAWKER_CENTERS' && selectedValueType === 'FAVOURITES') && !(selectedCurrentView === 'HAWKERS' && selectedValueType === 'FAVOURITES')"
+    >
+      <ion-label>Time Frame</ion-label>
+      <ion-select [(ngModel)]="selectedTimeFrame">
+        <ion-select-option value="{{null}}">All Time </ion-select-option>
+        <ion-select-option
+          *ngFor="let timeframe of timeFrameSelections"
+          [value]="timeframe.value"
+          >{{timeframe.label}}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-list-header *ngIf="selectedCurrentView !== leaderBoardViewTypes.HAWKER_CENTRES">
+      <ion-label>Customization Selection</ion-label>
+    </ion-list-header>
+    <ion-item lines="inset"
+      *ngIf="selectedCurrentView !== leaderBoardViewTypes.HAWKER_CENTRES"
+    >
+      <ion-label>Hawker Centres</ion-label>
+      <ion-select [(ngModel)]="selectedHawkerCentre">
+        <ion-select-option value="{{null}}"
+          >All Hawker Centres
+        </ion-select-option>
+        <ion-select-option
+          *ngFor="let hawkerCentre of allHawkerCentres"
+          [value]="hawkerCentre"
+          >{{hawkerCentre}}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item lines="inset" *ngIf="selectedCurrentView === leaderBoardViewTypes.FOOD_ITEMS">
+      <ion-label>Cuisines</ion-label>
+      <ion-select [(ngModel)]="selectedCuisineType">
+        <ion-select-option value="{{null}}"
+          >All Cuisine Types
+        </ion-select-option>
+        <ion-select-option *ngFor="let cuisine of allCuisineTypes" [value]="cuisine"
+          >{{cuisine}}
+          </ion-select-option>
+      </ion-select>
+    </ion-item>
+  </ion-list>
+  <ion-footer class="ion-no-border" style="position: fixed; bottom: 0">
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <ion-button
+            type="submit"
+            fill="solid"
+            expand="full"
+            (click)="reset()"
+            color="warning"
+          >
+            Reset
+          </ion-button>
+        </ion-col>
+        <ion-col>
+          <ion-button
+            type="submit"
+            fill="solid"
+            expand="full"
+            (click)="submit()"
+          >
+            Save
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-footer>
+</ion-content>

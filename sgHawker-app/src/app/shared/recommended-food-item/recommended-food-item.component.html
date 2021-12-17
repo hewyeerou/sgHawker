@@ -1,0 +1,39 @@
+<ion-card style="width: 150px; height: 250px; display: flex; flex-direction: column; justify-content: flex-end;">
+  <div style="display: flex; flex-direction: column;">
+    <img
+      src="../../../assets/sgHawkerAppIcon.svg"
+      style="height: 150px; width: 150px"
+      *ngIf="
+        foodItem.itemImageSrc === undefined ||
+        foodItem.itemImageSrc.length === 0
+      "
+    />
+    <ion-img
+      [src]="imgSrc(foodItem.itemImageSrc)"
+      style="height: 150px; width: 150px"
+      *ngIf="foodItem.itemImageSrc && foodItem.itemImageSrc.length > 0"
+    ></ion-img>
+    <ion-badge
+      style="margin-top: -10%"
+      color="light"
+      *ngIf="foodItem.itemAvailability === false"
+    >
+      NOT AVAILABLE
+    </ion-badge>
+  </div>
+  <ion-list lines="none">
+    <ion-item>
+      <div style="display: flex; flex-direction: column">
+        <ion-label>
+          {{ foodItem.itemName }}
+        </ion-label>
+        <ion-label class="ion-text-wrap" style="font-size: small; color: gray">
+          {{ foodItem.itemDescription }}
+        </ion-label>
+        <ion-note color="dark" style="font-weight: bold">
+          ${{ foodItem.itemPrice }}
+        </ion-note>
+      </div>
+    </ion-item>
+  </ion-list>
+</ion-card>

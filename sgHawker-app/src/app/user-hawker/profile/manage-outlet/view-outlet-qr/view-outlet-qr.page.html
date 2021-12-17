@@ -1,0 +1,27 @@
+<ion-header>
+  <ion-toolbar class="hawker-header-background-color">
+    <ion-buttons slot="end">
+      <ion-button (click)="goBackToManageOutlet()">
+        <ion-icon name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title class="qr-code-title">QR Code</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row class="qr-container">
+        <ngx-qrcode 
+              [elementType]="elementType"
+              [errorCorrectionLevel]="correctionLevel"
+              cssClass="hawker-outlet-qr"
+              [value]="id">
+        </ngx-qrcode>
+    </ion-row>
+    <ion-row class="qr-container">
+      <ion-button (click)="downloadQRCode()">Download QRCode</ion-button>
+    </ion-row>
+  </ion-grid>
+  
+</ion-content>

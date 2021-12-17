@@ -1,0 +1,21 @@
+.hawker-toolbar {
+    --background: var(--hawker-primary-color);
+    --color: var(--font-color);
+}
+
+.hawker-toolbar-title, 
+.hawker-toolbar-button {
+    color: white;
+}
+
+.cuisine-type-button{
+    --background: var(--hawker-primary-color);
+}
+
+ion-input {
+    text-align: end;
+}
+
+.add-button {
+    --background: var(--hawker-primary-color);
+}

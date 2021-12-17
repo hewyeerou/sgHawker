@@ -1,0 +1,409 @@
+<!-- QUEUE TYPE AND PENDING ORDERS -->
+<ion-row class="ion-align-items-center">
+  <ion-card-title *ngIf="queue.getQueueSize() === 0" style="color: darkgray"
+    >0 Pending Orders</ion-card-title
+  >
+  <ion-card-title *ngIf="queue.getQueueSize() !== 0">
+    {{ queue.getQueueSize() }} Pending Orders
+  </ion-card-title>
+</ion-row>
+<ion-row>
+  <ion-button (click)="openPeekModal()" class="button-outline" size="small">
+    <ion-icon name="eye-outline" slot="start"></ion-icon>
+    View Recent Orders
+  </ion-button>
+</ion-row>
+
+<div style="float: left">
+  <ion-badge
+    class="queue-pref-badge"
+  >
+    {{ formatQueueCondition() }}
+  </ion-badge>
+</div>
+
+<!-- BY ORDER TIME QUEUE-->
+<ion-slides
+  #orderSlide
+  [options]="slideOpts"
+  (ionSlideNextEnd)="loadNext()"
+  (ionSlidePrevEnd)="loadPrev()"
+  *ngIf="queueSetting.defaultQueuePreference === 'ORDER_TIME'"
+>
+  <!-- COMPLETED GROUP  -->
+  <ion-slide *ngFor="let previousOrder of queue.peekPreviousCompletedGroups()">
+    <ion-card class="order-card-fade">
+      <ion-card-header style="height: 35%">
+        <div style="float: left">
+          <ion-card-title
+            >Order: #{{
+              previousOrder._id.substring(previousOrder._id.length - 5)
+            }}</ion-card-title
+          >
+          <ion-card-subtitle *ngIf="previousOrder.customer"
+          >For: {{ previousOrder.customer?.name }}</ion-card-subtitle
+          >
+          <ion-card-subtitle *ngIf="!previousOrder.customer"
+            >WALK-IN ORDER</ion-card-subtitle
+          >
+          <ion-badge
+            style="float: left"
+            color="{{
+              previousOrder.orderType === 'DINE_IN'
+                ? 'secondary'
+                : previousOrder.orderType === 'DELIVERY'
+                ? 'warning'
+                : 'tertiary'
+            }}"
+          >
+            {{ previousOrder.orderType }}
+          </ion-badge>
+          <ion-badge
+            style="float: right; position:absolute"
+            color="{{
+              previousOrder.orderStatus === 'READY'
+                ? 'success'
+                : previousOrder.orderStatus === 'RECEIVED'
+                ? 'medium'
+                : 'primary'
+            }}"
+          >
+            {{ previousOrder.orderStatus }}
+          </ion-badge>
+        </div>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-list>
+          <!-- individual food items -->
+          <ion-item *ngFor="let food of previousOrder.individualOrderItems">
+            <ion-label class="text">
+              {{ food.foodItem.itemName }}
+              <br/>
+              <span *ngIf="food.selectedCustomizations.length > 0">
+                <span *ngFor="
+                let custType of food.selectedCustomizations;
+                let i = index
+                ">
+                {{ custType.selectedOption.optionName
+                }}{{
+                  food.selectedCustomizations.length - 1 === i ? "" : ", "
+                }}
+                </span>
+              </span>
+            </ion-label>
+            <ion-text class="text">x{{ food.itemQuantity }}</ion-text>
+          </ion-item>
+          <!-- food bundle items -->
+          <ion-item *ngFor="let bundle of previousOrder.foodBundleOrderItems; let i = index">
+            <ion-label class="text">
+              {{ bundle.bundleName }}
+              <br/>
+              <div id="{{ 'food-bundle-f' + previousOrder._id }}">
+                {{displayFoodBundleItems(bundle.bundleItems, 'food-bundle-f'+previousOrder._id)}}
+                <br/>
+              </div>
+            </ion-label>
+            <ion-text class="text">x{{bundle.bundleQuantity}}</ion-text>
+          </ion-item>
+        </ion-list>
+        
+      </ion-card-content>
+    </ion-card>
+  </ion-slide>
+
+  <!-- FOCUSED GROUP -->
+  <ion-slide *ngIf="checkCurrentOrderExist()">
+    <ion-card class="order-card" (click)="openOrderModal(currentFocusedOrder)">
+      <ion-card-header style="height: 35%">
+        <div style="float: left">
+          <ion-card-title
+            >Order: #{{
+              currentFocusedOrder._id.substring(
+                currentFocusedOrder._id.length - 5
+              )
+            }}
+          </ion-card-title>
+
+          <ion-card-subtitle *ngIf="currentFocusedOrder.customer"
+            >For: {{ currentFocusedOrder.customer?.name }}</ion-card-subtitle
+          >
+          <ion-card-subtitle *ngIf="!currentFocusedOrder.customer"
+            >WALK-IN ORDER</ion-card-subtitle
+          >
+          <ion-badge
+            style="float: left"
+            color="{{
+              currentFocusedOrder.orderType === 'DINE_IN'
+                ? 'secondary'
+                : currentFocusedOrder.orderType === 'DELIVERY'
+                ? 'warning'
+                : 'tertiary'
+            }}"
+          >
+            {{ currentFocusedOrder.orderType }}
+          </ion-badge>
+          <ion-badge
+            style="float: right; position: absolute"
+            color="{{
+              currentFocusedOrder.orderStatus === 'READY'
+                ? 'success'
+                : currentFocusedOrder.orderStatus === 'RECEIVED'
+                ? 'medium'
+                : 'primary'
+            }}"
+          >
+            {{ currentFocusedOrder.orderStatus }}
+          </ion-badge>
+        </div>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-list>
+          <!-- individual food items -->
+          <ion-item *ngFor="let food of currentFocusedOrder.individualOrderItems">
+            <ion-label class="text">
+              {{ food.foodItem.itemName }}
+              <br/>
+              <span *ngIf="food.selectedCustomizations.length > 0">
+                <span *ngFor="
+                let custType of food.selectedCustomizations;
+                let i = index
+                ">
+                {{ custType.selectedOption.optionName
+                }}{{
+                  food.selectedCustomizations.length - 1 === i ? "" : ", "
+                }}
+                </span>
+              </span>
+            </ion-label>
+            <ion-text class="text">x{{ food.itemQuantity }}</ion-text>
+          </ion-item>
+
+          <!-- food bundle items -->
+          <ion-item  *ngFor="let bundle of currentFocusedOrder.foodBundleOrderItems; let i = index">
+            <ion-label class="text">
+              {{ bundle.bundleName }}
+              <br/>
+              <div id="{{ 'food-bundle-f' + currentFocusedOrder._id}}">
+                {{displayFoodBundleItems(bundle.bundleItems, 'food-bundle-f'+currentFocusedOrder._id)}}
+                <br/>
+              </div>
+            </ion-label>
+            <ion-text class="text">x{{bundle.bundleQuantity}}</ion-text>
+          </ion-item>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+  </ion-slide>
+
+  <!-- END QUEUE -->
+  <ion-slide>
+    <ion-card> End of Order Queue </ion-card>
+  </ion-slide>
+</ion-slides>
+
+<!-- BY SIMILAR ITEM QUEUE-->
+<ion-slides
+  #orderSlide
+  [options]="slideOpts"
+  (ionSlideNextEnd)="loadNext()"
+  (ionSlidePrevEnd)="loadPrev()"
+  *ngIf="queueSetting.defaultQueuePreference === 'SIMILAR_ITEM'"
+>
+  <!-- COMPLETED GROUP  -->
+  <ion-slide *ngFor="let previousOrder of queue.peekPreviousCompletedGroups()">
+    <ion-card class="order-card-fade">
+      <ion-card-header style="height: 35%">
+        <div style="float: left">
+          <ion-card-title
+            >Serial: #{{ previousOrder.serial_number }}</ion-card-title
+          >
+          <ion-card-title style="float: left">{{
+            previousOrder.foodItem.itemName
+          }}</ion-card-title>
+        </div>
+        <div style="float: right">
+          <ion-badge
+            class="group-order-status"
+            color="{{
+              previousOrder.orderGroupStatus === 'READY'
+                ? 'success'
+                : previousOrder.orderGroupStatus === 'RECEIVED'
+                ? 'medium'
+                : 'primary'
+            }}"
+          >
+            {{ previousOrder.orderGroupStatus }}
+          </ion-badge>
+          <br />
+          <ion-text
+            style="
+              font-size: medium;
+              color: black;
+              font-weight: bold;
+              float: right;
+              margin-top: 10px;
+            "
+          >
+            x{{ previousOrder.currentItemQuantity }}
+          </ion-text>
+        </div>
+      </ion-card-header>
+      <ion-card-content>
+        <!-- orders -->
+        <ion-list>
+          <ion-item *ngFor="let order of previousOrder.orders | keyvalue">
+            <ion-label class="text">
+              <ion-badge
+                class="group-order-item-status"
+                color="{{
+                  order.value.orderType === 'DINE_IN'
+                    ? 'secondary'
+                    : order.value.orderType === 'DELIVERY'
+                    ? 'warning'
+                    : 'tertiary'
+                }}"
+              >
+                {{ order.value.orderType }}
+              </ion-badge>
+              <br />
+              Order: #{{
+                order.value._id.substring(order.value._id.length - 5)
+              }}
+              <span *ngIf="order.value.customer">
+                <br />
+                For: {{ order.value.customer?.name }}
+              </span>
+              <span *ngIf="!order.value.customer">
+                <br />
+                WALK-IN ORDER
+              </span>
+              <br />
+              {{
+                getCustomizationOptionsForOrderInSimilarGroup(
+                  order.value,
+                  previousOrder.foodItem.itemName
+                )
+              }}
+              <br />
+              {{ order.value.specialNote }}
+            </ion-label>
+            <div style="float: right; margin-top: -10px">
+              <br />
+              <ion-text>
+                x{{
+                  findOrderQuantityForOrderInSimilarGroup(
+                    order.value,
+                    previousOrder.foodItem.itemName,
+                    previousOrder.currentItemQuantity
+                  )
+                }}
+              </ion-text>
+            </div>
+          </ion-item>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+  </ion-slide>
+
+  <!-- FOCUSED GROUP -->
+  <ion-slide *ngIf="checkCurrentOrderExist()">
+    <ion-card class="order-card">
+      <ion-card-header style="height: 35%">
+        <div style="float: left">
+          <ion-card-title style="margin-bottom: 9px"
+            >Serial: #{{ currentFocusedOrder.serial_number }}</ion-card-title
+          >
+          <ion-card-title style="float: left"
+            >{{ currentFocusedOrder.foodItem.itemName }}&nbsp;</ion-card-title
+          >
+        </div>
+        <div style="float: right">
+          <ion-badge
+            class="group-order-status"
+            color="{{
+              currentFocusedOrder.orderStatus === 'READY'
+                ? 'success'
+                : currentFocusedOrder.orderStatus === 'RECEIVED'
+                ? 'medium'
+                : 'primary'
+            }}"
+          >
+            {{ currentFocusedOrder.orderGroupStatus }}
+          </ion-badge>
+          <br />
+          <ion-text
+            style="
+              font-size: medium;
+              color: black;
+              font-weight: bold;
+              float: right;
+              margin-top: 10px;
+            "
+          >
+            x{{ currentFocusedOrder.currentItemQuantity }}
+          </ion-text>
+        </div>
+      </ion-card-header>
+      <ion-card-content>
+        <!-- orders -->
+        <ion-item
+          *ngFor="let order of currentFocusedOrder.orders | keyvalue"
+          (click)="openOrderModal(order.value)"
+        >
+          <ion-label class="text">
+            <ion-badge
+              class="group-order-item-status"
+              color="{{
+                order.value.orderType === 'DINE_IN'
+                  ? 'secondary'
+                  : order.value.orderType === 'DELIVERY'
+                  ? 'warning'
+                  : 'tertiary'
+              }}"
+            >
+              {{ order.value.orderType }}
+            </ion-badge>
+            <br />
+            Order: #{{ order.value._id.substring(order.value._id.length - 5) }}
+            <span *ngIf="order.value.customer">
+              <br />
+              For: {{ order.value.customer?.name }}
+            </span>
+            <span *ngIf="!order.value.customer">
+              <br />
+              WALK-IN ORDER
+            </span>
+            <br />
+            {{
+              getCustomizationOptionsForOrderInSimilarGroup(
+                order.value,
+                currentFocusedOrder.foodItem.itemName
+              )
+            }}
+            <br />
+            {{ order.value.specialNote }}
+          </ion-label>
+          <div style="float: right; margin-top: -10px">
+            <br />
+            <ion-text>
+              x{{
+                findOrderQuantityForOrderInSimilarGroup(
+                  order.value,
+                  currentFocusedOrder.foodItem.itemName,
+                  currentFocusedOrder.currentItemQuantity
+                )
+              }}
+            </ion-text>
+          </div>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+  </ion-slide>
+
+  <!-- END QUEUE -->
+  <ion-slide>
+    <ion-card>
+      <ion-label>End of Order Queue</ion-label>
+    </ion-card>
+  </ion-slide>
+</ion-slides>

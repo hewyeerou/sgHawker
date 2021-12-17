@@ -1,0 +1,256 @@
+<ion-header>
+  <ion-toolbar
+    class="{{userType === 'HAWKER' ? 'hawker-header-background-color' : 'customer-header-background-color'}}">
+    <ion-buttons slot="primary">
+      <ion-button (click)="closeModal()">
+        <ion-icon slot="icon-only" name="close" style="color: white"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-row class="ion-align-items-center ion-justify-content-end">
+      <ion-title style="color: white"> Order Details </ion-title>
+    </ion-row>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen>
+  <div class="fill">
+    <img src="../../../../assets/Logo - Black.svg" />
+  </div>
+  <ion-grid style="margin-top: -10%">
+    <ion-row>
+      <ion-col>
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>
+              <ion-row class="ion-justify-content-between ion-align-items-center">
+                <ion-text color="dark" style="font-weight: bold; font-size: medium">
+                  {{ order.outlet.outletName }}
+                </ion-text>
+                <div [ngSwitch]="order.orderStatus">
+                  <ion-badge *ngSwitchCase="'UNPAID'" color="warning">{{
+                    order.orderStatus
+                    }}</ion-badge>
+                  <ion-badge *ngSwitchCase="'CANCELLED'" color="danger">{{
+                    order.orderStatus
+                    }}</ion-badge>
+                  <ion-badge *ngSwitchCase="'RECEIVED'" color="success">{{
+                    order.orderStatus
+                    }}</ion-badge>
+                  <ion-badge *ngSwitchCase="'PREPARING'" color="success">{{
+                    order.orderStatus
+                    }}</ion-badge>
+                  <ion-badge *ngSwitchCase="'READY'" color="success">{{
+                    order.orderStatus
+                    }}</ion-badge>
+                  <ion-badge *ngSwitchCase="'COMPLETED'" color="success">{{
+                    order.orderStatus
+                    }}</ion-badge>
+                  <ion-badge *ngSwitchDefault>{{
+                    order.orderStatus
+                    }}</ion-badge>
+                </div>
+              </ion-row>
+            </ion-card-title>
+            <ion-card-subtitle>
+              {{ order.outlet.outletAddress }}
+            </ion-card-subtitle>
+            <br />
+
+            <ion-row style="margin-top: 5px" class="ion-align-items-center">
+              <ion-icon name="time-outline"></ion-icon>&nbsp; Ordered @
+              {{ order.orderCreationTime | date: "dd/MM hh:mm" }}
+            </ion-row>
+
+            <ion-row style="margin-top: 5px" class="ion-align-items-center" *ngIf="order.completedTime">
+              <ion-icon name="time-outline"></ion-icon>&nbsp; Completed @
+              {{ order.completedTime | date: "dd/MM hh:mm" }}
+            </ion-row>
+
+            <ion-row style="margin-top: 5px" class="ion-align-items-center" *ngIf="order.orderPickUpTime">
+              <ion-icon name="alarm-outline"></ion-icon>&nbsp; Advance @
+              {{ order.orderPickUpTime | date: "dd/MM hh:mm" }}
+            </ion-row>
+
+            <ion-row style="margin-top: 5px" class="ion-align-items-center">
+              <ion-icon name="cart"></ion-icon>&nbsp;&nbsp;{{
+              getTotalOrderItems()
+              }}&nbsp;
+              <span *ngIf="getTotalOrderItems() > 1"> Items </span>
+              <span *ngIf="getTotalOrderItems() === 1"> Item </span>
+            </ion-row>
+
+            <ion-row style="margin-top: 5px" class="ion-align-items-center"
+              *ngIf="order.estimatedTimeTillCompletion !== 0">
+              <ion-icon name="time"></ion-icon>&nbsp; Ready in
+              {{ order.estimatedTimeTillCompletion }} mins
+            </ion-row>
+
+            <ion-row style="margin-top: 5px" class="ion-align-items-center">
+              <ion-icon name="card"></ion-icon>&nbsp;
+              {{ order.paymentType.toLowerCase() }}
+            </ion-row>
+
+            <ion-row style="margin-top: 5px" class="ion-align-items-center">
+              <ion-icon name="pizza"></ion-icon>&nbsp;
+              {{ order.orderType.toString().replace("_", " ").toLowerCase() }}
+            </ion-row>
+
+            <ion-row style="margin-top: 5px" class="ion-align-items-center" *ngIf="order.debitedCashback">
+              <ion-icon name="cash"></ion-icon>&nbsp;
+              Spent {{ order.debitedCashback | currency: 'USD'}} cashback
+            </ion-row>
+
+            <ion-row style="margin-top: 5px" class="ion-align-items-center" *ngIf="order.creditedCashback">
+              <ion-icon name="cash"></ion-icon>&nbsp;
+              Earned {{ order.creditedCashback | currency: 'USD'}} cashback
+            </ion-row>
+
+            <ion-row *ngIf="canReport">
+              <ion-chip color="danger" (click)="openReportModal()">
+                <ion-label style="display: flex; align-items: center;">
+                  <ion-icon slot="start" name="alert-circle" style="padding: 0 3px;"></ion-icon>Report this order
+                </ion-label>
+              </ion-chip>
+            </ion-row>
+          </ion-card-header>
+        </ion-card>
+
+        <ion-row style="margin-top: 10px">
+          <ion-col>
+            <ion-card class="borderless-ion-card">
+              <ion-card-title style="color: black; font-weight: bold">
+                Order Summary
+              </ion-card-title>
+              <br />
+              <ion-row *ngFor="let indiOrderItem of order.individualOrderItems">
+                <ion-col size="2">
+                  <ion-text style="color: black; font-weight: bold">
+                    {{ indiOrderItem.itemQuantity }}x
+                  </ion-text>
+                </ion-col>
+                <ion-col size="8">
+                  <ion-label label style="color: black; font-size: medium">
+                    {{ indiOrderItem.foodItem.itemName }}
+                  </ion-label>
+                  <ion-row>
+                    <ion-col>
+                      <div style="display: flex; flex-direction: column" *ngFor="
+                          let customization of indiOrderItem.selectedCustomizations
+                        ">
+                        {{ customization.selectedOption.optionName }}:
+                        {{
+                        customization.selectedOption.optionCharge
+                        | currency: "USD"
+                        }}
+                      </div>
+                    </ion-col>
+                  </ion-row>
+                </ion-col>
+                <ion-col size="2">
+                  <ion-text style="color: black; font-weight: bold">
+                    {{ indiOrderItem.itemSubtotal | currency: "USD" }}
+                  </ion-text>
+                </ion-col>
+              </ion-row>
+              <ion-row *ngFor="let bundleOrderItem of order.foodBundleOrderItems">
+                <ion-col size="2">
+                  <ion-text style="color: black; font-weight: bold">
+                    {{ bundleOrderItem.bundleQuantity }}x
+                  </ion-text>
+                </ion-col>
+                <ion-col size="8">
+                  <ion-row>
+                    <ion-label style="color: black; font-size: medium">
+                      {{ bundleOrderItem.bundleName }}
+                    </ion-label>
+                  </ion-row>
+                  <ion-row *ngFor="let orderItem of bundleOrderItem.bundleItems">
+                    <ion-col>
+                      <ion-label label style="color: black; font-size: small">
+                        {{ orderItem.foodItem.itemName }}
+                      </ion-label>
+                      <div style="display: flex; flex-direction: column" *ngFor="
+                          let customization of orderItem.selectedCustomizations
+                        ">
+                        {{ customization.selectedOption.optionName }}:
+                        {{
+                        customization.selectedOption.optionCharge
+                        | currency: "USD"
+                        }}
+                      </div>
+                    </ion-col>
+                  </ion-row>
+                </ion-col>
+                <ion-col size="2">
+                  <ion-text style="color: black; font-weight: bold">
+                    {{ bundleOrderItem.bundleSubtotal | currency: "USD" }}
+                  </ion-text>
+                </ion-col>
+              </ion-row>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
+<ion-footer>
+  <ion-row style="margin-top: 10px">
+    <ion-col style="padding-bottom: 0;">
+      <ion-card class="borderless-ion-card" style="margin: 0;">
+        <ion-row>
+          <ion-col size="7">
+            <ion-row>
+              <ion-card-title style="color: black; font-weight: bold">
+                Order Total:</ion-card-title>
+            </ion-row>
+          </ion-col>
+          <ion-col size="5">
+            <ion-row class="ion-justify-content-end">
+              <ion-card-title>
+                {{ order.totalPrice | currency: "USD" }}
+              </ion-card-title>
+            </ion-row>
+          </ion-col>
+        </ion-row>
+      </ion-card>
+    </ion-col>
+  </ion-row>
+  <ion-button 
+    color="primary"
+    expand="block"
+    *ngIf="
+      (this.order.orderStatus === 'COMPLETED' ||
+      this.order.orderStatus === 'CANCELLED') && userType !== 'HAWKER' && user"
+    (click)="repeatOrder()"
+  >
+    <ion-icon name="restaurant" slot="start"></ion-icon>
+    <ion-text style="font-size: small">Order Again</ion-text>
+  </ion-button>
+  <ion-button expand="block" color="success" *ngIf="this.order.orderStatus === 'READY' && userType !== 'HAWKER'"
+    (click)="confirmOrder()">
+    Confirm Order
+  </ion-button>
+  <ion-button expand="block" color="warning" *ngIf="canCancelOrder()" (click)="cancelOrder()">
+    Cancel Order
+  </ion-button>
+  <ion-button
+    expand="block"
+    color="medium"
+    *ngIf="canChangeOrderType()"
+    (click)="changeOrderType(this.order)"
+    >
+    Edit Order
+  </ion-button>
+  <ion-button expand="block" color="warning" *ngIf="canCancelOrder()" (click)="cancelOrder()">
+    Cancel Order
+  </ion-button>
+  <ion-button
+    expand="block"
+    color="medium"
+    *ngIf="canChangeOrderType()"
+    (click)="changeOrderType(this.order)"
+    >
+    Edit Order
+  </ion-button>
+</ion-footer>

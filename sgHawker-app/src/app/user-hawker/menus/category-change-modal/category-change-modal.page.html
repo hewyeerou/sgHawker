@@ -1,0 +1,105 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Change Category</ion-title>
+    <ion-buttons slot="primary">
+      <ion-button
+        (click)="dismissModal()"
+        style="font-size: 20px"
+        fill="clear"
+        color="primary"
+      >
+        <ion-icon name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-grid>
+      <!-- <ion-row class="ion-text-center">
+        <ion-col>
+          <ion-item>
+            <ion-label>From Category</ion-label>
+            <ion-select
+              [(ngModel)]="fromCategoryName"
+              (ionChange)="selectCategory($event)"
+            >
+              <ion-select-option
+                *ngFor="let category of itemCategories"
+                [value]="category"
+              >
+                {{category}}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+      </ion-row> -->
+      <ion-row>
+        <ion-col size="5">
+          <ion-item lines="none">
+            <ion-label>From Category: </ion-label>
+          </ion-item>
+        </ion-col>
+        <ion-col class="ion-align-self-center">
+          <item-category [itemCategories]="itemCategories" [(selectedItem)]="fromCategoryName" (selectedItemChange)="selectCategory()" 
+          [showAddTag]="false"
+            ></item-category>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-item-group>
+            <ion-item *ngFor="let foodItemCheckbox of foodItemsCheckboxes" lines="none">
+              <ion-label>{{foodItemCheckbox.foodItem.itemName}}</ion-label>
+              <ion-checkbox
+                slot="start"
+                (ionChange)="checkFormValid()"
+                [(ngModel)]="foodItemCheckbox.isSelected"
+              >
+              </ion-checkbox>
+            </ion-item>
+          </ion-item-group>
+        </ion-col>
+      </ion-row>
+      <!-- <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-label>To Category</ion-label>
+            <ion-select
+              [(ngModel)]="toCategoryName"
+              (ionChange)="toCategory($event)"
+            >
+              <ion-select-option
+                *ngFor="let category of itemCategoriesNotSelected"
+                [value]="category"
+              >
+                {{category}}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+      </ion-row> -->
+      <ion-row>
+        <ion-col size="5">
+          <ion-item lines="none">
+            <ion-label>To Category: </ion-label>
+          </ion-item>
+        </ion-col>
+        <ion-col class="ion-align-self-center">
+          <item-category [itemCategories]="itemCategories" [(selectedItem)]="toCategoryName" (selectedItemChange)="toCategory()"
+            ></item-category>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  <ion-footer class="ion-no-border" style="position: fixed; bottom: 0">
+    <ion-button
+      type="submit"
+      fill="solid"
+      expand="full"
+      disabled="{{!formValid}}"
+      (click)="onSubmit()"
+    >
+      Save
+    </ion-button>
+  </ion-footer>
+</ion-content>

@@ -1,0 +1,53 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title style="float:left">Select Food Items</ion-title>
+    <ion-buttons end style="float:right">
+      <ion-button color="primary" (click)="clear()">
+        Clear
+      </ion-button>
+      <ion-button color="success" (click)="confirm()">
+        Confirm
+      </ion-button>
+      <ion-button color="danger" (click)="dismiss()">
+        Close
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+        <ion-col>
+          <ion-card style="padding:10px;margin-bottom:50px" *ngFor="let c of categorisedAllFood">
+            <ion-text style="padding:10px">{{c.categoryName}}</ion-text>
+            <div class="ion-float-right" style="display: flex; align-items: center;">
+              <ion-label *ngIf="type === 'Select'">Select All &nbsp;</ion-label>
+              <ion-checkbox *ngIf="type==='Select'" name="c-checkbox" checked="{{c.selected}}" (click)="selectCategory(c, $event)"></ion-checkbox>
+            </div>
+            <ion-card *ngFor="let f of c.foodItems" style="box-shadow: none">
+              <ion-card-content>
+                <ion-item class="itemBox" lines="none">
+                  <div style="flex: 1;">
+                    <img src="{{baseUrl}}/{{f.itemImageSrc}}" style="width:80%;float:left" onerror="this.src='/assets/hokkienmee_placeholder.jpg';"
+                    alt="..."/>
+                  </div>
+                  <div style="flex: 2;width:50%">
+                    <br/>
+                    <ion-label>{{f.itemName}},&nbsp; ${{f.itemPrice}}</ion-label>
+                    <ion-badge>{{f.itemCategory}}</ion-badge>
+                    <ion-label>Description: <br/> {{f.itemDescription}}</ion-label>
+                    <br/>
+                  </div>
+                  <div style="flex: 0.5;">
+                    <ion-checkbox style="float:right" name="f-checkbox" checked="{{f.selected}}" (ionChange)="addToSelected(f, $event)"></ion-checkbox>
+                    <ion-input *ngIf="type!=='Select'" style="float:right" type="number" min="1" placeholder="Qty" value="{{f.qty}}" (ionChange)="changeQuantity(f, $event)"></ion-input>
+                  </div>
+                </ion-item>
+              </ion-card-content>
+            </ion-card>
+          </ion-card>
+        </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

@@ -1,0 +1,20 @@
+<ion-header>
+  <ion-toolbar class="hawker-header-background-color">
+    <ion-title>Leaderboard</ion-title>
+    <ion-buttons slot="end" (click)="showInformation()">
+      <ion-button>
+        <ion-icon style="font-size: 30px; color: white;" name="information-circle-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content style="--background: #FFF9F1">
+
+
+  <div class="ion-padding" style="margin: 0 auto;">
+    <!-- <food-item-leaderboard></food-item-leaderboard> -->
+    <hawker-leaderboard [leaderboardService]="leaderboardService"></hawker-leaderboard>
+  </div>
+
+</ion-content>

@@ -1,0 +1,60 @@
+<ion-header>
+  <ion-toolbar class="customer-header-background-color">
+    <ion-title style="color:white;">Top Up Digital Wallet</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismissModal()" style="font-size: 20px;" fill="clear">
+        <ion-icon name="close-outline" style="color:white;"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <form [formGroup]="topUpWalletForm" (ngSubmit)="topUpWalletAmount()">
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-label>Card: </ion-label>
+            <ion-select formControlName="cardSelected" (ngModelChange)="checkFormValid()">
+              <ion-select-option *ngFor="let card of cards" [value]="card._id">
+                *{{card.truncatedCardNumber.substr(card.truncatedCardNumber.length-4)}}
+                <ion-label *ngIf="card.isDefault === true" color="primary">[Default]</ion-label>
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <!-- Error Message -->
+      <ion-row>
+        <span *ngIf="formSubmitted && errorControl.cardSelected.errors?.required">Card is required.</span>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-label>Amount: </ion-label>
+            <ion-input type="number" formControlName="topUpAmt" (ngModelChange)="checkFormValid()"
+              placeholder="Please the amount"></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <!-- Error Message -->
+      <ion-row>
+        <span *ngIf="formSubmitted && errorControl.topUpAmt.errors?.required">Top up amount is required.</span>
+      </ion-row>
+      <ion-row>
+        <ion-col style="display:flex;justify-content: center;">
+          <ion-button type="submit" [class.button-disabled]="!formValid">
+            <ion-icon slot="start" name="checkmark"></ion-icon>
+            Submit
+          </ion-button>
+          <ion-button color="warning" (click)="dismissModal()">
+            <ion-icon slot="start" name="close"></ion-icon>
+            Cancel
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </form>
+  </ion-grid>
+
+</ion-content>

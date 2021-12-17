@@ -1,0 +1,86 @@
+<ion-header>
+  <ion-toolbar class="hawker-header-background-color">
+    <ion-buttons slot="start" class="hawker-toolbar-button">
+      <ion-back-button defaultHref="/hawker/profile"></ion-back-button>
+    </ion-buttons>
+    <ion-title class="hawker-toolbar-title">Outlet(s)</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card *ngFor="let o of outlets">
+    <!-- <img src="../../assets/test.jpg" class="img-banner" /> -->
+    <ion-card-header>
+      <div style="display: flex; justify-content: space-between;">
+        <div>
+          <ion-card-subtitle>{{o.hawkerCentreName}}</ion-card-subtitle>
+          <ion-card-title>{{o.outletName}}</ion-card-title>
+          <br />
+          <ion-badge color="primary" *ngFor="let ct of o.cuisineType">
+            {{ct}}
+          </ion-badge>
+        </div>
+        <div>
+          <ion-button (click)="presentViewQRModal(o._id)" id="edit-outlet-button">
+            <ion-icon name="document-text-outline" slot="start"></ion-icon>
+            QR Code
+          </ion-button>
+          <ion-button (click)="editOutlet(o._id)" id="edit-outlet-button">
+            <ion-icon name="settings-outline"></ion-icon>
+          </ion-button>
+        </div>
+      </div>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-button class="button-outline" (click)="automaticClose = !automaticClose">
+        <ion-label *ngIf="automaticClose">View Business Hours <ion-icon name="chevron-up-outline"></ion-icon>
+        </ion-label>
+        <ion-label *ngIf="!automaticClose">View Business Hours <ion-icon name="chevron-down-outline"></ion-icon>
+        </ion-label>
+      </ion-button>
+      <ion-grid *ngIf="automaticClose">
+        <ion-list lines="none">
+          <ion-item *ngFor="let ooh of o.outletOperatingHrs; let i = index;">
+            <ion-row style="width: 100%">
+              <div style="width: 25%">
+                <ion-label>{{ooh.day}}</ion-label>
+              </div>
+              <div style="
+                  width: 25%;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                ">
+                <ion-label style="font-weight: bold; color: #ff9050">From</ion-label>
+                <ion-datetime display-format="h:mm A" picker-format="h:mm A" value="{{ooh.startTime}}"
+                  [readonly]="true">
+                </ion-datetime>
+              </div>
+              <div style="
+                  width: 25%;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                ">
+                <ion-label style="font-weight: bold; color: #ff9050">To</ion-label>
+                <ion-datetime display-format="h:mm A" picker-format="h:mm A" value="{{ooh.endTime}}" [readonly]="true">
+                </ion-datetime>
+              </div>
+              <div style="
+                  width: 25%;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                ">
+                <ion-badge color="success" *ngIf="ooh.businessStatus===true">OPEN</ion-badge>
+                <ion-badge color="danger" *ngIf="ooh.businessStatus===false">CLOSE</ion-badge>
+              </div>
+            </ion-row>
+          </ion-item>
+        </ion-list>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
+  <br />
+  <br />
+</ion-content>

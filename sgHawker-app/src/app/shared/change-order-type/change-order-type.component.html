@@ -1,0 +1,62 @@
+<ion-header>
+  <ion-toolbar class="customer-header-background-color">
+    <ion-buttons slot="primary">
+      <ion-button (click)="closeModal()">
+        <ion-icon slot="icon-only" name="close" style="color: white"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-row class="ion-align-items-center ion-justify-content-end">
+      <ion-title style="color: white;">
+        Change Order Type
+      </ion-title>
+    </ion-row>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <br/>
+  <br/>
+  <div class="ion-padding-horizontal">
+    <div *ngIf="order.individualOrderItems.length + order.foodBundleOrderItems.length > 0">
+      <ion-item>
+        <ion-label>Dining Options</ion-label>
+        <ion-select interface="popover" placeholder={{order.orderType}} [(ngModel)]="diningOptions">
+          <ion-select-option value="DINE_IN" >Dine In</ion-select-option>
+          <ion-select-option value="TAKE_AWAY">Takeaway</ion-select-option>
+          <ion-select-option *ngIf="user" value="DELIVERY">Delivery</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item *ngIf="diningOptions === 'DELIVERY' || diningOptions === 'TAKE_AWAY'">
+        <ion-label>Advanced Order</ion-label>
+        <ion-toggle [(ngModel)]="advancedOrder"></ion-toggle>
+      </ion-item>
+
+      <ion-item *ngIf="(diningOptions === 'DELIVERY' || diningOptions === 'TAKE_AWAY') && advancedOrder">
+        <ion-label *ngIf="diningOptions === 'DELIVERY'">Delivery time</ion-label>
+        <ion-label *ngIf="diningOptions === 'TAKE_AWAY'">Takeaway time</ion-label>
+        <ion-datetime display-format="HH:mm" picker-format="HH:mm" [(ngModel)]="selectedTime"
+          minuteValues="0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55"
+          placeholder="{{diningOptions === 'DELIVERY' ? 'Select Delivery Time' : 'Select Takeaway Time'}}">
+        </ion-datetime>
+      </ion-item>
+    </div>
+
+    <div>
+      <ion-item *ngIf="diningOptions === 'DELIVERY'">
+        <ion-label>Select Delivery Address</ion-label>
+        <ion-select [(ngModel)]="selectedAddress">
+          <ion-select-option *ngFor="let address of allUserAddresses" [value]="address">{{address.addressDetails}}
+            <ion-label>S{{address.postalCode}}</ion-label>
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+    </div>
+  </div>
+
+</ion-content>
+
+<ion-footer class="ion-padding-horizontal">
+    <ion-button horizontal="end" vertical="bottom" expand="block" color="success" (click)="saveOrderType()">Edit Order
+    </ion-button>
+</ion-footer>

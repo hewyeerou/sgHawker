@@ -1,0 +1,70 @@
+<ion-card>
+  <ion-card-header (click)="toggleAccordion()">
+    <ion-grid>
+      <ion-row class="ion-align-items-center">
+        <ion-col size="2.3">
+          {{ orderNumber }}
+        </ion-col>
+        <ion-col>
+          {{ order.customer ? order.customer?.name : 'Guest' }}
+        </ion-col>
+        <ion-col> S${{ order.totalPrice.toFixed(2) }} </ion-col>
+        <ion-col>
+          <ion-badge
+            *ngIf="order.orderStatus === 'UNPAID'"
+            color="danger"
+            mode="ios"
+          >
+            UNPAID
+          </ion-badge>
+        </ion-col>
+        <ion-col class="ion-text-end">
+          <ion-button
+            *ngIf="order.orderStatus === 'UNPAID' && !startedDeleteTimer"
+            size="small"
+            (click)="clickMarkPaid($event)"
+            >Mark Paid</ion-button
+          >
+          <ion-button color="warning"
+            *ngIf="order.orderStatus === 'UNPAID' && startedDeleteTimer"
+            size="small"
+            (click)="undoDelete($event)"
+            >Undo ({{timeleft}})</ion-button
+          >
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card-header>
+  <ion-card-content #details>
+    <ion-grid>
+      <ion-row
+        class="ion-align-items-center"
+        *ngFor="let orderItem of order.individualOrderItems"
+      >
+        <ion-col>
+          {{ orderItem.foodItem.itemName }}
+        </ion-col>
+        <ion-col>
+          <ion-badge color="medium" mode="ios">
+            x {{ orderItem.itemQuantity }}
+          </ion-badge>
+        </ion-col>
+        <ion-col> S${{ orderItem.itemSubtotal.toFixed(2) }} </ion-col>
+      </ion-row>
+      <ion-row
+        class="ion-align-items-center"
+        *ngFor="let orderItem of order.foodBundleOrderItems"
+      >
+        <ion-col>
+          {{ orderItem.bundleName }}
+        </ion-col>
+        <ion-col>
+          <ion-badge color="medium" mode="ios">
+            x {{ orderItem.bundleQuantity }}
+          </ion-badge>
+        </ion-col>
+        <ion-col> S${{ orderItem.bundleSubtotal.toFixed(2) }} </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card-content>
+</ion-card>

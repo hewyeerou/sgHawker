@@ -1,0 +1,121 @@
+<ion-header>
+  <ion-toolbar class="hawker-header-background-color">
+    <ion-buttons slot="start" class="hawker-toolbar-button">
+      <ion-back-button defaultHref="/hawker/profile"></ion-back-button>
+    </ion-buttons>
+    <ion-title class="hawker-toolbar-title">Account Details</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="accountForm" (ngSubmit)="updateDetails()">
+  <ion-grid style="padding: 1rem">
+    <ion-row>
+      <ion-col>
+        <div style="display: flex; justify-content: center">
+          <ion-avatar>
+            <ion-img *ngIf="user.profileImgSrc!=='' && !previewPic" src="{{baseUrl}}/{{user.profileImgSrc}}">
+            </ion-img>
+            <ion-img *ngIf="user.profileImgSrc===''&& !imgURL" src="/assets/Profile Picture.svg"
+              aria-label="Image Placeholder"></ion-img>
+            <ion-img *ngIf="previewPic && imgURL" [src]="imgURL" style="border-radius: 50%"></ion-img>
+          </ion-avatar>
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <div class="ion-text-center">
+          <ion-fab vertical="center">
+            <ion-fab-button size="small" color="primary" shape="round" (click)="file.click()">
+              <ion-icon size="small" name="pencil"></ion-icon>
+            </ion-fab-button>
+          </ion-fab>
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <input class="ion-hide" name="file" #file type="file" accept="image/*" (change)="preview(file.files)" />
+    </ion-row>
+    <br />
+    <ion-row>
+      <ion-col size="12">
+        <ion-item>
+          <ion-label position="stacked" style="width: 100%">Name</ion-label>
+          <ion-input formControlName="name" type="text" (ngModelChange)="checkFormValid()"></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <!-- Error Message - Name -->
+        <span
+          *ngIf="errorControl.name.errors?.required"
+          style="color: #ee4444; padding-left: 1rem"
+          >Name is required.</span>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12">
+        <ion-item>
+          <ion-label position="stacked"
+            >Phone Number</ion-label
+          >
+          <ion-input formControlName="phone" type="text" (ngModelChange)="checkFormValid()"></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+
+      </ion-col>
+      <ion-col size="12">
+        <!-- Error Message - Phone -->
+        <span
+          *ngIf="errorControl.phone.errors?.required"
+          style="color: #ee4444; padding-left: 1rem"
+          >Phone is required.</span>
+          <span *ngIf="errorControl.phone.errors?.pattern" style="color: #ee4444;">Please insert a correct number.</span>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12">
+        <ion-item>
+          <ion-label position="stacked" style="width: 100%">Email</ion-label>
+          <ion-input formControlName="email" type="text" (ngModelChange)="checkFormValid()"></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <!-- Error Message - Email -->
+        <span
+          *ngIf="errorControl.email.errors?.required"
+          style="color: #ee4444; padding-left: 1rem"
+          >Email is required.</span>
+          <span *ngIf="errorControl.email.errors?.pattern" style="color: #ee4444;"
+          >Please input an appropriate email.</span
+        >
+      </ion-col>
+    </ion-row>
+    <br />
+    <br />
+    <div style="display: flex; justify-content: center;">
+      <ion-row>
+        <ion-col>
+          <ion-button color="primary" type="submit" [class.button-disabled]="!formValid">
+            <ion-icon slot="start" name="checkmark"></ion-icon>
+            Submit Change
+          </ion-button>
+        </ion-col>
+        <ion-col>
+          <ion-button color="warning" [routerLink]="['/hawker/profile']">
+            <ion-icon slot="start" name="close"></ion-icon>
+            Cancel
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </div>
+  </ion-grid>
+</form>
+</ion-content>

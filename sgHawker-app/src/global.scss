@@ -1,0 +1,119 @@
+/*
+ * App Global CSS
+ * ----------------------------------------------------------------------------
+ * Put style rules here that you want to apply globally. These styles are for
+ * the entire app and not just one component. Additionally, this file can be
+ * used as an entry point to import other CSS/Sass files to be included in the
+ * output CSS.
+ * For more information on global stylesheets, visit the documentation:
+ * https://ionicframework.com/docs/layout/global-stylesheets
+ */
+
+/* Core CSS required for Ionic components to work properly */
+@import "~@ionic/angular/css/core.css";
+
+/* Basic CSS for apps built with Ionic */
+@import "~@ionic/angular/css/normalize.css";
+@import "~@ionic/angular/css/structure.css";
+@import "~@ionic/angular/css/typography.css";
+@import "~@ionic/angular/css/display.css";
+
+/* Optional CSS utils that can be commented out */
+@import "~@ionic/angular/css/padding.css";
+@import "~@ionic/angular/css/float-elements.css";
+@import "~@ionic/angular/css/text-alignment.css";
+@import "~@ionic/angular/css/text-transformation.css";
+@import "~@ionic/angular/css/flex-utils.css";
+
+.view-customization-class {
+  .modal-wrapper {
+    height: 40%;
+    width: 50%;
+    border-radius: 15px;
+  }
+}
+
+/* For styling modal */
+.create-outlet-modal-css {
+  .modal-wrapper {
+    height: 48%;
+    width: 50%;
+  }
+}
+
+.add-cuisine-modal-css {
+  .modal-wrapper {
+    height: 22%;
+    width: 50%;
+  }
+}
+
+.view-outlet-modal-css {
+  .modal-wrapper {
+    height: 40%;
+    width: 40%;
+  }
+}
+
+/* For top banner */
+.fill {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  max-height: 20%;
+}
+.fill img {
+  flex-shrink: 0;
+  min-width: 100%;
+  min-height: 100%;
+}
+
+.customerTopBar {
+  background: var(--customer-primary-color);
+}
+
+.popover-class {
+  --min-width: 230px;
+}
+
+.alert-radio-label.sc-ion-alert-md,
+.alert-radio-label.sc-ion-alert-ios {
+  white-space: normal;
+}
+.alert-tappable.alert-radio {
+  height: auto;
+  contain: content;
+}
+
+.my-modal-class {
+  .modal-wrapper {
+    height: 35%;
+  }
+}
+
+.my-date-modal-class {
+  .modal-wrapper {
+    height: 40%;
+    width: 50%;
+  }
+}
+
+.info-modal-class {
+  .modal-wrapper {
+    height: 60%;
+    width: 90%;
+    border-radius: 10px;
+  }
+}
+
+.modal-fullscreen {
+  .modal-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+}

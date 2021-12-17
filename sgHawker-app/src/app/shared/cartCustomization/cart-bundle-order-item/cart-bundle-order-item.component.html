@@ -1,0 +1,31 @@
+<ion-item-sliding>
+  <ion-item (click)="showFoodBundleModal(bundleItem)">
+    <ion-grid>
+      <ion-row class="ion-justify-content-between">
+        <ion-text>
+          <h4><b>{{ bundleItem.bundleQuantity }}x {{ bundleItem.bundleName }}</b></h4>
+        </ion-text>
+        <ion-text>
+          <h4>${{ bundleItem.bundleSubtotal | number: '1.2-2' }}</h4>
+        </ion-text>
+      </ion-row>
+      <ion-list *ngFor="let foodItem of bundleItem.bundleItems">
+        <ion-text>
+          <h5>- {{ foodItem.foodItem.itemName }}</h5>
+        </ion-text>
+        <ion-list *ngIf="foodItem.selectedCustomizations?.length > 0">
+          <div *ngFor="let customization of foodItem.selectedCustomizations" style="min-height: 0;">
+            <h6 class="customization">&nbsp;&nbsp;&nbsp;{{ customization.customizationName }} - {{
+              customization.selectedOption?.optionName }}</h6>
+          </div>
+        </ion-list>
+      </ion-list>
+    </ion-grid>
+  </ion-item>
+
+  <ion-item-options side="end">
+    <ion-item-option color="danger" expandable (click)="removeBundleItem(bundleItem)">
+      Remove
+    </ion-item-option>
+  </ion-item-options>
+</ion-item-sliding>

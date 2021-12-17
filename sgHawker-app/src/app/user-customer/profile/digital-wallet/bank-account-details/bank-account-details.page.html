@@ -1,0 +1,90 @@
+<ion-header>
+  <ion-toolbar class="customer-header-background-color">
+    <ion-title>
+      <ion-row class="ion-align-items-end ion-justify-content-center">
+        <img src="../../assets/Logo - White.svg" width="40%" height="30%" />
+      </ion-row>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-row>
+    <ion-button size="large" type="button" [routerLink]="['/customer/profile/digital-wallet']" fill="clear"
+      >
+      <ion-icon size="large" style="color: #ee4444" slot="icon-only" name="arrow-back-outline"></ion-icon>
+    </ion-button>
+    <ion-label style="font-weight: bold; font-size: large; margin-left: 5%; margin-top: 6%;"> Bank Account Details
+    </ion-label>
+  </ion-row>
+  <form [formGroup]="bankAccountForm" (ngSubmit)="updateDetails()">
+    <ion-grid style="padding: 1rem">
+  
+      <ion-item class="ion-align-items-start" size="10" lines="full" style="border-color: black;">
+        <ion-col>
+          &nbsp;
+          <ion-row>
+            <ion-text>
+            <span style="font-size: large;"><b>Full Name:</b></span>
+          </ion-text>
+          </ion-row> 
+          <ion-row>
+            <ion-text>
+            <span style="font-size: large;">{{bankAccount.fullName}}</span>
+          </ion-text>
+          </ion-row> 
+          &nbsp;
+          <ion-row>
+            <ion-text>
+            <span style="font-size: large;"><b>Account Number: </b></span>
+          </ion-text>
+          </ion-row>
+          <ion-row>
+            <ion-text>
+            <span style="font-size: large;">********* {{bankAccount.accountNumber.substr(bankAccount.accountNumber.length-3)}}</span>
+          </ion-text>
+          </ion-row>
+          &nbsp;
+          <ion-row>
+            <ion-text>
+            <span style="font-size: large;"><b>Name of Bank:</b></span>
+          </ion-text>
+          </ion-row> 
+          <ion-row>
+            <ion-text>
+            <span style="font-size: large;">{{bankAccount.nameOfBank}}</span>
+          </ion-text>
+          </ion-row> 
+        </ion-col>
+      </ion-item>
+
+      <ion-row>
+        <ion-col size="9">
+          <ion-text style="font-weight: normal;">
+          Set as Default 
+          </ion-text>
+        </ion-col>
+        <ion-col >
+          <ion-toggle style="margin-left: 30%;" formControlName = "isDefault" (ngModelChange)="checkFormValid()" (ionChange)="changeDefault($event)"></ion-toggle>
+        </ion-col>
+      </ion-row>
+    
+      <br />
+      <br />
+      <div style="display: flex; justify-content: center;">
+        <ion-row>
+          <ion-col>
+            <ion-button color="primary" type="submit" [class.button-disabled]="!formValid">
+              Update Bank Account
+            </ion-button>
+          </ion-col>
+          <ion-col>
+            <ion-button color="danger"  (click)="showDeleteAlert()">
+              Delete Bank Account
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </div>
+    </ion-grid>
+  </form>
+</ion-content>

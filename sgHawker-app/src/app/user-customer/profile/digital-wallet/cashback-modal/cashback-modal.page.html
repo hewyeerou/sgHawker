@@ -1,0 +1,96 @@
+<ion-header>
+  <ion-toolbar class="customer-header-background-color">
+    <ion-title style="color: white;">Cashback</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismissModal()" style="font-size: 20px;" fill="clear">
+        <ion-icon name="close-outline" style="color:white;"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row class="ion-align-items-center">
+      <ion-col size=9>
+        <ion-label class="ion-padding" style="font-size: large; font-weight: bold;">
+          <ion-icon name="gift-outline"></ion-icon>
+          All Cashbacks
+        </ion-label>
+      </ion-col>
+      <ion-col size=1>
+        <ion-button class="button-has-icon-only" fill="clear" (click)="categorySelect.open()">
+          <ion-icon name="funnel-outline"> </ion-icon>
+        </ion-button>
+        <ion-select [(ngModel)]="selectedCategory" #categorySelect class="ion-hide"
+          (ionChange)="onChangeSelectedCategory($event);">
+          <ion-select-option *ngFor="let category of allFilterCategories" [value]="category">{{category}}
+          </ion-select-option>
+        </ion-select>
+      </ion-col>
+      <ion-col size=1>
+        <ion-button class="button-has-icon-only" fill="clear" (click)="sortCategorySelect.open()">
+          <ion-icon name="filter"> </ion-icon>
+        </ion-button>
+        <ion-select [(ngModel)]="selectedSortCategory" #sortCategorySelect class="ion-hide"
+          (ionChange)="sortAllCashbacks();">
+          <ion-select-option *ngFor="let item of allSortCategories" [value]="item">{{item}}
+          </ion-select-option>
+        </ion-select>
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="ion-padding-start">
+      <ion-col *ngIf="selectedSortCategory !== 'A-Z'">
+        Sorted by {{ selectedSortCategory }}
+      </ion-col>
+    </ion-row>
+
+    <ion-row *ngIf="selectedCategory === 'Hawker Centre' || selectedCategory === 'Hawker Store'"
+      class="ion-align-items-center ion-padding">
+      <ion-col size=4>
+        Filter By
+      </ion-col>
+      <ion-col size=8 *ngIf="selectedCategory === 'Hawker Centre'">
+        <ion-select [(ngModel)]="selectedHawkerCentres" (ionChange)="filterCashbacksByHawkerCentres();"
+          placeholder="Select One" multiple="true">
+          <ion-select-option *ngFor="let hawkerCenter of allHawkerCentres" [value]="hawkerCenter">{{hawkerCenter}}
+          </ion-select-option>
+        </ion-select>
+      </ion-col>
+      <ion-col size=8 *ngIf="selectedCategory === 'Hawker Store'">
+        <ion-select [(ngModel)]="selectedHawkerStores" (ionChange)="filterCashbacksByOutlet();" placeholder="Select One"
+          multiple="true">
+          <ion-select-option *ngFor="let hawkerStore of allHawkerStores" [value]="hawkerStore._id">
+            {{hawkerStore.outletName}}
+          </ion-select-option>
+        </ion-select>
+      </ion-col>
+    </ion-row>
+
+    <ion-row *ngIf="availableCashbacks.length === 0">
+      <ion-col>
+        <ion-text>No cashbacks available</ion-text>
+      </ion-col>
+    </ion-row>
+
+    <ion-row *ngFor="let c of availableCashbacks;">
+      <ion-col>
+        <ion-card style="background-color: #ee4444;;" (click)="navigateHawkerStore(c.outlet)">
+          <ion-card-content style="display:flex">
+            <div style="flex:2">
+              <ion-card-title style="font-size:large; color: white;">{{c.outlet.outletName}} CashBack</ion-card-title>
+              <br />
+              <ion-card-subtitle style="color: white;">{{c.outlet.hawkerCentreName}} </ion-card-subtitle>
+            </div>
+            <div style="display:flex; flex:1; justify-content: flex-end;flex-direction: column;">
+              <ion-label style="align-self: flex-end; font-size:xx-large; color:white;">
+                S${{c.cashbackBalance | number : '1.2-2'}}
+              </ion-label>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

@@ -1,0 +1,26 @@
+h5,
+h6,
+ul {
+  margin: 0;
+}
+
+.customization {
+  color: grey;
+}
+
+ion-toggle {
+  --background-checked: #ee4444;
+}
+
+ion-thumbnail {
+  --size: 30px;
+}
+
+::ng-deep .ion-select-style{
+  --width: 58%;
+  --max-width: 400px;
+}
+
+.payment-option-style{
+  max-width: 100% !important;
+}

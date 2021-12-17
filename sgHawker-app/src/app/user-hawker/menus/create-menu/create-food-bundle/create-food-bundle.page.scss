@@ -1,0 +1,20 @@
+ion-input {
+    text-align: end;
+}
+
+div {
+    display: flex;
+    justify-content: center;
+    margin-top: 50px
+}
+
+.fb-icon-edit {
+    margin-left:-10px;
+    margin-top:-10px;
+    background-color: var(--hawker-primary-color);
+    border-radius: 10px;
+    padding:5px;
+    font-size:20px;
+    color: white;
+    opacity: 0.9;
+}

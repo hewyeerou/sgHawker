@@ -1,0 +1,39 @@
+.header-wallet {
+    background-color: var(--hawker-primary-color);
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+}
+
+.header-wallet-balance {
+    flex:1;
+    display:flex;
+    justify-content: center;
+    padding:10px
+}
+
+.header-wallet-balance ion-label {
+    font-size: xx-large;
+    color: white;
+}
+
+.header-wallet-balance-date {
+    font-size: 20px
+}
+
+.header-wallet-button {
+    flex:1;
+    display:flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.content-header {
+    font-size: 25px;
+    font-weight:bold
+}
+
+ion-grid {
+    background-color: rgb(245, 245, 245);
+}

@@ -1,0 +1,7 @@
+export enum TransactionTypeEnum {
+    TOP_UP = 'TOP_UP',
+    WITHDRAWAL = 'WITHDRAWAL',
+    ORDER = 'ORDER',
+    SUBSCRIPTION_PAYMENT = 'SUBSCRIPTION_PAYMENT',
+    REFUND = 'REFUND'
+}

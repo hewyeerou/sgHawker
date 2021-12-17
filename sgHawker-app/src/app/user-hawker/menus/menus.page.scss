@@ -1,0 +1,46 @@
+.add-button {
+    color: #ffff;
+    font-size: 25px;
+}
+
+.add-menu-category-button {
+    // border: solid 1px white;
+    border-radius: 5px;
+    font-size:large;
+}
+
+ion-badge {
+    text-align: end;
+}
+
+.segment-active-inactive{
+    --color-checked: var(--hawker-tertiary-color);
+}
+
+.active-inactive-menu-cards{
+    width: 80%;
+    height: auto;
+    margin: auto;
+    text-align: center;
+}
+
+ion-label {
+    font-size: large;
+    font-weight: bold;
+}
+
+ion-col {
+    margin: auto;
+}
+
+#view-menu-details-btn {
+    --background: var(--hawker-secondary-color);
+    --color: var(--hawker-primary-color);
+    font-size: medium;
+}
+
+ion-searchbar {
+    width: 100%;
+    margin: auto;
+}
+

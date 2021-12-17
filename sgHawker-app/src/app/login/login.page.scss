@@ -1,0 +1,84 @@
+.topBarRed {
+  background-color: var(--customer-primary-color);
+}
+
+.topBarYellow {
+  background-color: #ff9050;
+}
+ion-input {
+  color: var(--font-color);
+}
+
+span {
+  color: #ee4444;
+  padding-left: 1rem;
+}
+
+.img-logo {
+  width: 70%;
+  height: 70%;
+}
+
+@media screen and (orientation: landscape) {
+  .img-logo {
+    width: 50%;
+  }
+}
+
+// .segregation {
+//   &::before {
+//     content: "";
+//     position: absolute;
+//     margin-top: auto;
+//     margin-bottom: auto;
+//     border-top: 1px solid black;
+//     left: 0;
+//     right: 0;
+//     bottom: 0;
+//   }
+// }
+
+.segregation {
+  position: relative;
+  font-size: 15px;
+  font-weight: bold;
+  z-index: 1;
+  overflow: hidden;
+  text-align: center;
+  color: #242424;
+  &::before {
+    position: absolute;
+    top: 51%;
+    overflow: hidden;
+    width: 45%;
+    height: 1px;
+    content: "\a0";
+    background-color: rgb(36, 36, 36);
+    margin-left: -50%;
+    text-align: right;
+  }
+  &::after {
+    position: absolute;
+    top: 51%;
+    overflow: hidden;
+    width: 50%;
+    margin-left: 5%;
+    height: 1px;
+    content: "\a0";
+    background-color: rgb(36, 36, 36);
+  }
+}
+// .segregation:before,
+// .segregation:after {
+//   position: absolute;
+//   top: 51%;
+//   overflow: hidden;
+//   width: 50%;
+//   height: 1px;
+//   content: "\a0";
+//   background-color: rgb(36, 36, 36);
+// }
+// .segregation:before {
+//   margin-left: -50%;
+//   text-align: right;
+// }

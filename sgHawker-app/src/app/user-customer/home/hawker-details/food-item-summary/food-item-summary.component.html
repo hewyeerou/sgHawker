@@ -1,0 +1,17 @@
+<ion-item>
+  <div style="display: flex;flex-direction: column;">
+    <ion-label>
+      {{ foodItem.itemName }}
+    </ion-label>
+    <ion-label xf style="font-size: small;color: gray;">
+      {{ foodItem.itemDescription }}
+    </ion-label>
+    <ion-note color="dark" style="font-weight: bold;">
+      ${{ foodItem.itemPrice }}
+    </ion-note>
+  </div>
+  <ion-thumbnail slot="end">
+    <ion-img *ngIf="foodItem.itemImageSrc !== undefined && foodItem.itemImageSrc.length > 0" [src] = "foodItem.itemImageSrc"></ion-img>
+    <img src="https://picsum.photos/200/300" *ngIf="foodItem.itemImageSrc === undefined || foodItem.itemImageSrc.length ===  0"/>
+  </ion-thumbnail>
+</ion-item>

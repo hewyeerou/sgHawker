@@ -1,0 +1,43 @@
+<ion-tabs>
+  <ion-tab-bar *ngIf="user" slot="bottom">
+    <ion-tab-button tab="home">
+      <ion-icon name="home-outline"></ion-icon>
+      <ion-label>Home</ion-label>
+     <!--<ion-badge>6</ion-badge>-->
+    </ion-tab-button>
+
+    <ion-tab-button tab="activity">
+      <ion-icon name="document"></ion-icon>
+      <ion-label>Activity</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="leaderboard">
+      <ion-icon name="map"></ion-icon>
+      <ion-label>Leaderboard</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="cart">
+      <ion-icon name="cart"></ion-icon>
+      <ion-label>Cart</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="profile">
+      <ion-icon name="person"></ion-icon>
+      <ion-label>Profile</ion-label>
+    </ion-tab-button>
+  </ion-tab-bar>
+
+  <ion-tab-bar *ngIf="!user" slot="bottom">
+    <ion-tab-button tab="home">
+      <ion-icon name="home-outline"></ion-icon>
+      <ion-label>Home</ion-label>
+     <!--<ion-badge>6</ion-badge>-->
+    </ion-tab-button>
+
+    <ion-tab-button tab="activity">
+      <ion-icon name="document"></ion-icon>
+      <ion-label>Activity</ion-label>
+    </ion-tab-button>
+  </ion-tab-bar>
+
+</ion-tabs>

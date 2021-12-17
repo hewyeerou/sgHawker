@@ -1,0 +1,156 @@
+<ion-header id="queueSettingHeader">
+  <ion-toolbar class="hawker-header-background-color">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/hawker/home" style="color: white"></ion-back-button>
+    </ion-buttons>
+    <ion-row class="ion-align-items-end ion-justify-content-center">
+      <img src="../../assets/Logo - White.svg" width="25%" height="25%" />
+    </ion-row>
+    <ion-buttons slot="end">
+      <ion-button *ngIf="!editingPreference" (click)="userClickOnEdit()">
+        EDIT
+      </ion-button>
+      <ion-button *ngIf="editingPreference" (click)="updateQueueSettings()">
+        SAVE
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col></ion-col>
+      <ion-col size="8">
+        <ion-item id="options">
+          <ion-label>Select default queue generation</ion-label>
+          <ion-select interface="popover" [(ngModel)]="selectedQueuePreference" disabled="{{!editingPreference}}">
+            <ion-select-option value="ORDER_TIME">Order Time</ion-select-option>
+            <ion-select-option value="SIMILAR_ITEM">Similar Item</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item *ngIf="selectedQueuePreference === 'ORDER_TIME'">
+          <ion-label>Select number of queues</ion-label>
+          <ion-select interface="popover" [(ngModel)]="selectedNumberOfQueueForOrderTime"
+            disabled="{{!editingPreference}}">
+            <ion-select-option value="1">1 queue</ion-select-option>
+            <ion-select-option value="2">2 queues</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item *ngIf="selectedQueuePreference === 'SIMILAR_ITEM'">
+          <ion-label>Select number of queues</ion-label>
+          <ion-select interface="popover" [(ngModel)]="selectedNumberOfQueueForSimilarItem"
+            disabled="{{!editingPreference}}">
+            <ion-select-option value="1">1 queue</ion-select-option>
+            <ion-select-option value="2">2 queues</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-row
+          *ngIf="(selectedQueuePreference === 'ORDER_TIME' && selectedNumberOfQueueForOrderTime === '2') || (selectedQueuePreference === 'SIMILAR_ITEM' && selectedNumberOfQueueForSimilarItem === '2')"
+          class="ion-justify-content-center" id="queueType">
+          <ion-radio-group
+            value="{{selectedQueuePreference === 'ORDER_TIME' ? selectedTypeOfQueueForOrderTime : selectedTypeOfQueueForSimilarItem}}"
+            (ionChange)="setTypeOfQueue($event)" style="display: flex; flex-direction: row;">
+            <ion-col>
+              <ion-card>
+                <ion-card-header class="ion-text-center">
+                  <ion-radio value="1" disabled="{{!editingPreference}}" mode="md"></ion-radio>
+                </ion-card-header>
+                <ion-row>
+                  <ion-col>
+                    <ion-item style="border: dotted; border-color: lightgrey; border-radius: 20px;" lines="none">
+                      <ion-chip color="warning" outline>Dine in</ion-chip>
+                    </ion-item>
+                  </ion-col>
+                </ion-row>
+                <ion-row>
+                  <ion-col>
+                    <ion-item
+                      style="border: dotted; border-color: lightgrey; border-radius: 20px;"
+                      lines="none">
+                        <ion-chip color="warning" outline>Takeaway</ion-chip>
+                        <ion-chip color="warning" outline>Delivery</ion-chip>
+                    </ion-item>
+                  </ion-col>
+                </ion-row>
+              </ion-card>
+            </ion-col>
+            <ion-col>
+              <ion-card>
+                <ion-card-header class="ion-text-center">
+                  <ion-radio value="2" disabled="{{!editingPreference}}" mode="md"></ion-radio>
+                </ion-card-header>
+                <ion-row>
+                  <ion-col>
+                    <ion-item style="border: dotted; border-color: lightgrey; border-radius: 20px;" lines="none">
+                      <ion-chip color="warning" outline>Delivery</ion-chip>
+                    </ion-item>
+                  </ion-col>
+                </ion-row>
+                <ion-row>
+                  <ion-col>
+                    <ion-item
+                      style="border: dotted; border-color: lightgrey; border-radius: 20px;"
+                      lines="none">
+                        <ion-chip color="warning" outline>Dine in</ion-chip>
+                        <ion-chip color="warning" outline>Takeaway</ion-chip>
+                    </ion-item>
+                  </ion-col>
+                </ion-row>
+              </ion-card>
+            </ion-col>
+          </ion-radio-group>
+        </ion-row>
+
+        <ion-card *ngIf="selectedQueuePreference === 'SIMILAR_ITEM'" id="orderGroupCard">
+          <ion-card-content>
+            <ion-list>
+              <ion-list-header>
+                <h2>Order Item Groups</h2>
+              </ion-list-header>
+              <ion-item *ngFor="let orderGroup of orderItemGroupQuantityArray; let id = index">
+                <ion-avatar slot="start"><img src="../../../../assets/Logo - Black.svg"></ion-avatar>
+                <ion-label>{{orderGroup.foodItem.itemName}}</ion-label>
+
+                <ion-row class="ion-align-items-center">
+                  <ion-button *ngIf="editingPreference" class="button-has-icon-only button-clear button-small"
+                    (click)="decreaseItemQuantity(id)">
+                    <ion-icon name="remove">
+                    </ion-icon>
+                  </ion-button>
+                  &nbsp;
+                  <ion-label>{{orderGroup.quantity}}</ion-label>
+                  &nbsp;
+                  <ion-button *ngIf="editingPreference" class="button-has-icon-only button-clear button-small"
+                    (click)="increaseItemQuantity(id)">
+                    <ion-icon name="add">
+                    </ion-icon>
+                  </ion-button>
+                </ion-row>
+              </ion-item>
+            </ion-list>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <ion-col></ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
+
+<!-- <ion-footer *ngIf="editingPreference" class="ion-padding-horizontal">
+  <ion-grid>
+    <ion-row>
+      <ion-col></ion-col>
+      <ion-col size="8">
+        <div>
+          <ion-button (click)="updateQueueSettings()" horizontal="end" vertical="bottom" expand="block" color="success">
+            Save Changes
+          </ion-button>
+        </div>
+      </ion-col>
+      <ion-col></ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-footer> -->

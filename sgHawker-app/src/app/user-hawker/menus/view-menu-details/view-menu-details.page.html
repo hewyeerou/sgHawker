@@ -1,0 +1,195 @@
+<ion-header>
+  <ion-toolbar class="hawker-header-background-color">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/hawker/menus"></ion-back-button>
+    </ion-buttons>
+    <ion-title>View Menu Details</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <div style="display: flex; justify-content: center; text-align: center;">
+      <ion-card-header>
+        <ion-card-title>{{menu.menuName}}</ion-card-title>
+        <ion-card-subtitle>{{menu.outlet.outletName}}</ion-card-subtitle>
+      </ion-card-header>
+    </div>
+    <br/>
+    <div style="display: flex; justify-content: center;">
+      <ion-row>
+        <ion-badge *ngIf="menu.activeMenu === true" color="success">ACTIVE</ion-badge>
+        <ion-badge *ngIf="menu.activeMenu === false" color="danger">INACTIVE</ion-badge>
+      </ion-row>
+    </div>
+    <br/>
+    <div style="display: flex; justify-content: center;">
+      <ion-row>
+        <ion-col>
+          <ion-button color="primary" (click)="editMenu()">
+            <ion-icon name="create-outline"></ion-icon> Edit
+          </ion-button>
+        </ion-col>
+        <ion-col>
+          <ion-button color="tertiary" (click)="duplicateMenuAlert()">
+            <ion-icon name="copy-outline"></ion-icon>&nbsp;Duplicate
+          </ion-button>
+        </ion-col>
+        <ion-col>
+          <ion-button color="danger" (click)="alertDeleteConfirmPopUp()">
+            <ion-icon name="trash-outline"></ion-icon> Delete
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </div>
+    <ion-grid>
+      <ion-row>
+        <ion-col size=2></ion-col>
+        <ion-col size=8>
+          <ion-searchbar (ionChange)="filterMenuByFood()" [(ngModel)]="searchString" placeholder="Search food items...">
+          </ion-searchbar>
+        </ion-col>
+        <ion-col size=2>
+          <ion-button class="button-has-icon-only" fill="clear" (click)="categorySelect.open()">
+            <ion-icon name="funnel-outline"></ion-icon>
+          </ion-button>
+          <ion-select [(ngModel)]="selectedCategories" #categorySelect class="ion-hide"
+            (ionChange)="filterCategories();" multiple="true">
+            <ion-select-option *ngFor="let category of allCategories" [value]="category">{{category}}
+            </ion-select-option>
+          </ion-select>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="2"></ion-col>
+        <ion-col size="8">
+          <ion-label style="font-size: larger; font-weight: bold; margin: 10px"
+            *ngIf="menu.menuCategories.length !== 0">Menu Categories</ion-label>
+          <ion-segment scrollable="true" [(ngModel)]="menuCatSegmentModel" *ngIf="menu.menuCategories.length !== 0"
+            class="menu-categories-segment-box" mode="ios">
+            <ion-segment-button *ngFor="let mc of menu.menuCategories" value="{{mc.categoryName}}"
+              class="menu-categories-segment">
+              {{mc.categoryName}}
+            </ion-segment-button>
+          </ion-segment>
+          <div [ngSwitch]="menuCatSegmentModel" *ngFor="let mc of menu.menuCategories">
+            <div *ngSwitchCase="mc.categoryName">
+              <ion-label *ngIf="mc.foodItems.length === 0" style="margin-left: 10px;">No data found</ion-label>
+            </div>
+            <ion-col *ngFor="let mcf of mc.foodItems;">
+              <ion-card class="food-card" *ngSwitchCase="mc.categoryName">
+                <ion-item>
+                  <ion-thumbnail slot="start">
+                    <img src="{{baseUrl}}/{{mcf.itemImageSrc}}" class="foodItemImg">
+                    <!-- <img src="https://picsum.photos/200/300" /> -->
+                  </ion-thumbnail>
+                  <div style="display: flex;flex-direction: column;">
+                    <ion-label class="item-name">
+                      {{ mcf.itemName }}
+                    </ion-label>
+                    <ion-label class="ion-text-wrap" style="font-size: medium;color: gray;">
+                      {{ mcf.itemDescription }}
+                    </ion-label>
+                    <ion-note color="danger" style="font-size: medium; font-weight: bold;">
+                      ${{ mcf.itemPrice }}
+                    </ion-note>
+                    <div>
+                      <ion-chip color="success" *ngIf="mcf.itemAvailability === true">Available</ion-chip>
+                      <ion-chip color="danger" *ngIf="mcf.itemAvailability === false">Not Available</ion-chip>
+                    </div>
+                  </div>
+                  <ion-toggle slot="end" [(ngModel)]="mcf.itemAvailability"
+                    (ngModelChange)="alertUpdateItemAvailability(mcf)">
+                  </ion-toggle>
+                </ion-item>
+              </ion-card>
+            </ion-col>
+          </div>
+        </ion-col>
+        <ion-col size="2"></ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="2"></ion-col>
+        <ion-col size="8">
+          <ion-label style="font-size: larger; font-weight: bold; margin: 10px" *ngIf="foodItemCategories.length !== 0">
+            Food
+            Items</ion-label>
+          <ion-segment scrollable="true" [(ngModel)]="foodCatSegmentModel" *ngIf="menu.foodItems.length !== 0"
+            class="menu-categories-segment-box" mode="ios">
+            <ion-segment-button *ngFor="let fc of foodItemCategories" value="{{fc.categoryName}}"
+              class="menu-categories-segment">
+              {{fc.categoryName}}
+            </ion-segment-button>
+          </ion-segment>
+          <div [ngSwitch]="foodCatSegmentModel">
+            <!-- <ion-col *ngFor="let fc of menu.foodItems; let i = index;"> -->
+            <ion-col *ngFor="let fc of foodItemCategories; let i = index;">
+              <div *ngSwitchCase="fc.categoryName">
+                <ion-label *ngIf="menu.foodItems.length === 0" style="margin-left: 10px;">No data found</ion-label>
+              </div>
+              <ion-card class="food-item-card" *ngSwitchCase="fc.categoryName">
+                <ion-item *ngFor="let fci of fc.foodItems">
+                  <ion-thumbnail slot="start">
+                    <img src="{{baseUrl}}/{{fci.itemImageSrc}}" class="foodItemImg">
+                    <!-- <img src="https://picsum.photos/200/300" /> -->
+                  </ion-thumbnail>
+                  <div style="display: flex;flex-direction: column;">
+                    <ion-label class="item-name">
+                      {{ fci.itemName }}
+                    </ion-label>
+                    <ion-label class="ion-text-wrap" style="font-size: medium;color: gray;">
+                      {{ fci.itemDescription }}
+                    </ion-label>
+                    <ion-note color="danger" style="font-size: medium; font-weight: bold;">
+                      ${{ fci.itemPrice }}
+                    </ion-note>
+                    <div>
+                      <ion-chip color="success" *ngIf="fci.itemAvailability === true">Available</ion-chip>
+                      <ion-chip color="danger" *ngIf="fci.itemAvailability === false">Not Available</ion-chip>
+                    </div>
+                  </div>
+                  <ion-toggle slot="end" [(ngModel)]="fci.itemAvailability"
+                    (ngModelChange)="alertUpdateItemAvailability(fci)">
+                  </ion-toggle>
+                </ion-item>
+              </ion-card>
+            </ion-col>
+          </div>
+        </ion-col>
+        <ion-col size="2"></ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col size="2"></ion-col>
+        <ion-col size="8">
+          <ion-label style="font-size: larger; font-weight: bold; margin: 10px">Food Bundles</ion-label>
+          <br />
+          <ion-label *ngIf="menu.foodBundles.length === 0" style="margin-left: 10px;">No data found</ion-label>
+          <ion-col *ngFor="let fb of menu.foodBundles">
+            <ion-card class="food-item-card">
+              <ion-item>
+                <ion-thumbnail slot="start">
+                  <img src="{{baseUrl}}/{{fb.bundleImgSrc}}" class="foodItemImg"
+                    onerror="this.src='/assets/hokkienmee_placeholder.jpg';">
+                </ion-thumbnail>
+                <div style="display: flex;flex-direction: column;">
+                  <ion-label class="item-name">
+                    {{ fb.bundleName }}
+                  </ion-label>
+                  <br />
+                  <ion-label *ngFor="let fi of fb.foodItems" style="font-size: medium;color: gray;">
+                    - {{ fi.foodItem.itemName }} x {{ fi.qty}}
+                  </ion-label>
+                  <ion-note color="danger" style="font-size: medium; font-weight: bold;">
+                    ${{ fb.bundlePrice }}
+                  </ion-note>
+                </div>
+              </ion-item>
+            </ion-card>
+          </ion-col>
+        </ion-col>
+        <ion-col size="2"></ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card>
+</ion-content>

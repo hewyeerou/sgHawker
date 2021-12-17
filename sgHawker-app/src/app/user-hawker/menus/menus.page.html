@@ -1,0 +1,118 @@
+<ion-header>
+  <ion-toolbar class="hawker-header-background-color">
+    <ion-row class="ion-align-items-end ion-justify-content-center">
+      <img src="../../assets/Logo - White.svg" width="25%" height="25%" />
+    </ion-row>
+    <ion-buttons slot="end">
+      <ion-button class="add-menu-category-button" (click)="showPopOver($event)">
+        <ion-icon name="ellipsis-horizontal-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col></ion-col>
+      <ion-col>
+        <ion-segment scrollable="true" [(ngModel)]="segmentModel">
+          <ion-segment-button value="active" class="segment-active-inactive">
+            <ion-label>Active</ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="inactive" class="segment-active-inactive">
+            <ion-label>Inactive</ion-label>
+          </ion-segment-button>
+        </ion-segment>
+      </ion-col>
+      <ion-col></ion-col>
+    </ion-row>
+    <div style="display: flex; justify-content: center;">
+      <ion-row style="width: 85%;">
+        <ion-col size="11">
+          <ion-searchbar (ionChange)="filterMenuByFood()" [(ngModel)]="searchString" placeholder="Search menu, food...">
+          </ion-searchbar>
+        </ion-col>
+      </ion-row>
+    </div>
+    <br />
+    <ion-row *ngIf="segmentModel === 'active' && activeMenus.length === 0" class="active-inactive-menu-cards">
+      <ion-col>
+        <ion-card>
+          <br />
+          <ion-label>No available data</ion-label>
+          <br />
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="segmentModel === 'active' && activeMenus.length !== 0" class="active-inactive-menu-cards">
+      <ion-col>
+        <!-- Menu  -->
+        <ion-card *ngFor="let m of activeMenus">
+          <ion-grid>
+            <ion-row>
+              <ion-col size=4 (click)="viewMenuDetails(m._id)">
+                <ion-label>{{m.menuName}}</ion-label>
+              </ion-col>
+              <ion-col size=4 (click)="viewMenuDetails(m._id)">
+                <ion-badge color="success" *ngIf="m.activeMenu === true">
+                  ACTIVE
+                </ion-badge>
+                <ion-badge color="danger" *ngIf="m.activeMenu === false">
+                  INACTIVE
+                </ion-badge>
+              </ion-col>
+              <ion-col size=2>
+                <ion-toggle [(ngModel)]="m.activeMenu"
+                  (ngModelChange)="alertUpdateActiveMenu(m)">
+                </ion-toggle>
+              </ion-col>
+              <!-- <ion-col>
+                <ion-button id="view-menu-details-btn" class="ion-float-end" (click)="viewMenuDetails(m._id)">
+                  <ion-icon name="document-text-outline"></ion-icon>
+                </ion-button>
+              </ion-col> -->
+            </ion-row>
+          </ion-grid>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="segmentModel === 'inactive' && inactiveMenus.length === 0" class="active-inactive-menu-cards">
+      <ion-col>
+        <ion-card>
+          <br />
+          <ion-label>No available data</ion-label>
+          <br />
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="segmentModel === 'inactive' && inactiveMenus.length !== 0" class="active-inactive-menu-cards">
+      <ion-col>
+        <!-- Menu  -->
+        <ion-card *ngFor="let m of inactiveMenus">
+          <ion-grid>
+            <ion-row>
+              <ion-col size=4 (click)="viewMenuDetails(m._id)">
+                <ion-label>{{m.menuName}}</ion-label>
+              </ion-col>
+              <ion-col size=4 (click)="viewMenuDetails(m._id)">
+                <ion-badge color="success" *ngIf="m.activeMenu === true">
+                  ACTIVE
+                </ion-badge>
+                <ion-badge color="danger" *ngIf="m.activeMenu === false">
+                  INACTIVE
+                </ion-badge>
+              </ion-col>
+              <ion-col size=2>
+                <ion-toggle [(ngModel)]="m.activeMenu"
+                  (ngModelChange)="alertUpdateActiveMenu(m)">
+                </ion-toggle>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>

@@ -1,0 +1,230 @@
+<ion-header>
+  <ion-toolbar class="customer-header-background-color">
+    <ion-buttons slot="primary">
+      <ion-button *ngIf="user" (click) = "presentPopover($event)">
+        <ion-icon slot="icon-only" ios="ellipsis-horizontal" md="ellipsis-vertical" style="color: white"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>
+      <ion-row class="ion-align-items-end ion-justify-content-center">
+        <img src="../../assets/Logo - White.svg" width="40%" height="30%" />
+      </ion-row>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row class="ion-align-items-center">
+      <ion-col size="10">
+        <ion-searchbar (ionChange)="searchData($event)" placeholder="Search hawker centres"></ion-searchbar>
+      </ion-col>
+      <ion-col size="1">
+        <ion-button class="button-has-icon-only" fill="clear" (click)="categorySelect.open()">
+          <ion-icon name="filter"> </ion-icon>
+        </ion-button>
+        <ion-select [(ngModel)]="selectedCategories" #categorySelect class="ion-hide" (ionChange)="filterCategories();"
+          multiple="true">
+          <ion-select-option *ngFor="let category of allCategories" [value]="category">{{category}}
+          </ion-select-option>
+        </ion-select>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <div>
+    <ion-card *ngFor="let hawkerCentre of allHawkerCentres; let id = index"
+      >
+      <ion-grid>
+        <ion-row class="ion-align-items-center">
+          <ion-col>
+            <ion-row class="ion-justify-content-between ion-align-items-center">
+              <ion-card-title style="font-family: bold; color: var(--font-color)" 
+              (click)="navigateHawkerCentreDetails(hawkerCentre.hawkerCenterName)">
+                {{hawkerCentre.hawkerCenterName}}
+              </ion-card-title>
+              <ion-icon *ngIf="user" name="heart" [color]="isFavourited(hawkerCentre.hawkerCenterName) ? 'danger': 'dark'" style="font-size: medium;" (click)="addFavouriteHawkerCentre(hawkerCentre.hawkerCenterName)"> </ion-icon>
+            </ion-row>
+            <br />
+            <ion-row class="ion-align-items-center">
+              <ion-icon name="location" style="color: coral"></ion-icon>
+              {{hawkerCentre.hawkerCentreAddress}}
+            </ion-row>
+            <ion-row class="ion-align-items-center">
+              <ion-icon name="storefront" style="color: coral"></ion-icon>
+              <span class="storeNumber">{{hawkerCentre.numberOfOutlets}} stalls</span>
+            </ion-row>
+            <br />
+            <ion-row class="ion-align-items-center">
+              <ion-badge color="warning" *ngFor="let type of hawkerCentre.cuisineTypes"
+                style="font-size: x-small; margin: 3px">
+                {{type}}
+              </ion-badge>
+            </ion-row>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card>
+  </div> 
+</ion-content>
+<!-- <div *ngIf="input !== ''">
+    <ion-item *ngIf="allHawkerCentres.length === 0">
+      <ion-label>
+        <h5><i>No results available.</i></h5>
+      </ion-label>
+    </ion-item>
+
+    <ion-col>
+      <ion-card *ngFor="let hawkerCentre of allHawkerCentres">
+
+        <ion-row class="ion-align-items-center">
+          <ion-col>
+            <span style="font-size: large;"><b>Amoy Street Food Centre</b></span>
+            <ion-label style="color: white; background-color: green; padding: 3px; margin: 3px;"><b>OPEN</b></ion-label>
+            <ion-row class="ion-align-items-center">
+              <ion-icon name="star"></ion-icon>
+              <ion-icon name="star"></ion-icon>
+              <ion-icon name="star"></ion-icon>
+              <ion-icon name="star-half-outline"></ion-icon>
+              <ion-icon name="star-outline"></ion-icon>
+              <ion-text style="padding: 3px;">
+                <h6>3.5</h6>
+              </ion-text>
+            </ion-row>
+            <ion-text>
+              <span>7 Maxwell Rooad</span>
+            </ion-text>
+          </ion-col>
+          <ion-icon name="location-outline" size="large"></ion-icon>
+        </ion-row>
+      </ion-card>
+    </ion-col>
+  </div>
+  <div *ngIf="input === ''">
+    <ion-card-header>
+      <ion-text>
+        <h4><b>Select a category</b></h4>
+      </ion-text>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-slides [options]="slideOptions">
+        <ion-slide style="display: flex; flex-direction: column;">
+          <ion-fab-button>
+            <ion-icon name="add"></ion-icon>
+          </ion-fab-button>
+          <p>Breakfast</p>
+        </ion-slide>
+        <ion-slide style="display: flex; flex-direction: column;">
+          <ion-fab-button>
+            <ion-icon name="add"></ion-icon>
+          </ion-fab-button>
+          <p>What should i eat today</p>
+        </ion-slide>
+        <ion-slide>
+          <ion-fab-button>
+            <ion-icon name="add"></ion-icon>
+          </ion-fab-button>
+        </ion-slide>
+        <ion-slide>
+          <ion-fab-button>
+            <ion-icon name="add"></ion-icon>
+          </ion-fab-button>
+        </ion-slide>
+      </ion-slides>
+    </ion-card-content>
+    <ion-card-header style="padding-bottom: 0px;">
+      <ion-row class="ion-justify-content-between">
+        <ion-text>
+          <h4><b>Offers</b></h4>
+        </ion-text>
+        <ion-text>
+          <h6>View all (11)</h6>
+        </ion-text>
+      </ion-row>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-slides>
+        <ion-slide>
+          <ion-card style="width: 100%;">
+            <img src="../../../assets/Logo - Black.svg" />
+            <ion-row class="ion-align-items-center ion-justify-content-between">
+              <ion-row>
+                <ion-card-header style="padding-bottom: 20px; padding-right: 5px; text-align: left;">Singapore Style
+                  Ramen
+                </ion-card-header>
+                <ion-icon name="heart-outline" style="margin-top: 24px;"></ion-icon>
+              </ion-row>
+              <ion-label style="color: white; background-color: green; padding: 3px; margin: 3px;"><b>OPEN</b></ion-label>
+            </ion-row>
+            <ion-row class="ion-justify-content-between">
+              <ion-col>
+                <ion-card-subtitle style="text-align: left; padding-left: 15px;">A Noddle Story</ion-card-subtitle>
+                <div style="text-align: left; padding-left: 15px;">
+                  <ion-icon name="star"></ion-icon>
+                  <ion-icon name="star"></ion-icon>
+                  <ion-icon name="star"></ion-icon>
+                  <ion-icon name="star-half-outline"></ion-icon>
+                  <ion-icon name="star-outline"></ion-icon>
+                </div>
+              </ion-col>
+              <ion-row>
+                <p style="margin: 3px;"><strike>$7.50</strike></p>
+                <p style="margin: 3px;">$6.50</p>
+              </ion-row>
+            </ion-row>
+          </ion-card>
+        </ion-slide>
+      </ion-slides>
+    </ion-card-content>
+    <ion-card-header style="padding-bottom: 0px;">
+      <ion-row class="ion-justify-content-between">
+        <ion-text>
+          <h4><b>Top Stalls</b></h4>
+        </ion-text>
+        <ion-text>
+          <h6>More</h6>
+        </ion-text>
+      </ion-row>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-item>
+          <img src="../../../assets/Logo - Black.svg" height="60" width="60" />
+          <ion-col>
+            <ion-text>
+              <h2><b>Ah Hock Hokkien Mee</b></h2>
+            </ion-text>
+            <ion-row>
+              <ion-label style="color: white; background-color: orange; padding: 3px; margin: 3px;">
+                <h5>Chinese</h5>
+              </ion-label>
+              <ion-label style="color: white; background-color: orange; padding: 3px; margin: 3px;">
+                <h5>Lunch</h5>
+              </ion-label>
+              <ion-label style="color: white; background-color: orange; padding: 3px; margin: 3px;">
+                <h5>Best Seller</h5>
+              </ion-label>
+              <ion-label style="color: white; background-color: orange; padding: 3px; margin: 3px;">
+                <h5>Cashback</h5>
+              </ion-label>
+            </ion-row>
+            <ion-text>
+              <h5>Amoy Street Food Centre</h5>
+            </ion-text>
+            <ion-row class="ion-justify-content-between">
+              <ion-row>
+                <ion-icon name="star"></ion-icon>
+                <h6>4.5</h6>
+              </ion-row>
+              <ion-row>
+                <ion-icon name="navigate"></ion-icon>
+                <h6>0.2km away</h6>
+              </ion-row>
+              <ion-label style="color: white; background-color: green; padding: 3px; margin: 3px;"><b>OPEN</b>
+              </ion-label>
+            </ion-row>
+          </ion-col>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </div> -->

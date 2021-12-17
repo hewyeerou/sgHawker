@@ -1,0 +1,60 @@
+.plan-group {
+    // border: 1px solid gray;
+    display:flex;
+    justify-content: center;
+    margin-bottom: 20px;
+    padding:30px;
+}
+
+ion-col {
+    align-self: center;
+    display:flex;
+    justify-content: center;
+    padding:40px
+}
+
+ion-col ion-label {
+    font-weight:bold;
+    font-size:15px
+}
+
+.col-left {
+    background-color: whitesmoke; 
+    border:1px solid gray
+}
+
+.col-mid {
+    border-top: 1px solid gray;
+    border-bottom: 1px solid gray; 
+}
+
+.col-right {
+    border-top: 1px solid gray;
+    border-bottom: 1px solid gray; 
+    border-right: 1px solid gray;
+}
+
+.col-left-selected {
+    background-color: lightgray; 
+    border:4px solid var(--hawker-primary-color)
+}
+
+.col-mid-selected {
+    border-top: 3px solid var(--hawker-primary-color);
+    border-bottom: 3px solid var(--hawker-primary-color); 
+}
+
+.col-right-selected {
+    border-top: 3px solid var(--hawker-primary-color);
+    border-bottom: 3px solid var(--hawker-primary-color); 
+    border-right: 3px solid var(--hawker-primary-color);
+}
+
+.plan-checked-icon {
+    font-size:40px;
+    color: var(--hawker-primary-color);
+    position: absolute;
+    align-self: center;
+    z-index: 1;
+    margin-left:-10px
+}

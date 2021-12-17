@@ -1,0 +1,39 @@
+ion-card-title,
+ion-list-header {
+  font-size: large;
+}
+
+li {
+  display: inline-block;
+  width: 2rem;
+}
+
+.tbl-header {
+  text-align: center;
+  font-weight: bold;
+}
+
+.tbl-content {
+  text-align: center;
+  border-top: 0.5px solid lightgray;
+  border-bottom: 0.5px solid lightgray;
+  padding:20px;
+}
+
+.tbl-content-row {
+  padding:10px;
+  
+}
+
+.tbl-sort {
+  position: absolute;
+  top:5px;
+  margin-left:5px;
+  font-size:20px;
+  color: var(--hawker-primary-color);
+}
+
+.tbl-sort:active {
+  color: var(--primary);
+}
+

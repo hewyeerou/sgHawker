@@ -1,0 +1,55 @@
+<ion-header>
+  <ion-toolbar class="hawker-header-background-color">
+    <ion-buttons slot="primary">
+      <ion-button (click)="closeModal()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-row class="ion-align-items-center ion-justify-content-end">
+      <ion-title> Filter </ion-title>
+    </ion-row>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding" scroll-y="false">
+  <div>
+    <ion-radio-group value="{{dateType}}">
+      <ion-item style="display:flex">
+        <ion-radio slot="start" value="one" (ionFocus)="change('one')"></ion-radio>
+        <ion-item lines="none" style="flex:1">
+          <ion-label>
+            <span style="font-size:14px; color:var(--ion-color-medium)">
+              Single Date
+            </span>
+            <br/>
+            Date: </ion-label>
+          <ion-datetime displayFormat="MM DD YY" value="{{singleDate}}" (ionChange)="updateDate($event, 1)" disabled="{{dateType !== 'one'}}"></ion-datetime>  
+        </ion-item>
+      </ion-item>
+    
+      <ion-item style="display:flex;">
+        <ion-radio slot="start" value="multiple" (ionFocus)="change('multiple')"></ion-radio>
+        <ion-list style="flex:1">
+          <ion-item lines="none">
+            <ion-label>
+              <span style="font-size:14px; color:var(--ion-color-medium)">
+                Range
+              </span>
+              <br/>
+              Start Date: </ion-label>
+            <ion-datetime displayFormat="MM DD YY" value="{{startDate}}" (ionChange)="updateDate($event, 2)" disabled="{{dateType !== 'multiple'}}"></ion-datetime>
+          </ion-item>
+          <ion-item lines="none">
+            <ion-label>End Date: </ion-label>
+            <ion-datetime displayFormat="MM DD YY" value="{{endDate}}" (ionChange)="updateDate($event, 3)" disabled="{{dateType !== 'multiple'}}"></ion-datetime>
+          </ion-item>
+        </ion-list>
+      </ion-item>
+
+    </ion-radio-group>
+  </div>
+  <div style="margin-top:20px;text-align: end;">
+    <ion-button color="primary" (click)="reset()">Reset</ion-button>
+    <ion-button color="primary" (click)="confirm()">Set</ion-button>
+  </div>
+</ion-content>

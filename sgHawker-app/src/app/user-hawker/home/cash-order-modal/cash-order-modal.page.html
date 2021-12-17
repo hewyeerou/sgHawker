@@ -1,0 +1,83 @@
+<ion-header>
+  <ion-toolbar class="hawker-header-background-color">
+    <ion-title style="color: white;">Unpaid Cash Orders</ion-title>
+    <ion-buttons slot="primary">
+      <ion-button
+        (click)="dismissModal()"
+        style="font-size: 20px"
+        fill="clear"
+        color="primary"
+      >
+        <ion-icon name="close" slot="icon-only" style="color: white;"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row class="ion-justify-content-center">
+      <ion-col>
+        <ion-row>
+          <!-- Searching -->
+          <ion-col size="11">
+            <ion-searchbar
+              [(ngModel)]="searchVal"
+              placeholder="Search Cash Order No., Customer Name..."
+            ></ion-searchbar>
+          </ion-col>
+          <!-- Sorting -->
+          <ion-col size="1" class="ion-align-self-center">
+            <ion-button (click)="selectSort.open()" fill="clear">
+              <ion-icon slot="icon-only" name="filter-outline" style="color: black;"></ion-icon>
+            </ion-button>
+            <ion-item class="ion-hide">
+              <ion-label [innerHTML]="title"></ion-label>
+              <ion-select #selectSort [(ngModel)]="sort">
+                <ion-select-option value="Latest"
+                  >Most Recent</ion-select-option
+                >
+                <ion-select-option value="A-Z">Cust Name A-Z</ion-select-option>
+                <ion-select-option value="OrderA-Z"
+                  >Order No. Ascending</ion-select-option
+                >
+                <ion-select-option value="OrderZ-A"
+                  >Order No. Descending</ion-select-option
+                >
+              </ion-select>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+        <ion-grid>
+          <ion-row style="font-size: small">
+            <ion-col> Order No. </ion-col>
+            <ion-col> Cust Name </ion-col>
+            <ion-col> Payment Amt </ion-col>
+            <ion-col> Status </ion-col>
+            <ion-col></ion-col>
+          </ion-row>
+        </ion-grid>
+
+        <ion-row
+          *ngIf="cashOrdersToDisplay.length === 0"
+          class="ion-align-items-center"
+        >
+          <ion-col class="ion-text-center" style="color: rgb(189, 189, 189)">
+            <img
+              src="./assets/Logo - Black.svg"
+              style="opacity: 0.2; width: 300px"
+            />
+            <h1>No Unpaid Cash Orders</h1>
+          </ion-col>
+        </ion-row>
+        <div *ngIf="cashOrdersToDisplay.length !== 0">
+          <cash-order-accordion
+            *ngFor="let order of cashOrdersToDisplay; let i = index"
+            [order]="order"
+            [markCashOrderPaidCB]="markCashOrderPaidCB"
+          ></cash-order-accordion>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

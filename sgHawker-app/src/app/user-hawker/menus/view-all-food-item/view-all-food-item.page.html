@@ -1,0 +1,183 @@
+<ion-header>
+  <ion-toolbar class="hawker-header-background-color">
+    <ion-back-button slot="start"></ion-back-button>
+    <!-- <ion-buttons slot="primary">
+      <ion-button (click) = "goToCreateFoodItem()">
+        <ion-icon slot="icon-only" name="add-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons> -->
+    <ion-buttons slot="end">
+      <ion-button class="popover-button" (click)="showPopOver($event)">
+        <ion-icon name="ellipsis-horizontal-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Food Items</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="10">
+        <ion-searchbar (ionChange)="_ionSearchChange($event)" placeholder="Search Food Items...."></ion-searchbar>
+      </ion-col>
+      <ion-col size="1" class="ion-align-self-center">
+          <ion-button (click)="selectFilter.open()" fill="clear">
+            <ion-icon slot="icon-only" name="funnel-outline"></ion-icon>
+          </ion-button>
+          <ion-item class='ion-hide'>
+            <ion-label>Filter</ion-label>
+            <ion-select #selectFilter [(ngModel)]="filter" (ionChange) = 'filterOnChange($event)'>
+              <ion-select-option value="default">All Food Item</ion-select-option>
+              <ion-select-option value="category">By Category</ion-select-option>
+              <ion-select-option value="available">Available</ion-select-option>
+              <ion-select-option value="notAvailable">Not Available</ion-select-option>
+            </ion-select>
+          </ion-item>
+      </ion-col>
+      <ion-col size="1" class="ion-align-self-center">
+        <ion-button (click)="selectSort.open()" fill="clear">
+          <ion-icon slot="icon-only" name="filter-outline"></ion-icon>
+        </ion-button>
+        <ion-item class='ion-hide'>
+          <ion-select #selectSort [(ngModel)]="sort" (ionChange) = 'sortOnChange($event)'>
+            <ion-select-option value="A-Z">A-Z</ion-select-option>
+            <ion-select-option *ngIf="filter !== 'category'"value="Price">Price</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <div *ngIf= "searchVal === ''">
+    <div class ="ion-text-center" style="color: grey; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);" *ngIf="foodItems.length === 0">
+      <img src="./assets/Logo - Black.svg" style="opacity: 0.5; width: 300px;"/>
+      <h1>No Food Items</h1>
+    </div>
+
+    <div *ngIf="foodItems.length !== 0">
+    <!--Show All Food Items-->
+    <div *ngIf= "filter === 'default' || filter === 'available' || filter === 'notAvailable' ">
+      <ion-list-header *ngIf="filter === 'default'">
+        <h3>All Food Items</h3>
+      </ion-list-header>
+      <ion-list-header *ngIf="filter === 'available'">
+        <h3>All Food Items - Available</h3>
+      </ion-list-header>
+      <ion-list-header *ngIf="filter === 'notAvailable'">
+        <h3>All Food Items - Not Available</h3>
+      </ion-list-header>
+      <ion-list class="ion-padding" *ngFor="let food of foodItems; let k = index" (click) ="viewFoodItemDetails(food)">
+        <ion-item>
+          <ion-thumbnail slot="start">
+            <img src="{{baseUrl}}/{{food.itemImageSrc}}">
+          </ion-thumbnail>
+          <ion-label>
+            <h4>{{food.itemName}}</h4>
+            <h5>${{food.itemPrice}}</h5>
+          </ion-label>
+          <ion-chip color="success" *ngIf="food.itemAvailability">
+            <ion-label>AVAILABLE</ion-label>
+          </ion-chip>
+          <ion-chip color="danger" *ngIf="!food.itemAvailability">
+            <ion-label>NOT AVAILABLE</ion-label>
+          </ion-chip>
+        </ion-item>
+      </ion-list>
+    </div>
+  </div>
+    <!--Filter By All Category-->
+    <div *ngIf="filter === 'category'">
+      <div *ngIf="foodItems.length !== 0">
+      <ion-list-header>
+        <h3>All Food Items - By Category</h3>
+      </ion-list-header>
+      <!--Select Category-->
+      <ion-grid style="width: 100%;">
+        <ion-row>
+          <ion-col size="2">
+            <ion-item lines="none">
+              <ion-label style="font-size: 15px;">
+                Select Category:
+              </ion-label>
+            </ion-item>
+          </ion-col>
+          <ion-col size="12" size-md>
+            <ion-item lines="none">
+              <ion-select class="ion-text-right" style="width: 100%;" [(ngModel)] = "selectedCategory" (ionChange) = "selectCategory($event)">
+                <ion-select-option *ngFor="let c of groupedFoodItems; let i = index"  [value]="i">{{c.category}}</ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
+          <ion-col *ngIf = "selectedCategory !== '' " size="1" class="ion-align-self-center">
+            <ion-button size="small" (click)="revert()" style="--background: #f2b354">REVERT</ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+      <!--Show All Food Items by Category-->
+      <div *ngIf = "selectedCategory === ''">
+      <ion-list *ngFor="let categories of groupedFoodItems; let j = index">
+        <ion-list-header style="background-color: #f9f9f9; width: 100%;">
+          <h5>{{categories.category}}</h5>
+        </ion-list-header>
+        <ion-list class="ion-padding" *ngFor="let item of categories.values; let k = index" (click) ="viewFoodItemDetails(item)">
+          <ion-item-sliding>
+          <ion-item>
+            <ion-thumbnail slot="start">
+              <img src="{{baseUrl}}/{{item.itemImageSrc}}">
+            </ion-thumbnail>
+            <ion-label>
+              <h4>{{item.itemName}}</h4>
+              <h5>${{item.itemPrice}}</h5>
+            </ion-label>
+          </ion-item>
+          <ion-item-options side="end">
+            <ion-item-option>DELETE</ion-item-option>
+          </ion-item-options>
+        </ion-item-sliding>
+        </ion-list>
+      </ion-list>
+    </div>
+    <!--Show By Specific Category-->
+    <div *ngIf = "selectedCategory !== ''">
+        <ion-list-header style="background-color: #f9f9f9; width: 100%;">
+          <h4>{{specificCategory.category}}</h4>
+        </ion-list-header>
+        <ion-list class="ion-padding" *ngFor="let item of specificCategory.values; let k = index" (click) ="viewFoodItemDetails(item)">
+          <ion-item>
+            <ion-thumbnail slot="start">
+              <img src="{{baseUrl}}/{{item.itemImageSrc}}">
+            </ion-thumbnail>
+            <ion-label>
+              <h4>{{item.itemName}}</h4>
+              <h5>${{item.itemPrice}}</h5>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+    </div>
+  </div>
+</div>
+
+    <!--Exist Search Result-->
+  <div *ngIf= "searchVal !== ''">
+    <ion-item-divider color="grey">Search result:</ion-item-divider>
+    <ion-list class="ion-padding" *ngFor="let food of searchedFoodItems; let k = index" (click) ="viewFoodItemDetails(food)">
+      <ion-item>
+        <ion-thumbnail slot="start">
+          <img src="{{baseUrl}}/{{food.itemImageSrc}}">
+        </ion-thumbnail>
+        <ion-label>
+          <h4>{{food.itemName}}</h4>
+          <h5>${{food.itemPrice}}</h5>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+
+    <!--No Search Result-->
+    <div *ngIf="searchedFoodItems.length === 0">
+      <h3 style="text-align: center;">No available search results</h3>
+    </div>
+  </div>
+
+</ion-content>

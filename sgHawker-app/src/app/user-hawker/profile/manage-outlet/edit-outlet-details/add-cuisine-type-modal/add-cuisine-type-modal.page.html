@@ -1,0 +1,28 @@
+<ion-header>
+  <ion-toolbar class="hawker-header-background-color">
+    <ion-title style="display:inline-block" class="hawker-toolbar-title">Add Cuisine Type</ion-title>
+    <ion-buttons end style="float:right">
+      <ion-button class="hawker-toolbar-button" (click)="dismiss()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid style="width: 100%;">
+    <ion-row>
+      <ion-item style="width: 100%;">
+        <ion-label>Cuisine Type</ion-label>
+        <ion-input [(ngModel)]="cuisineType"></ion-input>
+      </ion-item>
+    </ion-row>
+    <br/>
+    <br/>
+    <ion-row>
+      <ion-button type="submit" class="add-button" style="margin-left: auto;" (click)="addToList()">
+          Add
+      </ion-button>
+    </ion-row>
+  </ion-grid>
+</ion-content>

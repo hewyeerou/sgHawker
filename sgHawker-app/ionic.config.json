@@ -1,0 +1,7 @@
+{
+  "name": "is4103-ionic",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

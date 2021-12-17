@@ -1,0 +1,49 @@
+<ion-card *ngIf="order !== undefined">
+  <ion-grid fixed>
+  <ion-card-header>
+    <ion-card-title>
+      <ion-row class="ion-justify-content-between ion-align-items-start">
+        <ion-text color="dark" style="font-weight: bold; font-size: medium">
+          {{ order.outlet.outletName }}
+        </ion-text>
+        <div [ngSwitch]="order.orderStatus">
+          <ion-badge *ngSwitchCase="'UNPAID'" color="warning">{{
+            order.orderStatus
+          }}</ion-badge>
+          <ion-badge *ngSwitchCase="'CANCELLED'" color="danger">{{
+            order.orderStatus
+          }}</ion-badge>
+          <ion-badge *ngSwitchCase="'RECEIVED'" color="success">{{
+            order.orderStatus
+          }}</ion-badge>
+          <ion-badge *ngSwitchCase="'PREPARING'" color="success">{{
+            order.orderStatus
+          }}</ion-badge>
+          <ion-badge *ngSwitchCase="'READY'" color="success">{{
+            order.orderStatus
+          }}</ion-badge>
+          <ion-badge *ngSwitchCase="'COMPLETED'" color="success">{{
+            order.orderStatus
+          }}</ion-badge>
+          <ion-badge *ngSwitchDefault>{{ order.orderStatus }}</ion-badge>
+        </div>
+      </ion-row>
+    </ion-card-title>
+    <ion-badge color="light">
+      <ion-text style="color: black; font-size: small">
+        {{ order.orderCreationTime | date: "dd/MM" }}
+      </ion-text>
+    </ion-badge>
+    <ion-card-subtitle> {{ getTotalOrderItems() }} items </ion-card-subtitle>
+    <ion-row class="ion-align-items-center">
+      <ion-text
+        color="dark"
+        style="font-weight: bold; font-size: small"
+        class="ion-text-lg-lowercase"
+      >
+        {{ order.totalPrice | currency: "USD" }}
+      </ion-text>
+    </ion-row>
+  </ion-card-header>
+  </ion-grid>
+</ion-card>

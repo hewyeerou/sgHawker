@@ -1,0 +1,60 @@
+{
+    "extends": "airbnb",
+    "rules": {
+        "consistent-return": 1, // temp
+        "global-require": 0,
+        "no-continue": 0,
+        "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
+        "no-prototype-builtins": 1,
+        "no-restricted-syntax": 1, // temp
+        "no-underscore-dangle": 0,
+        "no-unused-vars": 1, // temp
+        "no-useless-escape": 1, // temp
+        "linebreak-style": 0,
+        "no-lonely-if": 0,
+        "quotes": 0,
+        "no-restricted-syntax": 0,
+        "guard-for-in": 0,
+
+        /** ES5 **/
+        "arrow-body-style": 1, // temp
+        "arrow-parens": ["error", "as-needed"],
+        "class-methods-use-this": 0,
+        "import/extensions": 1, // temp
+        "import/first": 1, // temp
+        "import/newline-after-import": 1, // temp
+        "import/no-dynamic-require": 1, // temp
+        "import/no-extraneous-dependencies": "warn", // temp
+        "import/no-unresolved": 1, // temp
+        "no-confusing-arrow": 0,
+        "no-param-reassign": [2, { "props": false }],
+        "no-var": 0,
+        "object-shorthand": 1, // temp
+        "prefer-arrow-callback": 1, // temp
+        "prefer-const": 0,
+        "prefer-spread": 1, // temp
+        "strict": 0,
+
+        /** ES6 **/
+        "brace-style": 2,
+        "camelcase": 1,
+        "comma-dangle": [2, "never"],
+        "func-names": 0,
+        "id-length": 0,
+        "max-len": [1, 120, 2, { "ignoreComments": true }],
+        "new-cap": 0,
+        "no-else-return": 0,
+        "object-curly-spacing": [2, "always"],
+        "prefer-template": "warn", // temp
+        "template-curly-spacing": ["warn", "never"] // temp
+    },
+    "parser": "babel-eslint",
+    "env": {
+        "browser": true,
+        "es6": true,
+        "mongo": true,
+        "node": true
+    },
+
+    "plugins": ["import"]
+}

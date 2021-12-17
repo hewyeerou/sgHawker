@@ -1,0 +1,162 @@
+<ion-header>
+  <ion-toolbar class="customer-header-background-color">
+    <ion-buttons slot="start">
+      <ion-back-button [routerLink]="['/customer/home']" style="color:white;"></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      <ion-row class="ion-align-items-end ion-justify-content-center">
+        <img src="../../assets/Logo - White.svg" width="40%" height="30%" />
+      </ion-row>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col></ion-col>
+      <ion-col>
+        <ion-segment scrollable="true" [(ngModel)]="segmentModel">
+          <ion-segment-button value="centres" class="segment-active-inactive">
+            <ion-label>Centres</ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="stores" class="segment-active-inactive">
+            <ion-label>Stores</ion-label>
+          </ion-segment-button>
+        </ion-segment>
+      </ion-col>
+      <ion-col></ion-col>
+    </ion-row>
+    <!-- <div style="display: flex; justify-content: center;">
+      <ion-row style="width: 85%;">
+        <ion-col size="11">
+          <ion-searchbar (ionChange)="filterMenuByFood()" [(ngModel)]="searchString" placeholder="Search for food...">
+          </ion-searchbar>
+        </ion-col>
+      </ion-row>
+    </div> -->
+    <br />
+    
+    <ion-row *ngIf="segmentModel === 'centres'">
+      
+        <ion-row style="width: 85%;">
+          <ion-col size="11">
+            <ion-searchbar (ionChange)="searchCentreData($event)" placeholder="Search hawker centres"></ion-searchbar>
+          </ion-col>
+          <ion-col size="1">
+            <ion-button class="button-has-icon-only" fill="clear" (click)="allCentreCategories.length === 0? noCategoryAlert() :categorySelect.open()">
+              <ion-icon name="funnel-outline"> </ion-icon>
+            </ion-button>
+            <ion-select [(ngModel)]="selectedCentreCategories" #categorySelect class="ion-hide" (ionChange)="filterCentreCategories();"
+              multiple="true">
+              <ion-select-option *ngFor="let category of allCentreCategories" [value]="category">{{category}}
+              </ion-select-option>
+            </ion-select>
+          </ion-col>
+        </ion-row>
+      
+      <ion-col>
+      
+      <ion-card *ngFor="let hawkerCentre of favouriteHawkerCentres; let id = index">
+      <ion-grid fixed>
+        <ion-row class="ion-align-items-center">
+          
+          <ion-col>
+            <ion-row class="ion-justify-content-between ion-align-items-center">
+              <ion-card-title style="font-family: bold; color: var(--font-color)" (click)="navigateHawkerCentreDetails(hawkerCentre.hawkerCenterName)">
+                {{hawkerCentre.hawkerCenterName}}
+              </ion-card-title> 
+              <!-- <ion-icon name="close-outline" style="position: absolute; top: 50%; right: 0px; transform: translateY(-50%);" (click)="removeFavouriteHawkerCentre(hawkerCentre.id)"> </ion-icon> -->
+              <ion-icon name="close-outline" style="margin-left: auto;" (click)="removeFavouriteHawkerCentre(hawkerCentre.hawkerCenterName)"> </ion-icon>
+            </ion-row>
+            <br />
+            <ion-row class="ion-align-items-center">
+              <ion-icon name="location" style="color: coral"></ion-icon>
+              {{hawkerCentre.hawkerCentreAddress}}
+            </ion-row>
+            <ion-row class="ion-align-items-center">
+              <ion-icon name="storefront" style="color: coral"></ion-icon>
+              <span class="storeNumber">{{hawkerCentre.numberOfOutlets}} stalls</span>
+            </ion-row>
+            <br />
+            <ion-row class="ion-align-items-center">
+              <ion-badge color="warning" *ngFor="let type of hawkerCentre.cuisineTypes"
+                style="font-size: x-small; margin: 3px">
+                {{type}}
+              </ion-badge>
+            </ion-row>
+            
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card>
+  </ion-col>
+    </ion-row>
+    
+    
+    <ion-row *ngIf="segmentModel === 'stores'">
+      <ion-row style="width: 85%;">
+        <ion-col size="11">
+        <ion-searchbar (ionChange)="searchStoreData($event)" placeholder="Search hawker stores"></ion-searchbar>
+        </ion-col>
+        <ion-col size="1">
+          <ion-button class="button-has-icon-only" fill="clear" (click)="allStoreCategories.length === 0? noCategoryAlert(): categorySelect.open()">
+            <ion-icon name="funnel-outline"> </ion-icon>
+          </ion-button>
+          <ion-select [(ngModel)]="selectedStoreCategories" #categorySelect class="ion-hide" (ionChange)="filterStoreCategories();"
+          multiple="true">
+            <ion-select-option *ngFor="let category of allStoreCategories" [value]="category">{{category}}
+            </ion-select-option>
+          </ion-select>
+        </ion-col>
+      </ion-row>
+      <ion-col>
+        <ion-card
+          *ngFor="let hawkerStore of favouriteHawkerStores"
+        >
+          <ion-row class="ion-align-items-center">
+            <ion-col>
+              <ion-row
+                class="ion-justify-content-between ion-align-items-center"
+              >
+                <ion-card-title
+                  style="
+                    font-family: bold;
+                    color: var(--font-color);
+                    align-items: center;
+                  "
+                  (click)="navigateHawkerStore(hawkerStore)"
+                >
+                  {{hawkerStore.outletName}}
+                  <ion-badge color="success" *ngIf="isActive(hawkerStore)">
+                    OPEN
+                  </ion-badge>
+                  <ion-badge color="medium" *ngIf="!isActive(hawkerStore)">
+                    CLOSED
+                  </ion-badge>
+                </ion-card-title>
+                <ion-icon name="close-outline" style="font-size: large; margin-left: auto" (click) = "removeFavouriteHawkerStore(hawkerStore._id)"> </ion-icon>
+              </ion-row>
+              <br />
+              <ion-row class="ion-align-items-center">
+                <ion-icon name="location" style="color: coral"></ion-icon>
+                {{hawkerStore.outletAddress}}
+              </ion-row>
+              <br />
+              <ion-row class="ion-align-items-center">
+                <ion-badge
+                  color="warning"
+                  *ngFor="let type of hawkerStore.cuisineType"
+                  style="font-size: x-small; margin: 3px"
+                >
+                  {{type}}
+                </ion-badge>
+              </ion-row>
+            </ion-col>
+          </ion-row>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>

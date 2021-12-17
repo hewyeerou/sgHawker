@@ -1,0 +1,27 @@
+span {
+  color: white;
+  padding-left: 5px;
+}
+.input {
+  border-radius: 10px;
+}
+
+.grid {
+  .first-child {
+    background-color: #2dd36f;
+    font-weight: bold;
+  }
+  ion-col {
+    border: 1px solid black;
+    border-bottom: 0;
+    border-right: 0;
+    background-color: white;
+  }
+  ion-col:last-child {
+    border-right: 1px solid black;
+  }
+
+  ion-row:last-child {
+    border-bottom: 1px solid black;
+  }
+}

@@ -1,0 +1,172 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar class="hawker-header-background-color ion-justify-content-center">
+    <ion-buttons slot="start" >
+      <ion-back-button defaultHref="/hawker/profile" style="color:white;"></ion-back-button>
+    </ion-buttons>
+    <ion-text style="display:flex;justify-content: center;font-size:20px">
+      Digital Wallet
+    </ion-text>
+    <ion-buttons slot="end">
+      <ion-button class="add-menu-category-button" (click)="showPopOver($event)">
+        <ion-icon name="ellipsis-horizontal-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <div class="header-wallet">
+    <div class="header-wallet-balance">
+      <ion-label *ngIf="wallet">
+        <span style="font-weight: bold;">
+          Wallet Balance:
+          S${{wallet.balance | number : '1.2-2'}}
+        </span>
+        <span style="font-size:15px;color:crimson" *ngIf="!defaultBankAccount">
+          <br/>
+          <ion-icon name="alert-circle-outline"></ion-icon>
+          Please set a default bank account for automatic withdrawal
+        </span>
+        <br/>
+        <span class="header-wallet-balance-date">
+          Next Auto Withdrawal: {{wallet.nextWithdrawalDate ? (wallet.nextWithdrawalDate | date : 'd MMM yyyy') : "-"}}
+          <br/>
+          Withdrawal Frequency: {{wallet.nextWithdrawalDate ? (getWithdrawalFrequencyString(wallet.withdrawalFrequency)) : "-"}}
+          <ion-chip style="top:-2px" (click)="changeWithdrawalFreq()">
+            Set
+          </ion-chip>
+        </span>
+        <br/>
+        <!-- <span class="header-wallet-balance-date" *ngIf="currentOutlet.isMaster">
+          Subscription Due End of Month: S${{wallet.subscriptionPaymentDue | number : '1.2-2'}}
+        </span> -->
+      </ion-label>
+    </div>
+    <div class="header-wallet-button">
+      <ion-button color="light" size="large" (click)="openWithdrawModal()" style="align-self: center;width:50%">
+        <span style="color:var(--hawker-primary-color); font-weight: bold;">
+          Withdraw Balance
+        </span>
+      </ion-button>
+      <ion-button color="light" size="large" (click)="openCashbackModal()" style="align-self: center;width:50%">
+        <span style="color:var(--hawker-primary-color); font-weight: bold;">
+          Store Cashback
+        </span>
+      </ion-button>
+    </div>
+  </div>
+</ion-header>
+<ion-content>
+ <ion-grid *ngIf="wallet" style="min-height:100%">
+   <ion-row class="ion-padding-bottom">
+     <ion-col>
+      <ion-segment [(ngModel)]="segmentModel" (ionChange)="changeSegment($event)">
+        <ion-segment-button value="all">
+          <ion-label>All Transactions</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="bt">
+          <ion-label>Bank Transfers</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="cc" *ngIf="(currentUser.accountTier === 'DELUXE' && currentOutlet.isMaster) || currentUser.accountTier === 'PREMIUM'">
+          <ion-label>Credit Card</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="o">
+          <ion-label>Orders</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+     </ion-col>
+   </ion-row>
+   <ion-row>
+    <ion-col size="1"></ion-col>
+    <ion-col style="text-align: start;" *ngIf="segmentModel==='o'">
+      <ion-radio-group value="{{ordersType}}">
+          <ion-radio style="margin-left:10px;" value="allOrders" (ionFocus)="changeRadio('allOrders')"></ion-radio>
+          <ion-label style="margin-left:7px">All</ion-label>
+
+          <ion-radio style="margin-left:30px" value="onlyOrders" (ionFocus)="changeRadio('onlyOrders')"></ion-radio>
+          <ion-label style="margin-left:7px">Orders</ion-label>
+
+          <ion-radio style="margin-left:30px" value="onlyRefunded" (ionFocus)="changeRadio('onlyRefunded')"></ion-radio>
+          <ion-label style="margin-left:7px">Refunded</ion-label>
+      </ion-radio-group>
+     </ion-col>
+    <ion-col style="text-align: end;">
+     <ion-icon 
+     name="filter-outline" 
+     style="font-size:30px;margin-right:50px" 
+     (click)="filterTransactions()"
+     color="{{filter ? 'primary' : ''}}"></ion-icon>
+    </ion-col>
+  </ion-row>
+   <ion-row *ngIf="transactionsByDate.length === 0" style="height:50%">
+     <ion-col style="display:flex; justify-content: center;">
+      <span style="font-weight:normal;padding-top:20px;align-self: center;">
+        There are no transactions yet for this month
+      </span>
+     </ion-col>
+   </ion-row>
+  <ion-row *ngFor="let t of transactionsByDate">
+    <ion-col></ion-col>
+    <ion-col size="10">
+      <ion-text class="ion-padding">{{t.date}}</ion-text>
+      <ion-card *ngFor="let txn of t.walletTransactions">
+
+        <!-- WITHDRAWAL TRANSACTIONS -->
+        <ion-card-content *ngIf="txn.transactionType === 'WITHDRAWAL'" style="display:flex" >
+          <div style="flex:2">
+            <ion-card-title style="font-size:15px">{{txn.transactionType}}</ion-card-title>
+            <ion-card-subtitle>{{txn.bankAccountInvolved.nameOfBank}} *{{txn.bankAccountInvolved.accountNumber.substr(txn.bankAccountInvolved.accountNumber.length-4)}}, {{txn.bankAccountInvolved.fullName}}</ion-card-subtitle>
+            <ion-card-subtitle>{{txn.transactionDate | date: 'h:mm aaa'}} </ion-card-subtitle>  
+          </div>
+          <div style="display:flex; flex:1; justify-content: flex-end;">
+            <ion-label style="align-self: flex-end; color:black; font-size:15px">
+              -S${{txn.withdrawalAmount | number : '1.2-2'}}
+            </ion-label>
+          </div>
+        </ion-card-content>
+
+         <!-- ORDER TRANSACTIONS --> 
+         <ion-card-content *ngIf="txn.transactionType === 'ORDER'" style="display:flex" (click)="openOrderModal(txn.order)">
+          <div style="flex:2">
+            <ion-card-title style="font-size:15px">{{txn.transactionType}} #{{txn.order._id.substr(txn.order._id.length-5) | uppercase}}</ion-card-title>
+            <ion-card-subtitle>{{txn.transactionDate | date: 'h:mm aaa'}} </ion-card-subtitle>  
+          </div>
+          <div style="display:flex; flex:1; justify-content: flex-end;flex-direction: column;">
+            <ion-icon name="chevron-forward-outline" style="align-self: flex-end;"></ion-icon>
+            <ion-label style="align-self: flex-end; color:green; font-size:15px;">
+              +S${{txn.paidNonCashbackAmount | number : '1.2-2'}}
+            </ion-label>
+          </div>
+        </ion-card-content>
+
+        <!-- REFUNDED ORDER TRANSACTIONS --> 
+        <ion-card-content *ngIf="txn.transactionType === 'REFUND'" style="display:flex" (click)="openOrderModal(txn.order)">
+          <div style="flex:2">
+            <ion-card-title style="font-size:15px">ORDER #{{txn.order._id.substr(txn.order._id.length-5) | uppercase}} (REFUNDED)</ion-card-title>
+            <ion-card-subtitle>{{txn.transactionDate | date: 'h:mm aaa'}} </ion-card-subtitle>  
+          </div>
+          <div style="display:flex; flex:1; justify-content: flex-end;flex-direction: column;">
+            <ion-icon name="chevron-forward-outline" style="align-self: flex-end;"></ion-icon>
+            <ion-label style="align-self: flex-end; color:black; font-size:15px;">
+              -S${{txn.paidNonCashbackAmount | number : '1.2-2'}}
+            </ion-label>
+          </div>
+        </ion-card-content>
+
+        <!-- CREDIT CARD TRANSACTIONS --> 
+        <ion-card-content *ngIf="txn.transactionType === 'SUBSCRIPTION_PAYMENT' && currentOutlet.isMaster" style="display:flex" >
+          <div style="flex:2">
+            <ion-card-title style="font-size:15px">SUBSCRIPTION PAYMENT</ion-card-title>
+            <ion-card-subtitle>{{txn.creditCardInvolved.cardType}} *{{txn.creditCardInvolved.truncatedCardNumber.substr(txn.creditCardInvolved.truncatedCardNumber.length-4)}}, {{txn.creditCardInvolved.cardName}}</ion-card-subtitle>
+            <ion-card-subtitle>{{txn.transactionDate | date: 'h:mm aaa'}} </ion-card-subtitle>  
+          </div>
+          <div style="display:flex; flex:1; justify-content: flex-end;">
+            <ion-label style="align-self: flex-end; color:black; font-size:15px">
+              -S${{txn.paymentAmount | number : '1.2-2'}}
+            </ion-label>
+          </div>
+        </ion-card-content>
+        
+      </ion-card>
+    </ion-col>
+    <ion-col></ion-col>
+  </ion-row>
+ </ion-grid>
+</ion-content>

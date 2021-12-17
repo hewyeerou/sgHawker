@@ -1,0 +1,43 @@
+<ion-header>
+  <ion-toolbar [ngClass]="{'customer-header-background-color': user !== undefined, 'hawker-header-background-color': outlet !== undefined}">
+    <ion-buttons slot="primary">
+    </ion-buttons>
+    <ion-row class="ion-align-items-center ion-justify-content-end">
+      <ion-title style="color: white"> Provide your feedback </ion-title>
+    </ion-row>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen>
+  <ion-grid>
+    <ion-row>
+      <ion-item style="width: 100%;" lines="none">
+        <ion-col>
+          <ion-row>
+            <ion-label>Feedback</ion-label>
+          </ion-row>
+          <ion-row>
+            <ion-textarea [(ngModel)]="feedback" rows="10" placeholder="Tell us how we can improve!">
+            </ion-textarea>
+          </ion-row>
+          <ion-row>
+            <span *ngIf="!formValid"
+              style="color: #ee4444; padding-left: 1rem">Please provide a description.</span>
+          </ion-row>
+        </ion-col>
+      </ion-item>
+    </ion-row>
+    <div class="submitButton ion-justify-content-center">
+      <ion-row>
+        <ion-button color="primary" (click)="submitFeedback()">
+          <ion-icon slot="start" name="checkmark"></ion-icon>
+          Submit Feedback
+        </ion-button>
+        <ion-button color="warning" (click)="cancelSubmitFeedback()">
+          <ion-icon slot="start" name="close"></ion-icon>
+          Cancel
+        </ion-button>
+      </ion-row>
+    </div>
+  </ion-grid>
+</ion-content>

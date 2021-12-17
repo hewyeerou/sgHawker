@@ -1,0 +1,101 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title *ngIf="isUpdate">Update Menu Category</ion-title>
+    <ion-title *ngIf="!isUpdate">Add Menu Category</ion-title>
+    <ion-buttons slot="primary">
+      <ion-button
+        (click)="dismissModal()"
+        style="font-size: 20px"
+        fill="clear"
+        color="primary"
+      >
+        <ion-icon name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="menuCategoryFormGroup" (ngSubmit)="submit()">
+    <ion-card style="margin-bottom: 6rem">
+      <ion-grid>
+        <ion-row class="ion-text-center">
+          <ion-col>
+            <ion-item>
+              <ion-label>Menu Category Name:</ion-label>
+              <ion-input
+                type="text"
+                disabled="{{isRecommended}}"
+                formControlName="categoryName"
+                (ngModelChange)="checkFormValid()"
+                placeholder="Please enter menu name"
+                style="text-align: end"
+              ></ion-input>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-list>
+              <ion-list-header>
+                <ion-label>Select Food Items:</ion-label>
+              </ion-list-header>
+              <ion-item-group
+                *ngFor="let itemCategoryCheckbox of itemCategoriesCheckboxes"
+              >
+                <ion-item>
+                  <ion-label style="font-size: 70%; font-weight: bold"
+                    >{{itemCategoryCheckbox.itemCategoryName}}</ion-label
+                  >
+                  <ion-checkbox
+                    slot="end"
+                    [(ngModel)]="itemCategoryCheckbox.isSelected"
+                    (ngModelChange)="onItemCategorySelectChange(itemCategoryCheckbox)"
+                    [ngModelOptions]="{standalone: true}"
+                  ></ion-checkbox>
+                </ion-item>
+                <ion-item
+                  *ngFor="let foodItemCheckbox of filteredCategoryItems(itemCategoryCheckbox.itemCategoryName)"
+                >
+                  <ion-avatar slot="start">
+                    <img
+                      src="{{baseUrl}}/{{foodItemCheckbox.foodItem.itemImageSrc}}"
+                      onerror="this.src='/assets/hokkienmee_placeholder.jpg';"
+                      alt="..."
+                    />
+                  </ion-avatar>
+                  <ion-label>{{foodItemCheckbox.foodItem.itemName}}</ion-label>
+                  <ion-checkbox
+                    slot="end"
+                    [(ngModel)]="foodItemCheckbox.isSelected"
+                    (ngModelChange)="onFoodItemSelectChange(itemCategoryCheckbox.itemCategoryName)"
+                    [ngModelOptions]="{standalone: true}"
+                  ></ion-checkbox>
+                </ion-item>
+              </ion-item-group>
+            </ion-list>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card>
+    <ion-footer class="ion-no-border" style="position: fixed; bottom: 0">
+      <ion-button
+        type="submit"
+        fill="solid"
+        expand="full"
+        [class.button-disabled]="!formValid"
+      >
+        Save
+      </ion-button>
+      <ion-button
+        fill="solid"
+        color="danger"
+        expand="full"
+        *ngIf="!isRecommended && isUpdate"
+        (click)="submitDelete()"
+      >
+        Delete
+      </ion-button>
+    </ion-footer>
+  </form>
+</ion-content>
