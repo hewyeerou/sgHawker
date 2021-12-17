@@ -1,0 +1,6 @@
+export enum QueueConditionEnum {
+  BY_DELIVERY = 'BY_DELIVERY',
+  BY_NOT_DELIVERY = 'BY_NOT_DELIVERY',
+  BY_DINE_IN = 'BY_DINE_IN',
+  BY_NOT_DINE_IN = 'BY_NOT_DINE_IN',
+}

@@ -1,0 +1,12 @@
+.btn-group{
+    float: right;
+}
+
+ion-range::part(pin) {
+    transform: translate3d(0px, -24px, 0px) scale(1);
+    color: black;
+}
+
+.details-form ion-input {
+    text-align: end;
+}

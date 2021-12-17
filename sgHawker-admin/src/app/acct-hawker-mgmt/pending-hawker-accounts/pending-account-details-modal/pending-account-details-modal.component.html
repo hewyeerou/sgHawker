@@ -1,0 +1,49 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Account Details</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-list>
+          <ion-item>
+            <ion-label>Name</ion-label>
+            {{ user.name }}
+          </ion-item>
+          <ion-item>
+            <ion-label>Phone Number</ion-label>
+            {{ user.phone }}
+          </ion-item>
+          <ion-item>
+            <ion-label>Email</ion-label>
+            {{ user.email }}
+          </ion-item>
+          <ion-item>
+            <ion-label>Account Tier</ion-label>
+            <ion-badge>
+              {{ user.accountTier }}
+            </ion-badge>
+          </ion-item>
+          <ion-item>
+            <ion-label>Verification Documents</ion-label>
+            <ion-button (click)="downloadHawkerDocuments()">
+              <ion-icon name="download" slot="start"> </ion-icon>
+              Download
+            </ion-button>
+          </ion-item>
+          <ion-item>
+            <ion-button color="success" (click)="approveHawker()"
+              >Approve</ion-button
+            >
+            <ion-button color="danger" (click)="rejectHawker()"
+              >Reject</ion-button
+            >
+          </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

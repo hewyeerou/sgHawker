@@ -1,0 +1,69 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title style="display:inline-block">Create Outlet</ion-title>
+    <ion-buttons end style="float:right">
+      <ion-button color="danger" (click)="dismiss()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<!-- Create-Outlet-Form -->
+<ion-content>
+  <ion-grid style="width: 100%;" class="create-outlet-form">
+    <form [formGroup]="createOutletForm" (ngSubmit)="createOutlet()">
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-label>Outlet Name</ion-label>
+            <ion-input type="text" formControlName="outletName" (ngModelChange)="checkFormValid()"
+              placeholder="Enter name"></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <!-- Error Message -->
+      <ion-row>
+        <span *ngIf="formSubmitted && errorControl.outletName.errors?.required">Outlet Name is required.</span>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-label>Outlet Address</ion-label>
+            <ion-input type="text" formControlName="outletAddress" (ngModelChange)="checkFormValid()"
+              placeholder="Enter address">
+            </ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <!-- Error Message -->
+      <ion-row>
+        <span *ngIf="formSubmitted && errorControl.outletAddress.errors?.required">Outlet Address is required.</span>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-label>Hawker Centre Name</ion-label>
+            <ion-input type="text" formControlName="hawkerCentreName" (ngModelChange)="checkFormValid()"
+              placeholder="Enter hawker centre">
+            </ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <!-- Error Message -->
+      <ion-row>
+        <span *ngIf="formSubmitted && errorControl.hawkerCentreName.errors?.required">Hawker Centre Name is
+          required.</span>
+      </ion-row>
+      <br />
+      <ion-row>
+        <ion-col style="display:flex;justify-content: center;">
+          <ion-button color="primary" type="submit" [class.button-disabled]="!formValid">
+            <ion-icon slot="start" name="checkmark"></ion-icon>
+            Create
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </form>
+  </ion-grid>
+</ion-content>

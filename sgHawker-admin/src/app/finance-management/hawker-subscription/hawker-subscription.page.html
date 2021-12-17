@@ -1,0 +1,64 @@
+<ion-content>
+    <ion-text>
+        <h4 style="margin: 20px">Hawker Subscriptions</h4>
+    </ion-text>
+    <ion-card>
+        <ion-card-content>
+            <ion-grid>
+                <ion-row>
+                    <ion-col>
+                        <table *ngIf="outlets.length > 0" datatable="ng" [dtOptions]="dtOptions"
+                            class="row-border hover">
+                            <thead>
+                                <tr>
+                                    <th>Hawker Account</th>
+                                    <th>Account Tier</th>
+                                    <th>Outlet</th>
+                                    <th>Subscription Payment Due</th>
+                                    <th>Subscription Payment Status</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody style="text-align: center">
+                                <tr *ngFor="let outlet of outlets">
+                                    <td>
+                                        {{ outlet.hawkerAccount.name }}
+                                    </td>
+                                    <td>
+                                        <ion-badge>
+                                            {{ outlet.hawkerAccount.accountTier }}
+                                        </ion-badge>
+                                    </td>
+                                    <td>
+                                        {{ outlet.outletName }}
+                                    </td>
+                                    <td>
+                                        <ion-text color="danger" *ngIf="outlet.wallet.subscriptionPaymentDue > 0">$
+                                            {{ outlet.wallet.subscriptionPaymentDue }}
+                                        </ion-text>
+                                        <ion-text color="success" *ngIf="outlet.wallet.subscriptionPaymentDue === 0">$
+                                            {{ outlet.wallet.subscriptionPaymentDue }}
+                                        </ion-text>
+                                    </td>
+                                    <td>
+                                        <ion-badge color="danger" *ngIf="outlet.wallet.subscriptionPaymentDue > 0">
+                                            UNPAID</ion-badge>
+                                        <ion-badge color="success" *ngIf="outlet.wallet.subscriptionPaymentDue === 0">
+                                            PAID</ion-badge>
+                                    </td>
+                                    <td>
+                                        <ion-button class="button-outline"
+                                            (click)="presentSubscriptionDetailsModal(outlet)">
+                                            View Details
+                                        </ion-button>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+        </ion-card-content>
+    </ion-card>
+</ion-content>

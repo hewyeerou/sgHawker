@@ -1,0 +1,81 @@
+<ion-content>
+  <!-- <ion-card> -->
+  <ion-text>
+    <h4 style="margin: 20px;">Non-pending Hawker Accounts</h4>
+  </ion-text>
+  <ion-card-content>
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <table 
+          *ngIf="approvedHawkers.length > 0"
+          datatable="ng" 
+          [dtOptions]="dtOptions" 
+          class="row-border hover">
+            <thead>
+              <tr>
+                <th>Account Name</th>
+                <th>Email</th>
+                <th>Phone Number</th>
+                <th>Account Tier</th>
+                <th>Account Status</th>
+                <th>Currently Login</th>
+                <th>Last Login</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody style="text-align: center;">
+              <tr *ngFor="let hawker of approvedHawkers">
+                <td>{{ hawker.name }}</td>
+                <td>{{ hawker.email }}</td>
+                <td>
+                  <span *ngIf="!hawker.lastLoggedIn">
+                    -
+                  </span>
+                  {{ hawker.phone }}
+                </td>
+                <td [ngSwitch]="hawker.accountTier">
+                  <ion-badge *ngSwitchCase="'FREE'">FREE</ion-badge>
+                  <ion-badge color="secondary" *ngSwitchCase="'PREMIUM'">PREMIUM</ion-badge>
+                  <ion-badge color="tertiary" *ngSwitchCase="'DELUXE'">DELUXE</ion-badge>
+                </td>
+                <td [ngSwitch]="hawker.accountStatus">
+                  <ion-badge color="danger" *ngSwitchCase="'DELETED'">
+                    {{hawker.accountStatus}}
+                  </ion-badge>
+                  <ion-badge color="danger" *ngSwitchCase="'REJECTED'">
+                    {{hawker.accountStatus}}
+                  </ion-badge>
+                  <ion-badge color="danger" *ngSwitchCase="'SUSPENDED'">
+                    {{hawker.accountStatus}}
+                  </ion-badge>
+                  <ion-badge color="light" *ngSwitchCase="'DEACTIVATED'">
+                    {{hawker.accountStatus}}
+                  </ion-badge>
+                  <ion-badge color="success" *ngSwitchCase="'APPROVED'">
+                    {{hawker.accountStatus}}
+                  </ion-badge>
+                  <ion-badge color="primary" *ngSwitchDefault>{{hawker.accountStatus}}</ion-badge>
+                </td>
+                <td>
+                  <ion-badge color="success" *ngIf="hawker.currentlyLoggedIn">Logged In</ion-badge>
+                  <ion-badge color="light" *ngIf="!hawker.currentlyLoggedIn">Logged Out</ion-badge>
+                </td>
+                <td>
+                  <span *ngIf="!hawker.lastLoggedIn">
+                    -
+                  </span>
+                  {{hawker.lastLoggedIn | date:'medium'}}
+                </td>
+                <td>
+                  <ion-button class="button-outline" (click)="goToDetailsPage(hawker._id)">View Details</ion-button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card-content>
+  <!-- </ion-card> -->
+</ion-content>

@@ -1,0 +1,49 @@
+<ion-content>
+  <ion-text>
+    <h4 style="margin: 20px">Pending Hawker Accounts</h4>
+  </ion-text>
+  <ion-card>
+    <ion-card-content>
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <table
+              *ngIf="pendingHawkers.length > 0"
+              datatable="ng"
+              [dtOptions]="dtOptions"
+              class="row-border hover"
+            >
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Verification Documents</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody style="text-align: center">
+                <tr *ngFor="let hawker of pendingHawkers">
+                  <td>{{ hawker.name }}</td>
+                  <td>{{ hawker.email }}</td>
+                  <td>
+                    <ion-button (click)="downloadHawkerDocuments(hawker)">
+                      <ion-icon name="download" slot="start"></ion-icon>
+                      Download
+                    </ion-button>
+                  </td>
+                  <td>
+                    <ion-button
+                      class="button-outline"
+                      (click)="showPendingAccountDetailsModal(hawker)"
+                      >View Details</ion-button
+                    >
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

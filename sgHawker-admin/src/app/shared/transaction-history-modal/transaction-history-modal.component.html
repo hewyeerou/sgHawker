@@ -1,0 +1,136 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="primary">
+      <ion-button (click)="closeModal()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-row class="ion-align-items-center ion-justify-content-end">
+      <ion-title style="text-transform: capitalize"
+        >{{ this.outlet.outletName }}&nbsp;Bank Transfer History</ion-title
+      >
+    </ion-row>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <ion-card-content>
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <ion-row class="ion-justify-content-center ion-align-items-center">
+              <ion-col size="9">
+                <ion-row class="ion-align-items-center">
+                  <ion-item style="width: 25%">
+                    <ion-label style="font-weight: bold">Start Date</ion-label>
+                    <ion-datetime [(ngModel)]="startDate"></ion-datetime>
+                  </ion-item>
+                  &nbsp;&nbsp;
+                  <ion-item style="width: 25%">
+                    <ion-label style="font-weight: bold">End Date</ion-label>
+                    <ion-datetime [(ngModel)]="endDate"></ion-datetime>
+                  </ion-item>
+                  &nbsp;&nbsp;
+                  <ion-button
+                    color="info"
+                    class="button-outline button-small"
+                    (click)="filterByDuration()"
+                    [disabled]="
+                      transactions?.length === 0 || !(startDate && endDate)
+                    "
+                  >
+                    <ion-icon slot="start" name="funnel"></ion-icon>
+                    Filter
+                  </ion-button>
+                  &nbsp;&nbsp;
+                  <ion-button
+                    color="danger"
+                    class="button-has-icon-only button-small"
+                    (click)="resetDurationFilter()"
+                    [disabled]="transactions?.length === 0"
+                  >
+                    <ion-icon slot="start" name="reload"></ion-icon>
+                    Reset
+                  </ion-button>
+                </ion-row>
+              </ion-col>
+              <ion-col size="3">
+                <ion-row class="ion-align-items-center">
+                  <ion-button
+                    class="button-small"
+                    color="warning"
+                    style="margin-left: auto"
+                    (click)="showBankWithdrawalAlert()"
+                  >
+                    <ion-icon slot="start" name="cash-outline"></ion-icon>
+                    Bank Withdrawal
+                  </ion-button>
+                </ion-row>
+              </ion-col>
+            </ion-row>
+            <br />
+            <br />
+            <table
+              *ngIf="this.transactions"
+              datatable="ng"
+              [dtOptions]="dtOptions"
+              class="row-border hover"
+            >
+              <thead>
+                <tr>
+                  <th>Transaction Date</th>
+                  <th>Withdrawal Amount</th>
+                  <th>Bank Account</th>
+                </tr>
+              </thead>
+              <tbody style="text-align: center">
+                <tr *ngFor="let transaction of this.transactions">
+                  <td>{{ transaction.transactionDate | date: "medium" }}</td>
+                  <td>{{ transaction.withdrawalAmount | currency: "USD" }}</td>
+                  <td>
+                    <ion-list lines="none" style="padding: 0; margin: 0">
+                      <ion-item
+                        style="font-size: small"
+                        class="ion-item-no-padding"
+                      >
+                        <ion-label style="font-weight: bold">
+                          Holder Name
+                        </ion-label>
+                        <ion-text>
+                          {{ transaction.bankAccountInvolved.fullName }}
+                        </ion-text>
+                      </ion-item>
+                      <ion-item
+                        style="font-size: small"
+                        class="ion-item-no-padding"
+                      >
+                        <ion-label style="font-weight: bold">
+                          Bank Name
+                        </ion-label>
+                        <ion-text>
+                          {{ transaction.bankAccountInvolved.nameOfBank }}
+                        </ion-text>
+                      </ion-item>
+                      <ion-item
+                        style="font-size: small"
+                        class="ion-item-no-padding"
+                      >
+                        <ion-label style="font-weight: bold">
+                          Account Number
+                        </ion-label>
+                        <ion-text>
+                          {{ transaction.bankAccountInvolved.accountNumber }}
+                        </ion-text>
+                      </ion-item>
+                    </ion-list>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

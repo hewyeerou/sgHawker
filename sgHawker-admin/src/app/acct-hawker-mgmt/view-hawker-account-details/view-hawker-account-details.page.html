@@ -1,0 +1,183 @@
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <form
+          #detailsForm="ngForm"
+          (ngSubmit)="updateAccountDetails(detailsForm)"
+        >
+          <ion-card class="details-form">
+            <ion-item>
+              <ion-button
+                color="warning"
+                style="margin-left: auto"
+                (click)="toggleReadOnly()"
+                *ngIf="readOnly"
+              >
+                <ion-icon name="pencil" slot="start"> </ion-icon>
+                Edit
+              </ion-button>
+              <div *ngIf="!readOnly" style="margin-left: auto">
+                <ion-button color="danger" (click)="toggleReadOnly()">
+                  <ion-icon name="close" slot="start"> </ion-icon>
+                  Cancel
+                </ion-button>
+                <ion-button
+                  type="submit"
+                  color="success"
+                  style="margin-left: auto"
+                >
+                  <ion-icon name="close" slot="start"> </ion-icon>
+                  Update
+                </ion-button>
+              </div>
+            </ion-item>
+            <ion-item>
+              <ion-label>Name</ion-label>
+              <ion-input
+                type="text"
+                [(ngModel)]="updatedHawker.name"
+                name="name"
+                required
+                [readonly]="readOnly"
+              >
+              </ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label>Phone Number</ion-label>
+              <ion-input
+                type="text"
+                [(ngModel)]="updatedHawker.phone"
+                name="phone"
+                required
+                [readonly]="readOnly"
+              >
+              </ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label>Email</ion-label>
+              <ion-input
+                type="email"
+                [(ngModel)]="updatedHawker.email"
+                name="email"
+                required
+                [readonly]="readOnly"
+              >
+              </ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label>Account Tier</ion-label>
+              <ion-select
+                [(ngModel)]="updatedHawker.accountTier"
+                name="accountTier"
+                [disabled]="readOnly"
+              >
+                <ion-select-option value="FREE">Free</ion-select-option>
+                <ion-select-option value="PREMIUM">Premium</ion-select-option>
+                <ion-select-option value="DELUXE">Deluxe</ion-select-option>
+              </ion-select>
+            </ion-item>
+            <ion-item>
+              <ion-label>Account Status</ion-label>
+              <ion-select
+                [(ngModel)]="updatedHawker.accountStatus"
+                name="accountStatus"
+                [disabled]="readOnly"
+              >
+                <ion-select-option value="PENDING">Pending</ion-select-option>
+                <ion-select-option value="APPROVED">Approved</ion-select-option>
+                <ion-select-option value="REJECTED">Rejected</ion-select-option>
+                <ion-select-option value="ACTIVE">Active</ion-select-option>
+                <ion-select-option value="SUSPENDED"
+                  >Suspended</ion-select-option
+                >
+                <ion-select-option value="DEACTIVATED"
+                  >Deactivated</ion-select-option
+                >
+                <ion-select-option value="DELETED">Deleted</ion-select-option>
+              </ion-select>
+            </ion-item>
+            <ion-item>
+              <ion-label>Verification Documents</ion-label>
+              <ion-button (click)="downloadHawkerDocuments()">
+                <ion-icon name="download" slot="start"> </ion-icon>
+                Download
+              </ion-button>
+            </ion-item>
+          </ion-card>
+        </form>
+
+        <ion-card *ngIf="hawker.accountStatus !== 'REJECTED' && hawker.accountStatus !== 'SUSPENDED' && hawker.accountStatus !== 'DEACTIVATED'">
+          <ion-card-header>
+            <ion-row class="ion-justify-content-between ion-align-items-center">
+              <ion-card-title> Outlets </ion-card-title>
+              <ion-button (click)="presentCreateOutletModal()">
+                <ion-icon name="add"></ion-icon>
+              </ion-button>
+            </ion-row>
+          </ion-card-header>
+          <ion-card-content>
+            <table
+              datatable="ng"
+              *ngIf="outlets.length > 0"
+              [dtOptions]="dtOptions"
+              class="row-border hover"
+            >
+              <thead>
+                <tr>
+                  <th>S/N</th>
+                  <th>Hawker Centre</th>
+                  <th>Outlet Name</th>
+                  <th>Outlet Location</th>
+                  <th>Outlet Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody style="text-align: center">
+                <tr *ngFor="let o of outlets; let i = index">
+                  <td>{{i+1}}</td>
+                  <td>
+                    <ion-input [(ngModel)]="o.hawkerCentreName"></ion-input>
+                  </td>
+                  <td>
+                    <ion-input [(ngModel)]="o.outletName"></ion-input>
+                  </td>
+                  <td>
+                    <ion-input [(ngModel)]="o.outletAddress"></ion-input>
+                  </td>
+                  <td>
+                    <ion-badge color="success" *ngIf="!o.isDeleted"
+                      >ACTIVE</ion-badge
+                    >
+                    <ion-badge color="danger" *ngIf="o.isDeleted"
+                      >DELETED</ion-badge
+                    >
+                  </td>
+                  <td>
+                    <ion-button
+                      size="small"
+                      shape="round"
+                      fill="outline"
+                      (click)="presentEditOutletModal(o)"
+                    >
+                      <ion-icon name="pencil"></ion-icon>
+                    </ion-button>
+                    <ion-button
+                      size="small"
+                      shape="round"
+                      fill="outline"
+                      color="danger"
+                      (click)="deleteOutlet(o)"
+                    >
+                      <ion-icon name="trash"></ion-icon>
+                    </ion-button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

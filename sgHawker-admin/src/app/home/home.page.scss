@@ -1,0 +1,21 @@
+.side-nav-menu {
+  width: 20%
+}
+
+.side-nav-content {
+  --offset-bottom: auto!important;
+  // --overflow: hidden; --disable scroll
+  overflow: auto;
+  &::-webkit-scrollbar {
+      display: none;
+  }
+}
+
+.side-nav-content ion-item:hover {
+  cursor: pointer;
+}
+
+.header ion-button {
+  float:right;
+  margin-top:15px
+}

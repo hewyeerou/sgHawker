@@ -1,0 +1,93 @@
+<ion-app>
+  <ion-menu contentId="main-content" side="start">
+    <ion-header>
+      <ion-toolbar color="primary">
+        <ion-title>
+          <img src="assets/logo-white.svg" />
+        </ion-title>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content>
+      <ion-list>
+        <ion-menu-toggle>
+          <ion-item
+            lines="none"
+            routerLink="/login"
+            *ngIf="!sessionService.getIsLogin()"
+          >
+            <ion-icon name="user" slot="start"></ion-icon>
+            <ion-label>Login</ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+
+        <ion-menu-toggle *ngIf="sessionService.getIsLogin()">
+          <ion-item lines="none" routerLink="/home">
+            <ion-icon name="home" slot="start"></ion-icon>
+            <ion-label>Home</ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+
+        <!-- drop down items in side bar, add ur routes in app.component.ts -->
+        <div *ngIf="sessionService.getIsLogin()">
+          <div *ngFor="let p of pages">
+            <ion-menu-toggle *ngIf="p.url">
+              <ion-item
+                lines="none"
+                [routerLink]="p.url"
+                routerDirection="root"
+                routerLinkActive="active"
+              >
+                <ion-icon name="dashboard" slot="start"></ion-icon>
+                <ion-label>{{ p.title }}</ion-label>
+              </ion-item>
+            </ion-menu-toggle>
+
+            <ion-item
+              button
+              *ngIf="p.children?.length > 0"
+              (click)="p.open = !p.open"
+              [class.active-parent]="p.open"
+              detail="false"
+            >
+              <ion-icon
+                slot="start"
+                name="chevron-forward"
+                *ngIf="!p.open"
+              ></ion-icon>
+              <ion-icon
+                slot="start"
+                name="chevron-down"
+                *ngIf="p.open"
+              ></ion-icon>
+              <ion-label>{{ p.title }}</ion-label>
+            </ion-item>
+
+            <ion-list *ngIf="p.open">
+              <ion-menu-toggle>
+                <ion-item
+                  *ngFor="let sub of p.children"
+                  lines="none"
+                  [routerLink]="sub.url"
+                  routerDirection="root"
+                  routerLinkActive="active"
+                >
+                  <ion-icon [name]="sub.icon" slot="start"></ion-icon>
+                  <ion-label>{{ sub.title }}</ion-label>
+                </ion-item>
+              </ion-menu-toggle>
+            </ion-list>
+          </div>
+        </div>
+
+        <ion-menu-toggle *ngIf="sessionService.getIsLogin()">
+          <ion-item lines="none" (click)="logout()" button>
+            <ion-icon name="exit" slot="start"></ion-icon>
+            <ion-label>Logout</ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+      </ion-list>
+    </ion-content>
+  </ion-menu>
+  <ion-router-outlet id="main-content"></ion-router-outlet>
+</ion-app>

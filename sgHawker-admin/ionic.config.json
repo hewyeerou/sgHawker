@@ -1,0 +1,7 @@
+{
+  "name": "sgHawker-admin",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}

@@ -1,0 +1,99 @@
+<ion-content>
+  <ion-text>
+    <h4 style="margin: 20px">Outlet Earnings</h4>
+  </ion-text>
+  <ion-card>
+    <ion-card-content>
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <table
+              *ngIf="outlets.length > 0"
+              datatable="ng"
+              [dtOptions]="dtOptions"
+              class="row-border hover"
+            >
+              <thead>
+                <tr>
+                  <th>Outlet Name</th>
+                  <th>Current Earnings</th>
+                  <th>Withdrawal Frequency</th>
+                  <th>Next Withdrawal Date</th>
+                  <th>Withdrawal Status</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody style="text-align: center">
+                <tr *ngFor="let outlet of outlets">
+                  <td style="font-weight: bold">{{ outlet.outletName }}</td>
+                  <td>{{ outlet.wallet.balance | currency:'USD' }}</td>
+                  <td>
+                    <ion-text *ngIf="!outlet.wallet.withdrawalFrequency"
+                      >-</ion-text
+                    >
+                    <ion-badge *ngIf="outlet.wallet.withdrawalFrequency">
+                      {{ outlet.wallet.withdrawalFrequency }} DAYS
+                    </ion-badge>
+                  </td>
+                  <td>
+                    <ion-text *ngIf="!outlet.wallet.nextWithdrawalDate"
+                      >-</ion-text
+                    >
+                    <ion-text *ngIf="outlet.wallet.nextWithdrawalDate"
+                      >{{outlet.wallet.nextWithdrawalDate | date:
+                      'dd/MM/yyyy'}}</ion-text
+                    >
+                  </td>
+                  <td>
+                    <ion-text
+                      *ngIf="withdrawalStatus(outlet.wallet.nextWithdrawalDate, outlet) === '-'"
+                      >-</ion-text
+                    >
+                    <ion-badge
+                      *ngIf="withdrawalStatus(outlet.wallet.nextWithdrawalDate, outlet) === 'OVERDUE'"
+                      color="danger"
+                    >
+                      OVERDUE
+                    </ion-badge>
+                    <ion-badge
+                      *ngIf="withdrawalStatus(outlet.wallet.nextWithdrawalDate, outlet) === 'SUCCESS'"
+                      color="success"
+                    >
+                      SUCCESS
+                    </ion-badge>
+                    <ion-badge
+                      *ngIf="withdrawalStatus(outlet.wallet.nextWithdrawalDate, outlet) === 'PENDING'"
+                      color="warning"
+                    >
+                      PENDING
+                    </ion-badge>
+                  </td>
+                  <td>
+                    <ion-button
+                      class="button-outline"
+                      (click)="showTransactionHistoryModal(outlet)"
+                      >Withdrawal History
+                    </ion-button>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="font-weight: bold">
+                    # Total Outlets: {{this.outlets.length}}
+                  </td>
+                  <td style="font-weight: bold">
+                    # Total Earnings: {{ totalOutletEarnings() | currency:'USD'
+                    }}
+                  </td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
+</ion-content>
